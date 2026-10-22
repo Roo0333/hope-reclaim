@@ -5064,9 +5064,19 @@ function bossAct(x) {
       emit(x,'story','scene','바시엘이 천천히 눈을 뜬다.');
       emit(x,'story','scene','빛을 잃은 눈동자가 일행을 향한다.');
       emit(x,'dialogue','vaciel','……이제, 더는 아프지 않아도 되네.');
+      const recipients=all(),hero=b.party.user;
+      const guardingEveryone=living(hero)&&active(hero,'bodyguard',b.round);
+      if(guardingEveryone){
+        // 공명이 일어나기 전, '등 맡기기'로 모두의 앞에 서는 연출을 먼저 보여준다.
+        emit(x,'story','scene','당신은 모두의 앞에 섰다.');
+        emit(x,'story','scene','빛도, 온기도 사라진 세계에서 홀로 모든 절망을 짊어지려 한다.');
+        emit(x,'story','scene','온몸에서 힘이 빠져나갈 것만 같다. 더는 버틸 수 없을지도 모른다.');
+        emit(x,'story','scene','그때, 누군가가 당신의 등에 손을 얹었다.');
+        emit(x,'story','scene','한 사람, 또 한 사람.');
+        emit(x,'story','scene','동료들의 희망이 당신을 감쌉니다.');
+      }
       emit(x,'story','scene','성역을 뒤덮은 고요가 한순간에 무너진다.');
       emit(x,'phase','system','「공명」');
-      const recipients=all(),hero=b.party.user;
       // 최대 HP 기준, 표식이 해제된 대상은 기본 피해 반감. 방어/방증/피감은 적용한다.
       const rawFor=u=>{
         let n=u.maxHp*(active(u,'colorlessDream',b.round)?1:.5);
@@ -5076,7 +5086,7 @@ function bossAct(x) {
         if(u.distorted)n*=d.distortedDamage;
         return Math.max(1,n);
       };
-      if(living(hero)&&active(hero,'bodyguard',b.round)){
+      if(guardingEveryone){
         // 공명 전용: 여섯 사람의 피해를 합산해 주인공 한 명이 받아, 전원 보호 후 1 HP 이상 생존한다.
         let n=recipients.reduce((sum,u)=>sum+u.maxHp*(active(u,'colorlessDream',b.round)?1:.5),0);
         n*=1-Math.min(.95,buff(hero,'bodyguard',b));
@@ -5088,11 +5098,6 @@ function bossAct(x) {
         const absorbed=Math.min(hero.shieldHp||0,n);hero.shieldHp-=absorbed;n-=absorbed;
         const dealt=Math.min(Math.max(0,hero.hp-1),Math.max(0,n));hero.hp-=dealt;
         emit(x,'damage','vaciel',`공명 → ${hero.name} · ${dealt} 피해 (동료들의 피해를 대신 받음)`,{target:hero.id,amount:dealt,sourceId:'vaciel',sourceLabel:'공명'});
-        emit(x,'story','scene','당신은 모두의 앞에 섰다.');
-        emit(x,'story','scene','빛도, 온기도 사라진 세계에서 홀로 모든 절망을 짊어진다.');
-        emit(x,'story','scene','온몸에서 힘이 빠져나간다. 더는 버틸 수 없을 것만 같았다.');
-        emit(x,'story','scene','그러나 무너지는 순간, 누군가가 당신의 등을 받쳤다.');
-        emit(x,'story','scene','동료들의 희망이 당신을 감쌉니다.');
         emit(x,'notice','system',`당신은 쓰러지지 않았습니다. (HP ${hero.hp})`);
         emit(x,'dialogue','vaciel','……그대의 뒤에도, 그대를 지키려는 이들이 있었구나.');
       }else{
