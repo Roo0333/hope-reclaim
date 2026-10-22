@@ -735,6 +735,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 
 /* 상단 주요 버튼은 유지하고, 음악/새 게임은 가벼운 텍스트 조작으로 표시. */
 .hr-page .hr-quick-buttons{gap:7px;flex-wrap:nowrap}
+.hr-page .hr-quick-buttons button#hand-toggle,
 .hr-page .hr-quick-buttons button#sound,
 .hr-page .hr-quick-buttons button#restart{
   background:transparent!important;
@@ -752,8 +753,10 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 .hr-page .hr-quick-buttons button#sound[aria-pressed="true"]{
   color:#292929!important;font-weight:800!important;background:transparent!important;
 }
+.hr-page .hr-quick-buttons button#hand-toggle:hover:not(:disabled),
 .hr-page .hr-quick-buttons button#sound:hover:not(:disabled),
 .hr-page .hr-quick-buttons button#restart:hover:not(:disabled){background:#efefef!important}
+.hr-page .hr-quick-buttons button#hand-toggle:focus-visible,
 .hr-page .hr-quick-buttons button#sound:focus-visible,
 .hr-page .hr-quick-buttons button#restart:focus-visible{outline:2px solid #686868!important;outline-offset:1px}
 .hr-page .hr-quick-buttons button#restart{color:#666666!important;font-weight:500!important}
@@ -762,6 +765,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 .hr-settings .hr-bgm-credit a:hover{color:#262626}
 @media(max-width:520px){
   .hr-page .hr-quick-buttons{gap:1px}
+  .hr-page .hr-quick-buttons button#hand-toggle,
   .hr-page .hr-quick-buttons button#sound,
   .hr-page .hr-quick-buttons button#restart{font-size:10px!important;padding:5px 4px!important;min-height:40px!important}
   .hr-settings .hr-bgm-credit{font-size:10px}
@@ -838,6 +842,36 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 
 /* 전투 UI: 후퇴 버튼은 숨기고 내부 이벤트 연결은 안전하게 유지 */
 #retreat{display:none!important}
+
+/* 데스크톱에서는 손 조작 전환을 숨깁니다. 모바일(520px 이하)에서만 표시합니다. */
+@media(min-width:521px){.hr-page .hr-quick-buttons #hand-toggle{display:none!important}}
+
+/* 모바일 엄지 조작: 손 방향만 바꾸며 상단 버튼은 음악/새 게임과 스타일을 공유합니다. */
+@media(max-width:520px){
+  body.hr-page[data-hand-mode="right"] #main-actions{justify-content:flex-end}
+  body.hr-page[data-hand-mode="left"] #main-actions{justify-content:flex-start}
+  body.hr-page #main-actions>button{min-width:0}
+  /* 다음 또는 적 차례 버튼 하나만 있을 때도 엄지 쪽으로 붙입니다. */
+  body.hr-page #main-actions>#next-event,
+  body.hr-page #main-actions>#perform-action,
+  body.hr-page #main-actions>#execute{flex:0 1 auto;width:70%;}
+  /* 이야기: 오른손은 [건너뛰기][다음], 왼손은 [다음][건너뛰기]. */
+  body.hr-page[data-hand-mode="right"] #main-actions>#skip-narration{order:0}
+  body.hr-page[data-hand-mode="right"] #main-actions>#next-event{order:2}
+  body.hr-page[data-hand-mode="left"] #main-actions>#next-event{order:0}
+  body.hr-page[data-hand-mode="left"] #main-actions>#skip-narration{order:2}
+  body.hr-page #main-actions:has(#skip-narration:not([hidden]))>#next-event{flex:1 1 0;width:auto}
+  /* 전투: 오른손은 [적 차례][공격하기], 왼손은 [공격하기][적 차례]. */
+  body.hr-page[data-hand-mode="right"] #main-actions>#execute{order:0}
+  body.hr-page[data-hand-mode="right"] #main-actions>#perform-action{order:2}
+  body.hr-page[data-hand-mode="left"] #main-actions>#perform-action{order:0}
+  body.hr-page[data-hand-mode="left"] #main-actions>#execute{order:2}
+  body.hr-page #main-actions:has(#perform-action:not([hidden]))>#perform-action{flex:1 1 0;width:auto}
+  body.hr-page #main-actions:has(#perform-action:not([hidden]))>#execute{flex:0 0 auto;width:auto;max-width:42%}
+  /* 자동공격도 선택한 손 쪽으로 정렬합니다. */
+  body.hr-page[data-hand-mode="left"] #utility-actions>#auto-attack{order:-1}
+  body.hr-page[data-hand-mode="left"] #utility-actions>#reservation-count{margin-right:0;margin-left:auto}
+}
 </style></head>
 <body class="hr-app hr-page">
 <div id="hr-boot-loading" role="status" aria-live="polite" aria-label="희망탈환 시작 준비">
@@ -909,7 +943,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 <main class="hr-panel hr-battle-panel" aria-label="희망탈환 전투">
  <div class="hr-heading"><span class="hr-star" aria-hidden="true"></span><h1 id="arena-title">희망탈환</h1><button id="mobile-battle-log" type="button" aria-controls="battle-log-popup" aria-haspopup="dialog" aria-expanded="false">전투 기록</button><button id="open-settings">전투 준비</button></div>
  <div class="hr-battle-scroll">
-  <div class="hr-version-row hr-quick-tools"><div class="hr-version-info"><strong id="build-version">희망탈환</strong><span id="difficulty-label"></span><span id="seed-label" hidden></span></div><div class="hr-quick-buttons"><button id="sound" type="button" aria-pressed="false" aria-label="배경음악 켜기" title="배경음악 켜기">♫ OFF</button><button id="restart" type="button" title="새 게임 시작 (확인 후 진행)">↻ 새 게임</button></div></div>
+  <div class="hr-version-row hr-quick-tools"><div class="hr-version-info"><strong id="build-version">희망탈환</strong><span id="difficulty-label"></span><span id="seed-label" hidden></span></div><div class="hr-quick-buttons"><button id="hand-toggle" type="button" aria-pressed="false" title="모바일 하단 버튼 위치 바꾸기">⇄ 오른손</button><button id="sound" type="button" aria-pressed="false" aria-label="배경음악 켜기" title="배경음악 켜기">♫ OFF</button><button id="restart" type="button" title="새 게임 시작 (확인 후 진행)">↻ 새 게임</button></div></div>
   <div class="hr-stage" id="stage">
    <div class="hr-stage-label" id="round-label"></div>
    <div id="boss-art"></div><div id="boss-floats" class="hr-boss-floats" aria-hidden="true"></div>
@@ -6661,6 +6695,31 @@ let resumed=false;try{const cfg=JSON.parse(localStorage.getItem('hope-player-cam
    }
    e.stopImmediatePropagation();
  },true);
+})();
+</script>
+
+<script>
+/* 오른손/왼손 조작 설정은 전투 진행 상황과 별도로 저장하고 즉시 적용합니다. */
+(function(){'use strict';
+ const toggle=document.getElementById('hand-toggle');
+ if(!toggle)return;
+ const key='hope-player-control-hand-v1';
+ let hand='right';
+ try{if(localStorage.getItem(key)==='left')hand='left';}catch{}
+ function apply(){
+   const left=hand==='left';
+   document.body.dataset.handMode=hand;
+   toggle.textContent=left?'⇄ 왼손':'⇄ 오른손';
+   toggle.setAttribute('aria-pressed',String(left));
+   toggle.setAttribute('aria-label',(left?'왼손':'오른손')+' 조작 모드. 누르면 '+(left?'오른손':'왼손')+' 조작으로 전환합니다.');
+   toggle.title='모바일에서 주요 버튼을 '+(left?'왼쪽':'오른쪽')+'에 배치합니다. 눌러 전환';
+ }
+ apply();
+ toggle.addEventListener('click',()=>{
+   hand=hand==='right'?'left':'right';
+   apply();
+   try{localStorage.setItem(key,hand);}catch{}
+ });
 })();
 </script>
 
