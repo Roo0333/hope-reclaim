@@ -4504,7 +4504,7 @@ function initial(c,opts={}) {
   }
   const extra=id==='vaciel'&&['normal','hard'].includes(mode)?(bc.params.hardHpPerCompanionBonus||0)*team.length:0;
   const hardplus=['normal','hard'].includes(mode);
-  const hpScale=(id==='cor'&&hardplus?(bc.params.hardHpScale??1):1)*(mode==='normal'?(bc.params.normalHpScale??1):mode==='hard'?(bc.params.nightmareHpScale??1):1);
+  const hpScale=(id==='cor'&&hardplus?(bc.params.hardHpScale??1):1)*(mode==='easy'?(bc.params.easyHpScale??1):mode==='normal'?(bc.params.normalHpScale??1):mode==='hard'?(bc.params.nightmareHpScale??1):1);
   const attackScale=hardplus?(bc.params.hardAttackScale??1)*(mode==='hard'?(bc.params.nightmareAttackScale??1):1):mode==='easy'?(bc.params.normalAttackScale??1):1;
   // 바시엘 어려움: 동료 1명당 최대 HP 91 추가. 6인 구성 기준 2,350 HP.
   // 기존 보스 HP 배율은 건드리지 않아 보통/쉬움 및 다른 보스에는 영향 없음.
@@ -4950,14 +4950,14 @@ function bossAct(x) {
     case 'wing':status(x,b.boss,'defup',easy?bc.params.wingDef*.5:nightmare?bc.params.wingDef*.9:b.difficulty==='normal'&&b.domain==='osteos'?bc.params.wingDef*(b.phase==='calm'?.65:.8):bc.params.wingDef,b.domain==='osteos'&&b.difficulty==='normal'?bc.params.wingTurns:bc.params.wingTurns+1);if(b.domain==='osteos'&&p.power>0&&b.difficulty!=='practice')sweep(p.power);break;
     case 'blade':if(p.target==='all')sweep(p.power,{critBonus:easy?0:bc.params.bladeCrit});else hit(one(),p.power,{critBonus:easy?0:bc.params.bladeCrit});break;
     case 'pillars':if(hard&&!b.summons.some(u=>u.kind==='pillar'))summon(x,'pillar',bc.params.pillarCount);break;
-    case 'aria':if(hard)sweep(nightmare?.72:.6);else if(b.difficulty==='easy')sweep(.34);for(const t of all())status(x,t,'weak',p.power,hard?4:3);break;
+    case 'aria':if(hard)sweep(nightmare?.72:.6);else if(b.difficulty==='easy')sweep(.55);for(const t of all())status(x,t,'weak',p.power,hard?4:3);break;
     case 'curtain':{if(hard)for(const original of all()){const u=redirectArea(original);if(!living(u))continue;let n=(bc.params.curtainDamage??10)*(nightmare?1.3:1);if(u.guard)n*=x.c.rules.guardFactor;if(u.protect)n*=1-u.protect;if(u.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,u,n);}const t=pick(b,all());if(t){b.invitation={target:t.id,until:b.round+1};emit(x,'mark','scene',t.name+'에게 조명이 내려앉습니다. 다음 리본이 그 무대로 향합니다.');}break;}
     case 'ribbon':{const t=one(),linked=hard&&b.invitation?.target===t?.id&&buff(t,'weak',b)>0;if(linked)emit(x,'combo','scene','아리아에 약해진 '+t.name+'에게 무대의 조명이 모입니다. 약화와 초대가 이어져 피날레의 위력이 커집니다.');hit(t,p.power*(linked?(bc.params.finaleWeakMultiplier??1.3):1));if(b.invitation?.target===t?.id)b.invitation=null;break;}
     case 'charge':{const t=one();const defender=b.party.user;const actual=b.enemyPhase&&living(defender)&&active(defender,'bodyguard',b.round)?defender:t;if(hit(t).hit&&living(actual))status(x,actual,'bleed',actual.maxHp*bc.params.bleedRatio*(easy?.4:1),bc.params.bleedTurns);break;}
     case 'smash':sweep();if(hard&&b.rageTriggered)status(x,b.boss,'defdown',bc.params.openingDef,2);break;
     case 'duel':if(hard){const t=one();if(t){for(let i=0;i<bc.params.duelHits&&living(t)&&living(b.boss);i++)hit(t,p.power,{noCrit:true});emit(x,'notice','scene','연속 검격이 멎고 코르의 자세가 잠시 열립니다.');status(x,b.boss,'defdown',bc.params.openingDef,2);}}break;
-    case 'light':if(hard&&b.domain==='lacrien')sweep(.48);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.38);for(const t of all())status(x,t,'dark',p.power,2);break;
-    case 'reflect':b.reflection={until:b.round+1};b.recordedDamage=0;emit(x,'notice','scene','라크리엔 주위의 빛이 거울처럼 맑아집니다.');if(hard&&b.domain==='lacrien')sweep(nightmare?.82:.72);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.42);break;
+    case 'light':if(hard&&b.domain==='lacrien')sweep(.48);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.51);for(const t of all())status(x,t,'dark',p.power,2);break;
+    case 'reflect':b.reflection={until:b.round+1};b.recordedDamage=0;emit(x,'notice','scene','라크리엔 주위의 빛이 거울처럼 맑아집니다.');if(hard&&b.domain==='lacrien')sweep(nightmare?.82:.72);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.54);break;
     case 'recordecho':if(hard){const amount=b.recordedDamage;emit(x,'echo','scene',amount>0?`기록의 잔향 · 만상기록에 쌓인 ${amount} 피해를 바탕으로 빛이 아군 전체에 되돌아옵니다.`:'기록의 잔향 · 기록이 비어 있어도 약한 잔광이 전원에게 되돌아옵니다.');for(const original of all()){const t=redirectArea(original);if(!living(t))continue;const echo=Math.max(amount*p.power,b.domain==='lacrien'?original.maxHp*.07:0); /* 어려움: HP 22% 상한 없음 */if(echo>0){let n=echo;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;if(t.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,t,n);} }b.recordedDamage=0;}break;
     case 'judgment':sweep();break;
     case 'summon':{
@@ -4966,7 +4966,7 @@ function bossAct(x) {
         const finalDoll=hard&&b.domain==='marionel'&&b.summonCount===1;
         summon(x,'doll',finalDoll?1:easy?1:hard&&b.domain==='marionel'&&b.team.length<2?1:Math.min(2,bc.params.summonAliveLimit));
         if(finalDoll){const u=b.summons.at(-1);u.name='미완성의 역작';u.maxHp=Math.round(u.maxHp*1.6);u.hp=u.maxHp;u.atk=Math.round(u.atk*1.2);emit(x,'phase','scene','마리오넬이 남은 실로 마지막 인형 하나를 꿰맵니다.');}
-        b.summonCount++;if(hard&&b.domain==='marionel')hit(one(),.6);else if(b.difficulty==='easy'&&b.domain==='marionel')hit(one(),.48);}
+        b.summonCount++;if(hard&&b.domain==='marionel')hit(one(),.6);else if(b.difficulty==='easy'&&b.domain==='marionel')hit(one(),.64);}
       else emit(x,'notice','scene','작업대의 실이 느슨하게 흔들립니다.');break;
     }
     case 'repair':{
@@ -5781,6 +5781,14 @@ function refreshBattleDefaults(c){
  // 이전 수정판에서 SP 0으로 저장된 설정도 새 전투부터 원래 비용으로 복구합니다.
  tune(skill('shion','track'),'cost',0,3);
  tune(skill('shion','encore'),'cost',0,3);
+ // 쉬움에서 방어력에 막혀 1~3 피해만 나던 오스테오스 「날개 감옥」만 조정.
+ // 사용자가 편집한 계수나 보통·어려움 패턴은 그대로 둡니다.
+ const easyWings=c.bosses?.osteos?.patterns?.easy||[];
+ for(const p of easyWings){
+   if(p.effect!=='wing')continue;
+   tune(p,'power',.4,.6);
+   tune(p,'power',.48,.68);
+ }
  // 양측 밸런스를 무너뜨리지 않도록 지원 기술과 약화 기술만 기본 1R 연장합니다.
  for(const [owner,id,oldDur] of [
   ['jun','firebreak',2],['rikka','mirror',3],
@@ -5815,16 +5823,16 @@ function refreshBattleDefaults(c){
   // SP 회복곡은 제거하고 남은 세 곡만 추첨합니다. 체력 부족 시 회복곡 비중이 올라갑니다.
  const adjustedWeights={healthy:[33,34,33],hp:[29,44,27],sp:[33,34,33],normal: [33,34,33]};
  c.songWeights=H.core.copy(adjustedWeights);
- // 하드(hard) / 나이트메어(nightmare) 보스별 목표 HP. 쉬움(normal)은 영향받지 않는다.
- // 전투 엔진의 동료 인원별 HP 증가와 코르의 광란 전용 배율은 유지한다.
+ // 화면 기준 쉬움/보통/어려움 보스별 목표 HP.
  // 간부는 동료 2명, 바시엘은 동료 5명 출전 시 목표 HP와 일치한다.
+ // 기존 보통/어려움 및 동료 인원별 HP 증가량은 유지하고, 쉬움 HP만 보스별 차등 조정한다.
  const tunedBossHp={
-  bellaton:{normal:390,hard:425},
-  cor:{normal:540,hard:745},
-  lacrien:{normal:460,hard:540},
-  marionel:{normal:480,hard:600},
-  osteos:{normal:450,hard:515},
-  vaciel:{normal:1350,hard:1895}
+  bellaton:{easy:360,normal:390,hard:425},
+  cor:{easy:420,normal:540,hard:745},
+  lacrien:{easy:370,normal:460,hard:540},
+  marionel:{easy:390,normal:480,hard:600},
+  osteos:{easy:380,normal:450,hard:515},
+  vaciel:{easy:960,normal:1350,hard:1895}
  };
  for(const [id,target] of Object.entries(tunedBossHp)){
   const boss=c.bosses?.[id];if(!boss)continue;
@@ -5832,6 +5840,9 @@ function refreshBattleDefaults(c){
   const extra=id==='vaciel'?(boss.params.hardHpPerCompanionBonus||0)*teamCount:0;
   const baseHp=boss.hp+boss.hpPerCompanion*teamCount+extra;
   const corScale=id==='cor'?(boss.params.hardHpScale||1):1;
+  const easyBaseHp=boss.hp+boss.hpPerCompanion*teamCount;
+  if(easyBaseHp>0&&c.difficulties?.easy?.hp>0)
+    boss.params.easyHpScale=target.easy/(easyBaseHp*c.difficulties.easy.hp);
   if(baseHp>0&&c.difficulties?.normal?.hp>0)
     boss.params.normalHpScale=target.normal/(baseHp*c.difficulties.normal.hp*corScale);
   if(baseHp>0&&c.difficulties?.hard?.hp>0)
