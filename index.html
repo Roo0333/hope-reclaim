@@ -5009,13 +5009,13 @@ function bossAct(x) {
     case 'dreammark':{
       b.dreamMonochrome=true; // 스냅샷 기준으로 전투 배경과 스탠딩을 위에서 아래로 탈색
       emit(x,'story','scene','바시엘의 눈가에 은빛 눈물이 맺힌다.');
-      emit(x,'story','scene','눈물이 양산 끝을 타고 떨어지자, 성역의 색채가 위에서부터 서서히 사라지기 시작한다.');
+      emit(x,'story','scene','눈물이 양산 끝을 타고 떨어지자 성역의 색채가 위에서부터 서서히 사라지기 시작한다.');
       emit(x,'story','scene','옷자락도, 피부에 남은 온기도, 천장의 푸른 빛마저.');
       emit(x,'story','scene','마침내 모든 것이 검고 흰 명암으로 물든다.');
       emit(x,'dialogue','vaciel','……이것이 이 몸이 재현하려는 세계일세. 아무것도 갈망하지 않아 아무것도 빼앗으려 하지 않는 곳.');
       emit(x,'dialogue','vaciel','그대들은…… 이곳에서도 내일을 바랄 수 있겠는가.');
       emit(x,'story','scene','바시엘은 천천히 눈을 감았다.');
-      emit(x,'story','scene','성역이 숨을 죽인다. 이 고요가 끝나면, 무언가 돌이킬 수 없는 일이 벌어질 것만 같다.');
+      emit(x,'story','scene','성역이 숨을 죽인다. 이 고요가 끝나면 무언가 돌이킬 수 없는 일이 벌어질 것만 같다.');
       for(const u of all()){
         u.buffs={};u.guard=false;u.protect=0;u.shieldHp=0;u.shieldMax=0;
         status(x,u,'colorlessDream',1,2);
@@ -6351,7 +6351,7 @@ function renderPanel(){
  <div class="start-event-grid">${Object.entries(config.heroes).filter(([id])=>id!=='user').map(([id,h])=>{const condition=isRunning?(journey.roster[id]||options.conditions[id]):options.conditions[id];const completed=!!condition?.eventCompleted;return `<div class="start-event-row"><strong>${esc(h.name)}</strong><div class="start-event-choice"><button type="button" data-event-pick="${id}:done" aria-pressed="${completed}" class="game-choice ${completed?'is-selected':''}" ${isRunning?'disabled':''}>완료</button><button type="button" data-event-pick="${id}:pending" aria-pressed="${!completed}" class="game-choice ${!completed?'is-selected':''}" ${isRunning?'disabled':''}>미완료</button></div></div>`;}).join('')}</div></div>
  <div class="start-section"><div class="start-heading"><span>04</span><h3>주인공 스킬 <small>기본 기술 3개 + 특수 기술 1개</small></h3></div><p class="start-caption">스킬 이름과 효과를 보고 장착할 수 있어요. SP는 전투 중 소모됩니다.</p>
  <div class="start-skill-grid">${config.skills.filter(s=>!C.isSpecial(s.id)).map(s=>`<button type="button" data-equip-pick="${s.id}" aria-pressed="${options.playerSkills.includes(s.id)}" class="start-skill game-pick ${options.playerSkills.includes(s.id)?'selected is-selected':''}"><span class="start-skill-info"><b>${esc(s.name)}</b><small>${esc(skillDescription(s)||s.detail)}</small></span><span class="start-cost">SP ${s.cost}</span></button>`).join('')}</div>
- <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 속박, 출혈, 화상, 꼭두각시 실, 수선하는 손, 「색을 잃은 꿈」을 해제합니다. 특수 기술 「치유」로 「색을 잃은 꿈」을 해제하면 생존한 아군 전원의 HP가 완전히 회복됩니다.</p></details></div>
+ <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 속박, 출혈, 화상, 꼭두각시 실, 수선하는 손, 「색을 잃은 꿈」을 해제합니다.</p></details></div>
 `;
  $('apply-restart').disabled=journey.pendingSupply||(options.series&&(journey.failed||!open.length));
  $('apply-restart').textContent=options.series?(journey.started?'다음 전투 시작 ▶':'보스 러시 시작 ▶'):'전투 시작 ▶';
