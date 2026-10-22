@@ -804,6 +804,37 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 #hr-boot-loading.hr-boot-delayed .hr-boot-retry{display:block}
 @keyframes hr-boot-pulse{0%{left:-35%}100%{left:105%}}
 @media(prefers-reduced-motion:reduce){#hr-boot-loading .hr-boot-bar::before{animation:none;left:32%;}#hr-boot-loading{transition:none}}
+
+/* 공명 · 색을 잃은 꿈: 원본 보스 스탠딩과 배경을 위에서 아래로 흑백으로 덮습니다. */
+.hr-stage[data-boss="vaciel"]::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-color:#f0f0f0;background-image:var(--dream-bg,none);
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+  filter:grayscale(1);clip-path:inset(0 0 100% 0);
+}
+.hr-stage[data-boss="vaciel"] #boss-art{position:relative}
+.hr-stage[data-boss="vaciel"] #boss-art img.dream-art-layer{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  height:100%;max-width:min(80vw,320px);object-fit:contain;
+  filter:grayscale(1);pointer-events:none;clip-path:inset(0 0 100% 0);
+}
+.hr-stage[data-boss="vaciel"].dream-wiping::before,
+.hr-stage[data-boss="vaciel"].dream-wiping .dream-art-layer{
+  animation:dream-wipe-down 2.2s linear both;
+}
+.hr-stage[data-boss="vaciel"].dream-complete::before,
+.hr-stage[data-boss="vaciel"].dream-complete .dream-art-layer{clip-path:inset(0 0 0 0)}
+.hr-stage[data-boss="vaciel"].dream-restoring::before,
+.hr-stage[data-boss="vaciel"].dream-restoring .dream-art-layer{
+  animation:dream-color-return 1.6s ease-in-out both;
+}
+@keyframes dream-wipe-down{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes dream-color-return{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0)}}
+@media(max-width:520px){.hr-stage[data-boss="vaciel"] #boss-art img.dream-art-layer{height:100%;max-width:74vw}}
+@media(prefers-reduced-motion:reduce){
+ .hr-stage.dream-wiping::before,.hr-stage.dream-wiping .dream-art-layer{animation:none;clip-path:inset(0 0 0 0)}
+ .hr-stage.dream-restoring::before,.hr-stage.dream-restoring .dream-art-layer{animation:none;clip-path:inset(0 0 100% 0)}
+}
 </style></head>
 <body class="hr-app hr-page">
 <div id="hr-boot-loading" role="status" aria-live="polite" aria-label="희망탈환 시작 준비">
@@ -1402,7 +1433,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
     "stunImmunityRounds": 2
   },
   "difficulties": {
-    "easy": {
+    "practice": {
       "name": "쉬움",
       "hp": 0.75,
       "atk": 0.7,
@@ -1415,7 +1446,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "distortedRegen": 0.08,
       "distortionEffect": 0.45
     },
-    "normal": {
+    "easy": {
       "name": "보통",
       "hp": 1,
       "atk": 1,
@@ -1428,7 +1459,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "distortedRegen": 0,
       "distortionEffect": 1
     },
-    "hard": {
+    "normal": {
       "name": "어려움",
       "hp": 1.15,
       "atk": 1.1,
@@ -1890,7 +1921,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         }
       ],
       "patterns": {
-        "easy": [
+        "practice": [
           {
             "id": "aria",
             "name": "절망의 아리아",
@@ -1960,7 +1991,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "흩어진 리본이 하나의 조명 아래로 모입니다."
           }
         ],
-        "normal": [
+        "easy": [
           {
             "id": "aria",
             "name": "절망의 아리아",
@@ -2030,7 +2061,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "흩어진 리본이 하나의 조명 아래로 모입니다."
           }
         ],
-        "hard": [
+        "normal": [
           {
             "id": "aria",
             "name": "절망의 아리아",
@@ -2200,7 +2231,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       },
       "intro": [],
       "patterns": {
-        "easy": [
+        "practice": [
           {
             "id": "warning",
             "name": "정중한 경고",
@@ -2321,7 +2352,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "검을 두른 파편들이 사방으로 퍼집니다."
           }
         ],
-        "normal": [
+        "easy": [
           {
             "id": "warning",
             "name": "정중한 경고",
@@ -2442,7 +2473,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "검을 두른 파편들이 사방으로 퍼집니다."
           }
         ],
-        "hard": [
+        "normal": [
           {
             "id": "warning",
             "name": "정중한 경고",
@@ -2674,7 +2705,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       },
       "intro": [],
       "patterns": {
-        "easy": [
+        "practice": [
           {
             "id": "slash",
             "name": "검격",
@@ -2727,7 +2758,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "코르가 검을 높이 듭니다. 발아래 땅이 울립니다."
           }
         ],
-        "normal": [
+        "easy": [
           {
             "id": "slash",
             "name": "검격",
@@ -2780,7 +2811,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "코르가 검을 높이 듭니다. 발아래 땅이 울립니다."
           }
         ],
-        "hard": [
+        "normal": [
           {
             "id": "slash",
             "name": "검격",
@@ -2943,7 +2974,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       },
       "intro": [],
       "patterns": {
-        "easy": [
+        "practice": [
           {
             "id": "light",
             "name": "빛의 안식",
@@ -3013,7 +3044,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "한 줄기 별빛이 궤도를 그립니다."
           }
         ],
-        "normal": [
+        "easy": [
           {
             "id": "light",
             "name": "빛의 안식",
@@ -3083,7 +3114,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "한 줄기 별빛이 궤도를 그립니다."
           }
         ],
-        "hard": [
+        "normal": [
           {
             "id": "light",
             "name": "빛의 안식",
@@ -3278,7 +3309,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       },
       "intro": [],
       "patterns": {
-        "easy": [
+        "practice": [
           {
             "id": "summon",
             "name": "인형 소환",
@@ -3348,7 +3379,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "팽팽해진 실들이 전장을 가로지릅니다."
           }
         ],
-        "normal": [
+        "easy": [
           {
             "id": "summon",
             "name": "인형 소환",
@@ -3418,7 +3449,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "팽팽해진 실들이 전장을 가로지릅니다."
           }
         ],
-        "hard": [
+        "normal": [
           {
             "id": "summon",
             "name": "인형 소환",
@@ -3600,7 +3631,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         }
       ],
       "patterns": {
-        "easy": [
+        "practice": [
           {
             "id": "drain",
             "name": "희망 탈환",
@@ -3687,7 +3718,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "주변의 색채가 하나씩 사라집니다."
           }
         ],
-        "normal": [
+        "easy": [
           {
             "id": "drain",
             "name": "희망 탈환",
@@ -3774,7 +3805,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "tell": "주변의 색채가 하나씩 사라집니다."
           }
         ],
-        "hard": [
+        "normal": [
           {
             "id": "drain",
             "name": "희망 탈환",
@@ -3958,14 +3989,6 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "detail": "아군 전체 최대 HP 35% 회복"
     },
     {
-      "id": "breath",
-      "name": "여름을 깨우는 방법",
-      "effect": "spall",
-      "power": 2,
-      "duration": 1,
-      "detail": "아군 전체 SP 3 회복"
-    },
-    {
       "id": "hush",
       "name": "나이트 온 뮤트",
       "effect": "weakall",
@@ -3975,10 +3998,10 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
     }
   ],
   "songWeights": {
-    "healthy": [35, 25, 5, 35],
-    "hp": [35, 35, 5, 25],
-    "sp": [35, 25, 5, 35],
-    "normal": [35, 25, 5, 35]
+    "healthy": [33, 34, 33],
+    "hp": [29, 44, 27],
+    "sp": [33, 34, 33],
+    "normal": [33, 34, 33]
   },
   "distortions": {
     "shion": {
@@ -4050,6 +4073,12 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
     ]
   },
   "itemLoadouts": {
+    "practice": {
+      "medicine": 5,
+      "revive": 2,
+      "ether": 3,
+      "remedy": 3
+    },
     "easy": {
       "medicine": 5,
       "revive": 2,
@@ -4057,12 +4086,6 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "remedy": 3
     },
     "normal": {
-      "medicine": 5,
-      "revive": 2,
-      "ether": 3,
-      "remedy": 3
-    },
-    "hard": {
       "medicine": 4,
       "revive": 2,
       "ether": 2,
@@ -4090,7 +4113,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
  m.params.stitchShareEasy=.10;
  m.params.stitchShareNormal=.20;
  m.params.stitchShareRatio=.30;
- for(const difficulty of ['easy','normal','hard']){
+ for(const difficulty of ['practice','easy','normal']){
    const p=m.patterns[difficulty].find(v=>v.id==='repair');
    if(p)p.tell='마리오넬이 두 사람을 잇는 실을 조용히 펼칩니다.';
  }
@@ -4111,9 +4134,9 @@ for(const [id,info]of Object.entries(data)){
 const m=bosses.marionel;
 // 어려움과 동일한 2인 연결/피해 공유/다음 라운드 발동. 비율과 선행 피해만 낮춥니다.
 m.params.stitchShareEasy=.10;m.params.stitchShareNormal=.20;m.params.stitchShareRatio=.30;
-for(const difficulty of ['easy','normal','hard']){
+for(const difficulty of ['practice','easy','normal']){
  const skill=m.patterns[difficulty].find(p=>p.id==='repair');
- if(skill){skill.effect='repair';skill.power=({easy:.15,normal:.30,hard:.55})[difficulty];skill.tell='서로 다른 두 사람의 움직임이 실로 이어지려 합니다.';}
+ if(skill){skill.effect='repair';skill.power=({practice:.15,easy:.30,normal:.55})[difficulty];skill.tell='서로 다른 두 사람의 움직임이 실로 이어지려 합니다.';}
 }
 g.HopeBattle.defaults.title='희망탈환 · 전투 대사 전체 반영';
 })(globalThis);
@@ -4123,17 +4146,17 @@ g.HopeBattle.defaults.title='희망탈환 · 전투 대사 전체 반영';
 const H=g.HopeBattle,copy=x=>JSON.parse(JSON.stringify(x));
 function extend(c){
   c.difficulties??={};
-  if(!c.difficulties.nightmare)c.difficulties.nightmare={name:'악몽',hp:1.42,atk:1.22,def:1.03,speed:1.05,hpRegen:0,spRegen:1,enemyCrit:.07,distortedDamage:.9,distortedRegen:0,distortionEffect:1.06};
+  if(!c.difficulties.hard)c.difficulties.hard={name:'악몽',hp:1.42,atk:1.22,def:1.03,speed:1.05,hpRegen:0,spRegen:1,enemyCrit:.07,distortedDamage:.9,distortedRegen:0,distortionEffect:1.06};
   c.itemLoadouts??={};
-  if(!c.itemLoadouts.nightmare)c.itemLoadouts.nightmare={medicine:3,revive:2,ether:2,remedy:2};
+  if(!c.itemLoadouts.hard)c.itemLoadouts.hard={medicine:3,revive:2,ether:2,remedy:2};
   const hps={bellaton:.73,cor:1.196,lacrien:1.008,marionel:1.12,osteos:.92,vaciel:1.344};
   const atks={bellaton:1.12,cor:1.275,lacrien:1.0976,marionel:1.224,osteos:1.0788,vaciel:1.1845};
   const oldHps={bellaton:.73,cor:1.04,lacrien:.96,marionel:1,osteos:.92,vaciel:1.12};
   const oldAtks={bellaton:1,cor:1.02,lacrien:.98,marionel:1.02,osteos:.93,vaciel:1.03};
   for(const [id,b]of Object.entries(c.bosses||{})){
-    if(!b.patterns?.hard)continue;
-    if(!b.patterns.nightmare){
-      const list=copy(b.patterns.hard);
+    if(!b.patterns?.normal)continue;
+    if(!b.patterns.hard){
+      const list=copy(b.patterns.normal);
       const tuning={
         bellaton:{aria:{power:.25},ribbon:{power:1.28},finale:{power:1.72}},
         cor:{charge:{power:1.38},smash:{power:1.05},duel:{power:1.25,cooldown:3}},
@@ -4144,7 +4167,7 @@ function extend(c){
       };
       for(const p of list)Object.assign(p,tuning[id]?.[p.id]||{});
       if(id==='vaciel'){const m=list.find(p=>p.effect==='motif');if(m)m.priority=80;}
-      b.patterns.nightmare=list;
+      b.patterns.hard=list;
     }
     if(b.params.nightmareHpScale===undefined||b.params.nightmareHpScale===oldHps[id])b.params.nightmareHpScale=hps[id];
     if(b.params.nightmareAttackScale===undefined||b.params.nightmareAttackScale===oldAtks[id])b.params.nightmareAttackScale=atks[id];
@@ -4176,7 +4199,7 @@ function extend(c){
   }
   return c;
 }
-H.nightmare={extend};extend(H.defaults);
+H.hardDifficulty={extend};extend(H.defaults);H.defaults.difficultySchemaVersion=2;
 })(globalThis);
 </script>
 <script>/* 희망탈환 공용 엔진 0.5. DOM·AI·시계에 의존하지 않는 순수 상태 전이.
@@ -4187,7 +4210,7 @@ H.nightmare={extend};extend(H.defaults);
 'use strict';
 const H = g.HopeBattle, copy = x => JSON.parse(JSON.stringify(x));
 const bossIds = ['osteos','bellaton','cor','lacrien','marionel','vaciel'];
-const effects = ['strike','sweep','wait','opening','wing','blade','pillars','aria','ribbon','curtain','charge','smash','duel','light','reflect','recordecho','judgment','summon','thread','repair','drain','parasol','motif','empty'];
+const effects = ['strike','sweep','wait','opening','wing','blade','pillars','aria','ribbon','curtain','charge','smash','duel','light','reflect','recordecho','judgment','summon','thread','repair','drain','parasol','motif','empty','dreammark','dreamresonance','dreamrest'];
 const skillTargets = {single:'enemy',area:'enemies',buff:'ally',debuff:'enemy',defdown:'enemy',heal:'ally',allheal:'allies',spheal:'ally',guardall:'allies',counter:'self',track:'allies',encore:'allies',cleanse:'ally',protect:'ally',defall:'allies',mitigateall:'allies',followup:'self',burnarea:'enemies',pierce:'enemy',breakhit:'enemy',triplehit:'enemy',lifesteal:'enemy',stun:'enemy',breakarea:'enemies',misdirection:'enemies',spotlight:'self',climax:'enemy',mimic:'self',shield:'self',purify:'allies'};
 const skillLabels = {single:'단일 공격',area:'전체 공격',buff:'공격력 상승',debuff:'공격력 감소',defdown:'방어력 감소',heal:'체력 회복',allheal:'전체 체력 회복',spheal:'기력 회복',guardall:'전체 방어',counter:'방어·반격',track:'랜덤 지원곡',encore:'직전 노래 재연',cleanse:'일반 약화 해제',protect:'피해 감소',defall:'전체 방어력 상승',mitigateall:'전체 받는 피해 감소',followup:'아군 공격 추격',burnarea:'전체 공격·화상',pierce:'방어력 무시',breakhit:'공격·방어력 감소',triplehit:'3연격',lifesteal:'흡혈 공격',stun:'행동 봉쇄',breakarea:'전체 공격·방어력 감소',misdirection:'전체 공격·명중률 감소',spotlight:'관객에 따른 자기 강화',climax:'강화 연계 단일 공격',mimic:'직전 동료 기술 복사',shield:'전체 공격 대신 받기',purify:'전체 약화 해제'};
 const need = (v,msg) => { if (!v) throw Error(msg); };
@@ -4219,14 +4242,14 @@ function validateConfig(c) {
   for(const k of ['defenseFactor','guardFactor','critCap','repeatTargetWeight']) num(c.rules?.[k],0,1,k);
   for(const k of ['attackSp','defendSp']) num(c.rules[k],0,100,k);
   for(const k of ['maxRounds','bleedRounds','bindImmunityRounds','stunImmunityRounds']) num(c.rules[k],1,1000,k,true);
-  for(const id of ['easy','normal','hard','nightmare']) {
+  for(const id of ['practice','easy','normal','hard']) {
     const d=c.difficulties?.[id];need(d&&korean(d.name),'난이도 이름 오류');
     for(const k of ['hp','atk','def','speed']) num(d[k],.05,10,k);
     for(const k of ['hpRegen','enemyCrit','distortedRegen']) num(d[k],0,1,k);
     num(d.spRegen,0,100,'기력 회복');num(d.distortedDamage,.05,2,'구출 피해 배율');num(d.distortionEffect,0,2,'일그러짐 효과 배율');
   }
   for(const k of ['medicine','revive','ether','remedy']) num(c.items?.[k],0,99,'아이템 수',true);
-  if(c.itemLoadouts)for(const id of ['easy','normal','hard','nightmare','final'])for(const k of ['medicine','revive','ether','remedy'])num(c.itemLoadouts[id]?.[k],0,99,'난이도별 아이템 수',true);
+  if(c.itemLoadouts)for(const id of ['practice','easy','normal','hard','final'])for(const k of ['medicine','revive','ether','remedy'])num(c.itemLoadouts[id]?.[k],0,99,'난이도별 아이템 수',true);
   need(Array.isArray(c.skills)&&c.skills.length<=30,'사용자 스킬 목록 오류');
   for(const list of [c.skills,...Object.values(c.heroSkills||{})]) {
     need(Array.isArray(list)&&list.length<=30,'스킬 목록 오류');const ids=new Set();
@@ -4237,9 +4260,9 @@ function validateConfig(c) {
       for(const k of ['secondary','limit']) if(s[k]!==undefined) num(s[k],0,20,k);
     }
   }
-  need(Array.isArray(c.songs)&&c.songs.length===4,'지원곡 네 개가 필요합니다.');
+  need(Array.isArray(c.songs)&&c.songs.length===3,'지원곡 세 개가 필요합니다.');
   for(const s of c.songs) {skillName(s.name,'곡');need(['buffall','allheal','spall','weakall','mitigateall'].includes(s.effect),'지원곡 효과 오류');num(s.power,0,20,'노래 효과');num(s.duration,1,20,'노래 지속',true);}
-  if(c.songWeights)for(const key of ['healthy','hp','sp','normal']){const w=c.songWeights[key];need(Array.isArray(w)&&w.length===4,'상황별 지원곡 확률은 네 개가 필요합니다.');w.forEach(v=>num(v,0,100,'노래 확률'));need(w.reduce((a,v)=>a+v,0)===100,'노래 확률 합계는 100이어야 합니다.');}
+  if(c.songWeights)for(const key of ['healthy','hp','sp','normal']){const w=c.songWeights[key];need(Array.isArray(w)&&w.length===c.songs.length,'상황별 지원곡 확률은 지원곡 개수와 같아야 합니다.');w.forEach(v=>num(v,0,100,'노래 확률'));need(w.reduce((a,v)=>a+v,0)===100,'노래 확률 합계는 100이어야 합니다.');}
   for(const id of ['jun','rikka','shion','rinne','takumi']) {const d=c.distortions?.[id];need(d&&korean(d.name),'일그러짐 자료 오류');num(d.power,0,id==='takumi'?2:1,'일그러짐 위력');num(d.secondary,0,1,'보조 효과');num(d.interval,1,10,'발동 간격',true);lines(c.smallTalk[id],c);}
   need(c.storyRules?.talkRequired===3&&c.storyRules.talkPerRound===1&&c.storyRules.rpRecovery===false,'구출 규칙 오류');
   for(const id of bossIds) {
@@ -4251,14 +4274,14 @@ function validateConfig(c) {
     for(const k of ['guardReduction','rageHp','rageAtk','rageDef','openingDef','repairRatio','wingDef','attackHp','bladeHp','bladeDef','bladeCrit','pillarHeal','rageDot','bleedRatio','duelCap','reflectRatio','reflectCap','recordCap']) num(b.params[k],0,.99,k);
     for(const k of ['summonLimit','repairLimit','pillarCount']) num(b.params[k],0,10,k,true);
     for(const k of ['wingTurns','calmMaxRounds','pillarTicks','duelHits','bindTurns','exposeRounds','bleedTurns','summonAliveLimit']) num(b.params[k],1,20,k,true);
-    for(const mode of ['easy','normal','hard','nightmare']) {
+    for(const mode of ['practice','easy','normal','hard']) {
       const list=b.patterns?.[mode];need(Array.isArray(list)&&list.length>0&&list.length<=100,'패턴 목록 오류');const ids=new Set();
       for(const p of list) {
         need(/^[a-z][a-z0-9_-]*$/.test(p.id)&&!ids.has(p.id),'패턴 ID 오류 또는 중복');ids.add(p.id);
         skillName(p.name,'보스 기술');need(text(p.tell)&&effects.includes(p.effect),'패턴 효과·예고 오류');
         num(p.power,0,10,'패턴 위력');num(p.cycle,1,99,'주기',true);num(p.offset,1,p.cycle,'주기 내 순서',true);num(p.fromRound,1,1000,'시작 라운드',true);num(p.hpMin,0,100,'최소 체력');num(p.hpMax,p.hpMin,100,'최대 체력');num(p.priority,0,1000,'우선도',true);num(p.cooldown,0,100,'재사용',true);
         need(typeof p.once==='boolean'&&['any','base','calm','rage','empty'].includes(p.phase)&&['one','all'].includes(p.target),'패턴 조건 오류');
-        if(!['hard','nightmare'].includes(mode)) need(!['pillars','duel','thread','recordecho'].includes(p.effect),'이 효과는 어려움 전용입니다.');
+        if(!['normal','hard'].includes(mode)) need(!['pillars','duel','thread','recordecho'].includes(p.effect),'이 효과는 어려움 전용입니다.');
       }
     }
     const s=b.story;need(s&&typeof s.enabled==='boolean'&&(s.hero===null||Object.keys(c.heroes).filter(k=>k!=='user').includes(s.hero))&&(!s.enabled||s.hero),'스토리 연결 오류');
@@ -4286,7 +4309,7 @@ const rescueTargets=b=>canTalk(b)&&!active(b.party.user,'puppet',b.round)&&!b.ac
 const combatReady=(u,r)=>ready(u,r)&&!active(u,'timehold',r);
 const actions=b=>Object.keys(b.party).filter(id=>!b.acted[id]&&(combatReady(b.party[id],b.round)||(id==='user'&&rescueTargets(b).length>0)));
 const enemies=b=>[b.boss,...b.summons].filter(living);
-const attackable=b=>enemies(b).filter(u=>!(u===b.boss&&b.domain==='marionel'&&!['hard','nightmare'].includes(b.difficulty)&&b.summons.some(s=>living(s)&&s.kind==='doll')));
+const attackable=b=>enemies(b).filter(u=>!(u===b.boss&&b.domain==='marionel'&&!['normal','hard'].includes(b.difficulty)&&b.summons.some(s=>living(s)&&s.kind==='doll')));
 const specialIds=['mimic','shield','purify'];
 const isSpecial=id=>specialIds.includes(id);
 const skills=(b,c,id)=>id==='user'?c.skills.filter(s=>b.playerSkills.includes(s.id)):c.heroSkills[id]||[];
@@ -4296,7 +4319,7 @@ const actorName=(b,id)=>id==='system'?'전투 기록':id==='scene'?'':b.party[id
 const rand=b=>{b.rng=(Math.imul(1664525,b.rng)+1013904223)>>>0;return b.rng/4294967296;};
 const pick=(b,a)=>a.length?a[Math.floor(rand(b)*a.length)]:null;
 const pct=(n,p)=>Math.max(0,Math.round(n*p));
-function snapshot(b) {return copy({round:b.round,party:b.party,boss:b.boss,summons:b.summons,phase:b.phase,intent:b.intent,mark:b.mark,story:b.story,items:b.items,outcome:b.outcome,committed:b.committed,talkRound:b.talkRound,acted:b.acted,invitation:b.invitation,reflection:b.reflection,recordedDamage:b.recordedDamage,exposedUntil:b.exposedUntil,playerName:b.playerName});}
+function snapshot(b) {return copy({round:b.round,party:b.party,boss:b.boss,summons:b.summons,phase:b.phase,intent:b.intent,mark:b.mark,story:b.story,items:b.items,outcome:b.outcome,committed:b.committed,talkRound:b.talkRound,acted:b.acted,invitation:b.invitation,reflection:b.reflection,recordedDamage:b.recordedDamage,exposedUntil:b.exposedUntil,dreamMonochrome:!!b.dreamMonochrome,playerName:b.playerName});}
 function emit(x,type,speaker,message,extra={}) {
   const b=x.b,e={id:++b.eventSerial,type,speaker,template:String(message),text:String(message).replaceAll('{{user}}',b.playerName),...extra};
   if(b.record) {b.log.push(copy(e));if(b.log.length>600)b.log.shift();x.events.push({...e,view:snapshot(b)});}return e;
@@ -4317,7 +4340,7 @@ function choose(x,preferred=null,forced=false) {
 }
 function pattern(b,c) {
   const hp=b.boss.hp/b.boss.maxHp*100,list=c.bosses[b.domain].patterns[b.difficulty];
-  return copy(list.filter(p=>(p.effect!=='motif'||b.motifCount<(b.difficulty==='nightmare'?5:3))&&p.fromRound<=b.round&&(b.round-1)%p.cycle===p.offset-1&&hp>=p.hpMin&&hp<=p.hpMax&&(p.phase==='any'||p.phase===b.phase)&&(!p.once||b.patternUsed[p.id]==null)&&(b.patternUsed[p.id]==null||b.round-b.patternUsed[p.id]>p.cooldown)).sort((a,z)=>z.priority-a.priority)[0]||{id:'fallback',name:b.domain==='vaciel'?'그림자의 물결':'견제',effect:b.phase==='calm'?'wait':'strike',power:b.difficulty==='easy'?.6:1,target:'one',tell:'움직임을 가다듬고 있습니다.'});
+  return copy(list.filter(p=>(p.effect!=='motif'||b.motifCount<(b.difficulty==='hard'?5:3))&&p.fromRound<=b.round&&(b.round-1)%p.cycle===p.offset-1&&hp>=p.hpMin&&hp<=p.hpMax&&(p.phase==='any'||p.phase===b.phase)&&(!p.once||b.patternUsed[p.id]==null)&&(b.patternUsed[p.id]==null||b.round-b.patternUsed[p.id]>p.cooldown)).sort((a,z)=>z.priority-a.priority)[0]||{id:'fallback',name:b.domain==='vaciel'&&b.difficulty!=='hard'?'그림자의 물결':'견제',effect:b.phase==='calm'?'wait':'strike',power:b.difficulty==='practice'?.6:1,target:'one',tell:'움직임을 가다듬고 있습니다.'});
 }
 // 예고와 실제 판정이 같은 상태·설정을 읽는다. 스토리 정답이나 구출 횟수는 표시하지 않는다.
 function forecast(b,c) {
@@ -4333,8 +4356,8 @@ function forecast(b,c) {
 function adaptiveIntent(b,c,p) {
   const bc=c.bosses[b.domain];
   if(b.domain==='marionel'&&p.effect==='repair')
-    return {...p,tell:b.difficulty==='nightmare'?'수선하는 손 · 두 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.':'수선하는 손 · 한 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.'};
-  if(b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty)){
+    return {...p,tell:b.difficulty==='hard'?'수선하는 손 · 두 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.':'수선하는 손 · 한 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.'};
+  if(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)){
     const dolls=b.summons.filter(u=>living(u)&&u.kind==='doll');
     const canNextWave=b.summonCount===0||(b.team.length>0&&b.summonCount===1&&b.boss.hp/b.boss.maxHp<=.7);
     if(b.summonCount===1&&canNextWave&&b.summonCount<bc.params.summonLimit&&!dolls.length&&b.round>b.exposedUntil)
@@ -4350,8 +4373,15 @@ function adaptiveIntent(b,c,p) {
       return {...p,power:Math.max(p.power,1.4),tell:'마리오넬이 수많은 실을 한곳으로 끌어당깁니다.'};
   }
   // 수선하는 손은 모든 난이도에서 1회 스킬 봉인, 어려움에서는 2명에게 적용합니다.
-  if(b.domain!=='vaciel'||b.difficulty==='easy'||!(bc.params.lateChainHp>0)||b.finalChain==='done')return p;
+  if(b.domain!=='vaciel'||b.difficulty==='practice'||!(bc.params.lateChainHp>0)||b.finalChain==='done')return p;
   const list=bc.patterns[b.difficulty],hp=b.boss.hp/b.boss.maxHp*100;
+  // 바시엘 어려움 한정: 장막 뒤에 표식 1턴 -> 공명 -> 탈진 1턴.
+  if(b.difficulty==='hard'){
+    const closing={target:'all',phase:'any',power:0,cycle:1,offset:1,fromRound:1,priority:100,once:false,cooldown:0};
+    if(b.finalChain==='mark')return {...closing,id:'dreammark-closing',name:'색을 잃은 꿈',effect:'dreammark',closingStep:'mark',tell:'바시엘의 눈가에서 은빛 눈물이 떨어집니다. 성역의 색이 천천히 사라집니다.'};
+    if(b.finalChain==='resonate')return {...closing,id:'dreamresonance-closing',name:'공명',effect:'dreamresonance',closingStep:'resonate',tell:'색채를 잃은 성역에 한 점의 소리도 들리지 않습니다. 바시엘이 눈을 뜨려 합니다.'};
+    if(b.finalChain==='aftershock')return {...closing,id:'dreamrest-closing',name:'공명의 반동',effect:'dreamrest',closingStep:'aftershock',tell:'바시엘의 손끝이 떨립니다. 양산의 그림자가 잠시 흔들립니다.'};
+  }
   const eligible=v=>(v.phase==='any'||v.phase===b.phase)&&v.fromRound<=b.round&&hp>=v.hpMin&&hp<=v.hpMax&&(!v.once||b.patternUsed[v.id]==null)&&(b.patternUsed[v.id]==null||b.round-b.patternUsed[v.id]>v.cooldown);
   const drain=list.find(v=>v.effect==='drain'&&eligible(v)),finish=list.find(v=>v.effect===(b.phase==='empty'?'empty':'parasol')&&eligible(v));
   if(b.finalChain==='rest'){
@@ -4360,8 +4390,8 @@ function adaptiveIntent(b,c,p) {
     return {...recovery,id:recovery.id+'-closing-rest',sourcePatternId:recovery.id,closingStep:'rest',tell:recovery.tell+'\n장막의 틈새로 잠깐 빛이 스며듭니다.'};
   }
   if(b.finalChain==='finish'&&!finish){b.finalChain='done';return p;}
-  const closeAt=['hard','nightmare'].includes(b.difficulty)?bc.params.lateChainHp:(bc.params.normalLateChainHp??bc.params.lateChainHp);
-  const readyToClose=b.round>=(['hard','nightmare'].includes(b.difficulty)?4:3)&&b.boss.hp/b.boss.maxHp<=closeAt&&(!['hard','nightmare'].includes(b.difficulty)||!list.some(v=>v.effect==='motif')||b.motifCount>=(b.difficulty==='nightmare'?5:3));
+  const closeAt=b.difficulty==='hard'?Math.max(.65,bc.params.lateChainHp):['normal','hard'].includes(b.difficulty)?bc.params.lateChainHp:(bc.params.normalLateChainHp??bc.params.lateChainHp);
+  const readyToClose=b.round>=(['normal','hard'].includes(b.difficulty)?4:3)&&b.boss.hp/b.boss.maxHp<=closeAt&&(!['normal','hard'].includes(b.difficulty)||!list.some(v=>v.effect==='motif')||b.motifCount>=(b.difficulty==='hard'?5:3));
   if(b.finalChain==='finish')return {...finish,id:finish.id+'-closing',sourcePatternId:finish.id,closingStep:'finish',tell:finish.tell+'\n바시엘의 그림자가 한층 더 짙어집니다.'};
   if(readyToClose&&drain&&finish)return {...drain,id:drain.id+'-closing',sourcePatternId:drain.id,closingStep:'drain',tell:drain.tell+'\n어둠 속에서 두 번째 물결이 일렁입니다.'};
   return p;
@@ -4406,15 +4436,15 @@ function prepare(x) {
     else if(!b.rageTriggered) {const phase=hp>bc.params.attackHp&&b.round<=bc.params.calmMaxRounds?'calm':'base';if(b.phase==='calm'&&phase==='base')emit(x,'dialogue',b.domain,'……어리석군요.');b.phase=phase;}
   }
   if(b.domain==='cor'&&!b.rageTriggered&&hp<=bc.params.rageHp) {b.rageTriggered=true;b.phase='rage';if(bc.battleCues?.rage?.length)scene(x,bc.battleCues.rage);else emit(x,'phase','scene','코르의 기세가 거칠어집니다. 타오르는 힘이 자신의 몸도 상하게 합니다.');}
-  if(b.domain==='vaciel'&&['hard','nightmare'].includes(b.difficulty)&&hp<=.65&&!b.vacielCracked){b.vacielCracked=true;emit(x,'phase','scene','바시엘의 양산 아래로 그림자가 짙게 번집니다. 간부들의 잔영이 서로 얽히며 압박이 거세집니다.');}
+  if(b.domain==='vaciel'&&['normal','hard'].includes(b.difficulty)&&hp<=.65&&!b.vacielCracked){b.vacielCracked=true;emit(x,'phase','scene','바시엘의 양산 아래로 그림자가 짙게 번집니다. 간부들의 잔영이 서로 얽히며 압박이 거세집니다.');}
   storyEvent(x);ensureAgency(x);
   const p=adaptiveIntent(b,x.c,pattern(b,x.c));b.intent={...p,targetId:null};
   if(p.effect==='duel') {b.intent.targetId=choose(x)?.id||null;b.mark={target:b.intent.targetId,due:b.round};}
   if(b.domain==='vaciel'&&p.effect==='motif'&&b.motifCount===1){b.intent.targetId=choose(x)?.id||null;b.mark={target:b.intent.targetId,due:b.round};b.intent.tell='희미한 잔영이 한 사람을 향해 고개를 돌립니다.';}
   if(b.domain==='vaciel'&&p.effect==='motif'&&b.motifCount===0)b.intent.tell='바시엘의 등 뒤에 얇은 장막이 겹쳐집니다.';
   if(b.domain==='vaciel'&&p.effect==='motif'&&b.motifCount===2)b.intent.tell='찬 기운이 전장을 천천히 뒤덮습니다.';
-  if(b.domain==='vaciel'&&b.difficulty==='nightmare'&&p.effect==='motif'&&b.motifCount===3)b.intent.tell='마리오넬의 잔영이 실을 엮습니다. 여러 사람의 움직임이 얽힙니다.';
-  if(b.domain==='vaciel'&&b.difficulty==='nightmare'&&p.effect==='motif'&&b.motifCount===4){b.intent.targetId=null;b.mark=null;b.intent.tell='코르의 잔영이 전장 곳곳에 검을 겨눕니다. 다섯 번의 참격이 어디로 향할지 알 수 없습니다.';}
+  if(b.domain==='vaciel'&&b.difficulty==='hard'&&p.effect==='motif'&&b.motifCount===3)b.intent.tell='마리오넬의 잔영이 실을 엮습니다. 여러 사람의 움직임이 얽힙니다.';
+  if(b.domain==='vaciel'&&b.difficulty==='hard'&&p.effect==='motif'&&b.motifCount===4){b.intent.targetId=null;b.mark=null;b.intent.tell='코르의 잔영이 전장 곳곳에 검을 겨눕니다. 다섯 번의 참격이 어디로 향할지 알 수 없습니다.';}
   if(p.effect==='ribbon'&&living(b.party[b.invitation?.target])) {b.intent.targetId=b.invitation.target;b.mark={target:b.invitation.target,due:b.round};}
   // 모든 적 행동·라운드 종료 효과와 다음 라운드 준비가 끝난 뒤 기록합니다.
   // 명시적 이름 치환만 허용하므로 등장인물 대사의 '당신'은 건드리지 않습니다.
@@ -4435,17 +4465,17 @@ function initial(c,opts={}) {
     if(u.eventCompleted&&h.eventFeeling){need(korean(h.eventFeeling)&&text(h.eventFeeling,160),'감정 요약은 한국어 160자 이내입니다.');u.eventFeeling=h.eventFeeling;}
     if(!u.hp)u.downAt=round-1;if(u.distorted){u.rescue='pending';u.distortedAt=round;u.nextDistortionRound=round;}party[key]=u;
   }
-  const extra=id==='vaciel'&&['hard','nightmare'].includes(mode)?(bc.params.hardHpPerCompanionBonus||0)*team.length:0;
-  const hardplus=['hard','nightmare'].includes(mode);
-  const hpScale=(id==='cor'&&hardplus?(bc.params.hardHpScale??1):1)*(mode==='hard'?(bc.params.normalHpScale??1):mode==='nightmare'?(bc.params.nightmareHpScale??1):1);
-  const attackScale=hardplus?(bc.params.hardAttackScale??1)*(mode==='nightmare'?(bc.params.nightmareAttackScale??1):1):mode==='normal'?(bc.params.normalAttackScale??1):1;
-  // 바시엘 어려움: 동료 1명당 최대 HP 40 추가 (1인 플레이는 기존 HP 유지).
+  const extra=id==='vaciel'&&['normal','hard'].includes(mode)?(bc.params.hardHpPerCompanionBonus||0)*team.length:0;
+  const hardplus=['normal','hard'].includes(mode);
+  const hpScale=(id==='cor'&&hardplus?(bc.params.hardHpScale??1):1)*(mode==='normal'?(bc.params.normalHpScale??1):mode==='hard'?(bc.params.nightmareHpScale??1):1);
+  const attackScale=hardplus?(bc.params.hardAttackScale??1)*(mode==='hard'?(bc.params.nightmareAttackScale??1):1):mode==='easy'?(bc.params.normalAttackScale??1):1;
+  // 바시엘 어려움: 동료 1명당 최대 HP 101 추가. 6인 구성 기준 2,400 HP.
   // 기존 보스 HP 배율은 건드리지 않아 보통/쉬움 및 다른 보스에는 영향 없음.
-  const vacielNightmareTeamHp=id==='vaciel'&&mode==='nightmare'?40*team.length:0;
+  const vacielNightmareTeamHp=id==='vaciel'&&mode==='hard'?101*team.length:0;
   const boss=unit(id,{...bc,hp:pct(bc.hp+bc.hpPerCompanion*team.length+extra,d.hp*hpScale)+vacielNightmareTeamHp,atk:bc.atk*d.atk*attackScale,def:bc.def*d.def,speed:bc.speed*d.speed,crit:d.enemyCrit});
   num(opts.bossHpPercent??100,1,100,'보스 체력');boss.hp=Math.max(1,pct(boss.maxHp,(opts.bossHpPercent??100)/100));
   const gate=opts.storyFlags||{},returned=Array.isArray(gate.returnedCommanders)?bossIds.filter(k=>k!=='vaciel'&&gate.returnedCommanders.includes(k)):[],empty=id==='vaciel'&&returned.length===5&&gate.composureRestored===true;
-  const b={version:3,forceDefeat:!!opts.forceDefeat,id:opts.id||id+'-'+seed,mode:opts.mode==='campaign'?'campaign':'workbench',domain:id,playerName:name,difficulty:mode,seed,rng:seed,round,startedAt:round,revision:0,meaningful:false,eventSerial:0,record:opts.record!==false,team:[...team],playerSkills:[...ps],party,boss,summons:[],summonSerial:0,summonCount:0,repairCount:0,motifCount:0,phase:id==='osteos'?'calm':'base',specialFinal:empty,rageTriggered:false,patternUsed:{},intent:null,mark:null,story:{occurred:!!opts.eventOccurred,pressured:!!opts.eventOccurred,hero:null,branch:'none',resolved:false,focus:null},storyFlags:{returnedCommanders:returned,composureRestored:gate.composureRestored===true},talkRound:0,smallTalkUsed:{},bossTalkCount:0,bossTalkLimit:(bc.chat?.length||3)+((bc.bossTalkEntry?.ordinary?.length||bc.bossTalkEntry?.solo?.length)?1:0),pairTalkUsed:false,midDialogueShown:false,acted:{},items:copy(c.itemLoadouts?.[mode==='nightmare'?'nightmare':id==='vaciel'?'final':mode]||c.items),log:[],outcome:null,committed:false,deathAllowed:false,lastTrack:null,lastCompanionSkill:null,lastRandomTarget:null,invitation:null,reflection:null,recordedDamage:0,exposedUntil:0};
+  const b={version:3,forceDefeat:!!opts.forceDefeat,id:opts.id||id+'-'+seed,mode:opts.mode==='campaign'?'campaign':'workbench',domain:id,playerName:name,difficulty:mode,seed,rng:seed,round,startedAt:round,revision:0,meaningful:false,eventSerial:0,record:opts.record!==false,team:[...team],playerSkills:[...ps],party,boss,summons:[],summonSerial:0,summonCount:0,repairCount:0,motifCount:0,phase:id==='osteos'?'calm':'base',specialFinal:empty,rageTriggered:false,patternUsed:{},intent:null,mark:null,story:{occurred:!!opts.eventOccurred,pressured:!!opts.eventOccurred,hero:null,branch:'none',resolved:false,focus:null},storyFlags:{returnedCommanders:returned,composureRestored:gate.composureRestored===true},talkRound:0,smallTalkUsed:{},bossTalkCount:0,bossTalkLimit:(bc.chat?.length||3)+((bc.bossTalkEntry?.ordinary?.length||bc.bossTalkEntry?.solo?.length)?1:0),pairTalkUsed:false,midDialogueShown:false,acted:{},items:copy(c.itemLoadouts?.[mode==='hard'?'hard':id==='vaciel'?'final':mode]||c.items),log:[],outcome:null,committed:false,deathAllowed:false,lastTrack:null,lastCompanionSkill:null,lastRandomTarget:null,invitation:null,reflection:null,recordedDamage:0,exposedUntil:0,dreamMonochrome:false};
   const existing=party[bc.story.hero];if(existing?.distorted&&existing.rescue==='pending'){b.story={occurred:true,hero:existing.id,branch:'distorted',resolved:false,focus:bc.story.focus?existing.id:null};}
   const x=ctx(b,c);
   scene(x,id==='vaciel'?(empty?bc.emptyIntro:returned.length?bc.mixedIntro||bc.intro:bc.intro):bc.intro);
@@ -4461,6 +4491,8 @@ function failedZero(x,u) {
 }
 function finish(x,outcome) {
   const {b}=x;if(b.outcome)return;b.outcome=outcome;b.story.focus=null;
+  // 공명 반동 이전에 전투가 끝나도 스탠딩/배경이 흑백으로 남지 않도록 복원.
+  if(b.domain==='vaciel')b.dreamMonochrome=false;
   for(const u of Object.values(b.party))if(u.distorted&&living(u)&&u.rescue==='pending'){u.rescue='unrecovered';u.permanentUnavailable=true;cleanupDistortion(x,u.id);emit(x,'rescueFailed','system',u.name+' · 생존했으나 일그러짐에서 돌아오지 못했습니다. 영구 전투불가.');}
   // Minor injury depends on HP at battle end, not on whether the hero was ever knocked out.
   for(const u of Object.values(b.party))if(u.alive&&!u.permanentUnavailable&&!u.severeInjury)u.injured=u.hp===0;
@@ -4487,7 +4519,7 @@ function heal(x,u,ratio,reason=''){
   if(n)emit(x,'heal','system',u.name+' · HP +'+n,{target:u.id,amount:n,reason});
 }
 function sp(x,u,n,reason='기력 회복'){if(!living(u)||u.permanentUnavailable)return;const amount=Math.min(u.maxSp-u.sp,Math.round(n));u.sp+=amount;if(amount)emit(x,'sp','system',u.name+' · SP +'+amount+(reason==='라운드 종료 자동 회복'?'':' ('+reason+')'),{target:u.id,amount,reason});}
-const stateNames={mitigation:'받는 피해 감소',weak:'공격력 감소',defdown:'방어력 감소',dark:'명중 저하',buff:'공격력 상승',defup:'방어력 상승',counter:'반격 준비',followup:'추격 준비',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:'회복량 감소',bodyguard:'등 맡기기',riposte:'수호 반격 준비',timehold:'늘어진 순간',songAtk:'불안정한 노래',songDef:'불안정한 노래'};
+const stateNames={mitigation:'받는 피해 감소',weak:'공격력 감소',defdown:'방어력 감소',dark:'명중 저하',buff:'공격력 상승',defup:'방어력 상승',counter:'반격 준비',followup:'추격 준비',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:'회복량 감소',bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색을 잃은 꿈',timehold:'늘어진 순간',songAtk:'불안정한 노래',songDef:'불안정한 노래'};
 const playerStackCaps={buff:.40,weak:.40,defdown:.50,dark:.32,defup:.65,mitigation:.45};
 function status(x,u,key,value,duration=2,extra={}) {
   if(!living(u))return;
@@ -4515,10 +4547,10 @@ function status(x,u,key,value,duration=2,extra={}) {
     buff:`공격력 +${percent}%`,weak:`공격력 −${percent}%`,defup:`방어력 +${percent}%`,defdown:`방어력 −${percent}%`,
     mitigation:`받는 피해 ${percent}% 감소`,dark:`명중률 −${percent}%`,
     spotlight:`공격력 +${percent}% (스포트라이트)`,counter:`직접 반격 준비 (라운드당 최대 ${extra.limit||1}회)`,
-    followup:'레드라인 추격 준비 (2라운드 동안 횟수 제한 없음)',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',
-    bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:`HP 회복량 ${percent}% 감소`,bodyguard:'등 맡기기',riposte:'수호 반격 준비',timehold:'늘어진 순간',songAtk:`공격력 +${percent}% (노래)`,songDef:`방어력 −${percent}% (노래)`
+    colorlessDream:'색을 잃은 꿈',followup:'레드라인 추격 준비 (2라운드 동안 횟수 제한 없음)',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',
+    bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:`HP 회복량 ${percent}% 감소`,bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색을 잃은 꿈',timehold:'늘어진 순간',songAtk:`공격력 +${percent}% (노래)`,songDef:`방어력 −${percent}% (노래)`
   };
-  const lasting=key==='puppet'?'다음 아군 차례의 행동 1회':key==='skillseal'?'다음 아군 차례 1회 (스킬 사용 불가)':key==='healdown'?'다음 아군 차례 1회':key==='stitch'?'다음 적 차례까지':`${duration}라운드 지속`+(key==='burn'&&extra.stackable?` · 화상 ${stackCount}/2겹`:stackCount>1?' · 효과 중첩':'');
+  const lasting=key==='colorlessDream'?'다음 적 차례까지':key==='puppet'?'다음 아군 차례의 행동 1회':key==='skillseal'?'다음 아군 차례 1회 (스킬 사용 불가)':key==='healdown'?'다음 아군 차례 1회':key==='stitch'?'다음 적 차례까지':`${duration}라운드 지속`+(key==='burn'&&extra.stackable?` · 화상 ${stackCount}/2겹`:stackCount>1?' · 효과 중첩':'');
   emit(x,'status','system',`${u.name} · ${labels[key]||stateNames[key]||'상태 변화'} · ${lasting}`,{target:u.id,statusKey:key,statusValue:extra.stackable?combined:value,statusDuration:duration});
 }
 function takeDamage(x,a,t,amount,opts={}) {
@@ -4550,7 +4582,7 @@ function takeDamage(x,a,t,amount,opts={}) {
   if(!t.hp) {
     if(b.party[t.id]) {if(t.distorted)failedZero(x,t);else {t.injured=true;t.knockedOutThisBattle=true;t.downAt=b.round;t.bleed=x.c.rules.bleedRounds;emit(x,'down','system',t.name+' · 전투불능');}}
     else if(t===b.boss)emit(x,'down','system',t.name+josa(t.name,'이','가')+' 더는 전투를 이어가지 못합니다.');
-    else {t.alive=false;emit(x,'down','system',t.name+' · 격파');if(t.kind==='doll'&&!b.summons.some(u=>living(u)&&u.kind==='doll')){b.exposedUntil=b.round+x.bc.params.exposeRounds;scene(x,x.bc.battleCues?.exposed);emit(x,'notice','scene',b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty)?'마지막 인형이 쓰러졌습니다. 끊어진 실의 반동이 마리오넬에게 되돌아갑니다. 본체가 노출됩니다.':'인형들의 실이 끊어졌습니다. 본체가 드러납니다.');if(b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty)&&living(b.boss))takeDamage(x,{id:'broken-threads',name:'끊어진 실'},b.boss,Math.max(1,Math.round(b.boss.maxHp*(x.bc.params.dollBreakRatio??.05))));}}
+    else {t.alive=false;emit(x,'down','system',t.name+' · 격파');if(t.kind==='doll'&&!b.summons.some(u=>living(u)&&u.kind==='doll')){b.exposedUntil=b.round+x.bc.params.exposeRounds;scene(x,x.bc.battleCues?.exposed);emit(x,'notice','scene',b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)?'마지막 인형이 쓰러졌습니다. 끊어진 실의 반동이 마리오넬에게 되돌아갑니다. 본체가 노출됩니다.':'인형들의 실이 끊어졌습니다. 본체가 드러납니다.');if(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&living(b.boss))takeDamage(x,{id:'broken-threads',name:'끊어진 실'},b.boss,Math.max(1,Math.round(b.boss.maxHp*(x.bc.params.dollBreakRatio??.05))));}}
   }return dealt;
 }
 function damage(x,a,t,power,opts={}) {
@@ -4559,18 +4591,18 @@ function damage(x,a,t,power,opts={}) {
   const intercepted=b.enemyPhase&&(a===b.boss||b.summons.includes(a))&&b.party[t.id]&&living(b.party.user)&&active(b.party.user,'bodyguard',b.round);
   const savedAlly=intercepted&&t!==b.party.user;
   if(intercepted)t=b.party.user;
-  if(t===b.boss&&b.domain==='marionel'&&!['hard','nightmare'].includes(b.difficulty)&&b.summons.some(u=>living(u)&&u.kind==='doll'))return {hit:false,amount:0};
+  if(t===b.boss&&b.domain==='marionel'&&!['normal','hard'].includes(b.difficulty)&&b.summons.some(u=>living(u)&&u.kind==='doll'))return {hit:false,amount:0};
   if(!opts.reaction&&!opts.noMiss&&buff(a,'dark',b)>0&&rand(b)<buff(a,'dark',b)){emit(x,'miss',a.id,a.name+'의 공격이 빛 속에서 빗나갔습니다.');return {hit:false,amount:0};}
-  const rageAtk=a===b.boss&&b.domain==='cor'&&b.rageTriggered?bc.params.rageAtk*(b.difficulty==='easy'?.4:1):0;
+  const rageAtk=a===b.boss&&b.domain==='cor'&&b.rageTriggered?bc.params.rageAtk*(b.difficulty==='practice'?.4:1):0;
   const rageDef=t===b.boss&&b.rageTriggered?(b.domain==='osteos'?bc.params.bladeDef:bc.params.rageDef):0;
   const atk=a.atk*Math.max(.1,1+buff(a,'buff',b)+buff(a,'spotlight',b)+buff(a,'songAtk',b)-buff(a,'weak',b)+rageAtk);
   const def=t.def*Math.max(.05,1+buff(t,'defup',b)-buff(t,'defdown',b)-buff(t,'songDef',b)-rageDef);
   const critChance=Math.min(c.rules.critCap,a.crit+(opts.critBonus||0)),critical=!opts.noCrit&&rand(b)<critChance;
   let n=Math.max(1,atk*power-(opts.ignoreDef?0:def*c.rules.defenseFactor*(opts.defensePortion??1)))*(critical?a.critMult:1);
-  if(t===b.boss&&b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty)&&b.summons.some(u=>living(u)&&u.kind==='doll'))n*=1-(bc.params.dollShieldRatio??.65);
-  if(t===b.boss&&b.domain==='marionel'&&b.difficulty!=='easy'&&b.exposedUntil>=b.round)n*=1+(bc.params.exposedDamageBonus||0)+(['hard','nightmare'].includes(b.difficulty)&&b.domain==='marionel'?.1:0);
-if(t===b.boss&&b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty)&&b.team.length===0)n*=1.25;
-  if(b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty)&&b.team.length===0&&!b.party[a.id])n*=.72;
+  if(t===b.boss&&b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&b.summons.some(u=>living(u)&&u.kind==='doll'))n*=1-(bc.params.dollShieldRatio??.65);
+  if(t===b.boss&&b.domain==='marionel'&&b.difficulty!=='practice'&&b.exposedUntil>=b.round)n*=1+(bc.params.exposedDamageBonus||0)+(['normal','hard'].includes(b.difficulty)&&b.domain==='marionel'?.1:0);
+if(t===b.boss&&b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&b.team.length===0)n*=1.25;
+  if(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&b.team.length===0&&!b.party[a.id])n*=.72;
   // 방어력 감소 상태의 적은 방어력 수치 감소 외에 공격 피해가 20% 증가한다.
   // 중첩 방깎(최대 50%)이라도 추가 피해 증가율은 중첩되지 않는다.
   // 보스 고유의 보호·노출 기믹은 기존 판정을 유지한다.
@@ -4581,7 +4613,7 @@ if(t===b.boss&&b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty
   if(t.distorted&&b.party[t.id])n*=d.distortedDamage;
   if(t.id==='jun'&&t.distorted)n*=1-c.distortions.jun.power;
   if(opts.cap!==undefined)n=Math.min(n,opts.cap);
-  if(a===b.boss&&b.domain==='cor'&&b.difficulty==='nightmare')n*=.94;
+  if(a===b.boss&&b.domain==='cor'&&b.difficulty==='hard')n*=.94;
   const dealt=takeDamage(x,a,t,n,{...opts,critical});
   if(savedAlly&&dealt>0&&living(b.party.user)&&!active(b.party.user,'riposte',b.round)){
     status(x,b.party.user,'riposte',.2,3);
@@ -4590,7 +4622,7 @@ if(t===b.boss&&b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty
   if(t===b.boss&&b.reflection&&b.reflection.until>=b.round&&!opts.reaction&&living(a)&&b.party[a.id]) {
     b.recordedDamage+=dealt;
     // 어려움은 반사 피해량을 최대 HP의 일정 비율로 강제 제한하지 않습니다.
-    const reflected=['hard','nightmare'].includes(b.difficulty)?dealt*bc.params.reflectRatio*(b.domain==='lacrien'&&b.difficulty==='hard'?1.5:1):Math.min(dealt*bc.params.reflectRatio,a.maxHp*bc.params.reflectCap);
+    const reflected=['normal','hard'].includes(b.difficulty)?dealt*bc.params.reflectRatio*(b.domain==='lacrien'&&b.difficulty==='normal'?1.5:1):Math.min(dealt*bc.params.reflectRatio,a.maxHp*bc.params.reflectCap);
     if(reflected>0){emit(x,'reflect','scene',`만상기록에 ${dealt} 피해가 더해졌습니다. 누적 ${b.recordedDamage} · 공격의 일부가 되돌아옵니다.`);let amount=reflected;if(a.guard)amount*=c.rules.guardFactor;if(a.protect)amount*=1-a.protect;takeDamage(x,b.boss,a,amount);}
   }
   if(living(t)&&living(a)&&active(t,'counter',b.round)&&!opts.reaction) {
@@ -4647,7 +4679,7 @@ function playerAct(x,id,a) {
     const victims=Object.values(b.party).filter(v=>v.id!==u.id&&living(v));
     const victim=pick(b,victims);
     if(victim){emit(x,'distortion','scene',u.name+'의 몸이 제 의지와 상관없이 움직입니다. 저항할 틈도 없이, 공격이 '+victim.name+'에게 향합니다.');
-      damage(x,{...u,crit:0},victim,b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty)?(b.difficulty==='nightmare'?(x.bc.params.nightmarePuppetAttackRatio??1.85):(x.bc.params.hardPuppetAttackRatio??1.65)):(x.bc.params.puppetAttackRatio??.6),{reaction:true,noCrit:true,noMiss:true});}
+      damage(x,{...u,crit:0},victim,b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)?(b.difficulty==='hard'?(x.bc.params.nightmarePuppetAttackRatio??1.85):(x.bc.params.hardPuppetAttackRatio??1.65)):(x.bc.params.puppetAttackRatio??.6),{reaction:true,noCrit:true,noMiss:true});}
     else emit(x,'notice','scene',u.name+josa(u.name,'이','가')+' 실에 저항합니다. 공격할 동료가 없어 강제 공격은 발생하지 않습니다.');
     return;
   }
@@ -4749,12 +4781,23 @@ function playerAct(x,id,a) {
       emit(x,'guard',id,`${u.name} · 등 맡기기 준비! 다음 적 차례 공격을 모두 대신 받고, 각 피해를 ${Math.round(s.power*100)}% 감소시킵니다.`,{target:id});break;
     }
     case 'purify':{
-      const removable=['weak','defdown','dark','bind','bleed','burn','puppet','stitch','skillseal','healdown'];
+      const dreamPurified=b.domain==='vaciel'&&b.difficulty==='hard'&&allies.some(v=>active(v,'colorlessDream',b.round));
+      const removable=['weak','defdown','dark','bind','bleed','burn','puppet','stitch','skillseal','healdown','colorlessDream'];
       const affected=allies.filter(v=>removable.some(k=>active(v,k,b.round)));
       if(affected.length===0)emit(x,'notice','scene','해제할 약화가 없습니다.');
-      // 이번 한 번의 치유에는 기존 회복량 감소가 적용되고, 이후 약화를 해제한다.
-      for(const v of allies)heal(x,v,s.power,'치유');
-      for(const v of affected)cleanse(x,v);
+      // 공명 표식의 특수 치유: 생존한 동료를 최대 HP까지 회복하고,
+      // 일반 해제 메시지 대신 전용 스토리 대사만 출력한다.
+      // 공명의 표식 해제 피해 배율(최대 HP의 50%)은 그대로 유지한다.
+      for(const v of allies)heal(x,v,dreamPurified?1:s.power,'치유');
+      for(const v of affected)cleanse(x,v,{silent:dreamPurified});
+      if(dreamPurified){
+        emit(x,'story','scene','빛을 잃은 세계에 작은 온기가 번진다.');
+        emit(x,'story','scene','검게 바래던 표식에 작은 균열이 생긴다.');
+        emit(x,'story','scene','당신들의 희망은 아직 이곳에 있습니다.');
+        emit(x,'notice','system','아군 전체의 「색을 잃은 꿈」이 해제되었습니다!');
+        emit(x,'dialogue','vaciel','……분명 거두었을 터인데.');
+        emit(x,'story','scene','바시엘은 잠시 말을 잇지 못했다.');
+      }
       break;
     }
     case 'stun':if(t.stunImmuneUntil>=b.round)emit(x,'notice','scene',t.name+josa(t.name,'은','는')+' 아직 같은 속박에 다시 걸리지 않습니다.');else{const duration=t===b.boss?1:s.duration;status(x,t,'stun',1,duration);t.stunImmuneUntil=b.round+duration+c.rules.stunImmunityRounds;}break;
@@ -4763,12 +4806,12 @@ function playerAct(x,id,a) {
       // 가장 최근 동료의 TRACK/앙코르가 재생했던 '실제 곡'을 따라 합니다.
       // 이전 버전 저장 파일에 곡 기록이 없으면 시온의 마지막 곡으로 보완합니다.
       let index=copiedRecord&&Number.isInteger(copiedRecord.songIndex)?copiedRecord.songIndex:b.lastTrack;
-      if(s.effect==='track'&&!copiedRecord){
+      if(s.effect==='track'&&(!copiedRecord||!Number.isInteger(index)||!c.songs[index])){
         const alive=Object.values(b.party).filter(living);
         const hpNeed=alive.some(t=>t.hp/t.maxHp<.50)||alive.filter(t=>t.hp/t.maxHp<.70).length>=2;
         // SP 부족 여부로 별도 확률을 변경하지 않는다. HP 부족만 회복곡에 가중치.
         const key=hpNeed?'hp':'normal';
-        const weights=c.songWeights?.[key]||[25,25,25,25];
+        const weights=c.songWeights?.[key]||[33,34,33];
         let ticket=rand(b)*100;index=weights.length-1;
         for(let i=0;i<weights.length;i++){ticket-=weights[i];if(ticket<0){index=i;break;}}
       }
@@ -4780,10 +4823,13 @@ function playerAct(x,id,a) {
   }
   if(attacked)followups(x,u,attacked);
 }
-function cleanse(x,t) {
-  if(t.buffs.stitch){const partner=x.b.party[t.buffs.stitch.partner];if(partner?.buffs.stitch?.partner===t.id){delete partner.buffs.stitch;emit(x,'cleanse','scene',t.name+josa(t.name,'과','와')+' '+partner.name+josa(partner.name,'을','를')+' 이어 둔 수선 실이 끊어졌습니다.');}}
-  const puppet=!!t.buffs.puppet;for(const k of ['weak','defdown','dark','bind','bleed','burn','puppet','stitch','skillseal','healdown'])delete t.buffs[k];
-  emit(x,'cleanse','system',t.name+(puppet?' · 꼭두각시 실 해제. 행동을 되찾았습니다.':' · 일반 약화를 해제했습니다.'));
+function cleanse(x,t,{silent=false}={}) {
+  if(t.buffs.stitch){const partner=x.b.party[t.buffs.stitch.partner];if(partner?.buffs.stitch?.partner===t.id){delete partner.buffs.stitch;if(!silent)emit(x,'cleanse','scene',t.name+josa(t.name,'과','와')+' '+partner.name+josa(partner.name,'을','를')+' 이어 둔 수선 실이 끊어졌습니다.');}}
+  const hadDream=!!t.buffs.colorlessDream,puppet=!!t.buffs.puppet;
+  for(const k of ['weak','defdown','dark','bind','bleed','burn','puppet','stitch','skillseal','healdown','colorlessDream'])delete t.buffs[k];
+  // 전원에게서 표식이 사라지면 공명 연출의 흑백 상태도 즉시 종료한다.
+  if(hadDream&&x.b.domain==='vaciel'&&!Object.values(x.b.party).some(u=>living(u)&&u.buffs.colorlessDream))x.b.dreamMonochrome=false;
+  if(!silent)emit(x,'cleanse','system',t.name+(puppet?' · 꼭두각시 실 해제. 행동을 되찾았습니다.':' · 일반 약화를 해제했습니다.'));
 }
 function followups(x,actor,target) {
   const {b}=x;if(!living(target)||b.outcome||!living(actor))return;
@@ -4799,7 +4845,7 @@ function summon(x,kind,count) {
     const slot=!occupied('left')?'left':!occupied('right')?'right':null;
     const sameKind=b.summons.filter(u=>u.kind===kind).length+1;
     const summonName=pillar?(slot==='left'?'왼쪽 백골 기둥':slot==='right'?'오른쪽 백골 기둥':`백골 기둥 ${sameKind}`):(slot==='left'?'왼쪽 인형':slot==='right'?'오른쪽 인형':`인형 ${sameKind}`);
-    const u=unit(kind+'-'+serial,{name:summonName,hp:(pillar?bc.params.pillarHp:bc.params.dollHp)*d.hp,atk:pillar?0:bc.params.dollAtk*d.atk*(b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty)?1.2:1),def:(pillar?bc.params.pillarDef:bc.params.dollDef)*d.def,speed:0,crit:0},{kind,slot,spawnedAt:b.round,healTicks:pillar?bc.params.pillarTicks:0});
+    const u=unit(kind+'-'+serial,{name:summonName,hp:(pillar?bc.params.pillarHp:bc.params.dollHp)*d.hp,atk:pillar?0:bc.params.dollAtk*d.atk*(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)?1.2:1),def:(pillar?bc.params.pillarDef:bc.params.dollDef)*d.def,speed:0,crit:0},{kind,slot,spawnedAt:b.round,healTicks:pillar?bc.params.pillarTicks:0});
     b.summons.push(u);emit(x,'summon','scene',u.name+josa(u.name,'이','가')+' 나타났습니다.');
   }
 }
@@ -4835,14 +4881,24 @@ function bossActionText(bc,p) {
   return owner+' · '+p.name+' 발동!';
 }
 function bossAct(x) {
-  const {b,bc,d}=x,p=b.intent,hard=['hard','nightmare'].includes(b.difficulty),nightmare=b.difficulty==='nightmare',easy=b.difficulty==='easy';
+  const {b,bc,d}=x,p=b.intent,hard=['normal','hard'].includes(b.difficulty),nightmare=b.difficulty==='hard',easy=b.difficulty==='practice';
   // 봉쇄로 후반 연계가 취소되지 않도록 현재 단계 그대로 다음 라운드에 재시도한다.
-  if(active(b.boss,'stun',b.round)){emit(x,'blocked','scene',bc.name+'의 움직임이 잠시 멎습니다. 후반 연계는 잠시 늦춰집니다.');return;}
+  if(active(b.boss,'stun',b.round)){
+    if(b.domain==='vaciel'&&b.difficulty==='hard'&&p.effect==='dreamresonance'){
+      b.finalChain='aftershock';
+      for(const u of Object.values(b.party))delete u.buffs.colorlessDream;
+      b.dreamMonochrome=false;
+      emit(x,'blocked','scene','린네가 붙잡은 찰나, 공명을 이루던 고요가 깨집니다. 성역을 덮은 힘이 흩어지고 바시엘의 손끝이 떨립니다.');
+      emit(x,'notice','system','「공명」을 저지했습니다!');
+      return;
+    }
+    emit(x,'blocked','scene',bc.name+'의 움직임이 잠시 멎습니다. 후반 연계는 잠시 늦춰집니다.');return;
+  }
   // 기술 연출은 예고하지 않고 적의 실제 차례에만 보여 줍니다.
   const cueKey=p.id==='repair'&&p.effect!=='repair'?null:bc.battleCues?.[p.id]?p.id:bc.battleCues?.[p.effect]?p.effect:null;
   const cue=b.domain==='vaciel'&&p.effect==='motif'?(bc.battleCues?.['motif-'+Math.min(5,b.motifCount+1)]||bc.battleCues?.[cueKey]):bc.battleCues?.[cueKey];
   scene(x,cue||null);
-  if(p.closingStep)b.finalChain=p.closingStep==='drain'?'finish':p.closingStep==='finish'?'rest':'done';
+  if(p.closingStep)b.finalChain=p.closingStep==='drain'?'finish':p.closingStep==='finish'?(b.domain==='vaciel'&&b.difficulty==='hard'?'mark':'rest'):p.closingStep==='mark'?'resonate':p.closingStep==='resonate'?'aftershock':'done';
   b.patternUsed[p.id]=b.round;if(p.sourcePatternId)b.patternUsed[p.sourcePatternId]=b.round;emit(x,'skill',b.domain,b.domain==='marionel'&&p.effect==='repair'?'마리오넬이 수선하는 손을 펼쳐 동료의 손끝에 실을 감습니다.':bossActionText(bc,p),{skillName:p.name});
   let target=null;const one=()=>target||(target=choose(x,p.targetId,!!p.targetId)),all=()=>Object.values(b.party).filter(living);
   // 전체 공격의 각 명중을 쥰에게 순서대로 돌립니다. 쓰러진 뒤에는 나머지 공격이 원래 대상에게 돌아갑니다.
@@ -4854,17 +4910,17 @@ function bossAct(x) {
   switch(p.effect) {
     case 'opening':emit(x,'notice','scene','수선이 끊긴 틈을 지켰습니다. 마리오넬은 이 차례에 수리하거나 공격하지 않습니다.');break;
     case 'wait':emit(x,'dialogue',b.domain,'지금이라면 돌아갈 수 있습니다.');break;
-    case 'wing':status(x,b.boss,'defup',easy?bc.params.wingDef*.5:nightmare?bc.params.wingDef*.9:b.difficulty==='hard'&&b.domain==='osteos'?bc.params.wingDef*(b.phase==='calm'?.65:.8):bc.params.wingDef,b.domain==='osteos'&&b.difficulty==='hard'?bc.params.wingTurns:bc.params.wingTurns+1);if(b.domain==='osteos'&&p.power>0&&b.difficulty!=='easy')sweep(p.power);break;
+    case 'wing':status(x,b.boss,'defup',easy?bc.params.wingDef*.5:nightmare?bc.params.wingDef*.9:b.difficulty==='normal'&&b.domain==='osteos'?bc.params.wingDef*(b.phase==='calm'?.65:.8):bc.params.wingDef,b.domain==='osteos'&&b.difficulty==='normal'?bc.params.wingTurns:bc.params.wingTurns+1);if(b.domain==='osteos'&&p.power>0&&b.difficulty!=='practice')sweep(p.power);break;
     case 'blade':if(p.target==='all')sweep(p.power,{critBonus:easy?0:bc.params.bladeCrit});else hit(one(),p.power,{critBonus:easy?0:bc.params.bladeCrit});break;
     case 'pillars':if(hard&&!b.summons.some(u=>u.kind==='pillar'))summon(x,'pillar',bc.params.pillarCount);break;
-    case 'aria':if(hard)sweep(nightmare?.72:.6);else if(b.difficulty==='normal')sweep(.34);for(const t of all())status(x,t,'weak',p.power,hard?4:3);break;
+    case 'aria':if(hard)sweep(nightmare?.72:.6);else if(b.difficulty==='easy')sweep(.34);for(const t of all())status(x,t,'weak',p.power,hard?4:3);break;
     case 'curtain':{if(hard)for(const original of all()){const u=redirectArea(original);if(!living(u))continue;let n=(bc.params.curtainDamage??10)*(nightmare?1.3:1);if(u.guard)n*=x.c.rules.guardFactor;if(u.protect)n*=1-u.protect;if(u.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,u,n);}const t=pick(b,all());if(t){b.invitation={target:t.id,until:b.round+1};emit(x,'mark','scene',t.name+'에게 조명이 내려앉습니다. 다음 리본이 그 무대로 향합니다.');}break;}
     case 'ribbon':{const t=one(),linked=hard&&b.invitation?.target===t?.id&&buff(t,'weak',b)>0;if(linked)emit(x,'combo','scene','아리아에 약해진 '+t.name+'에게 무대의 조명이 모입니다. 약화와 초대가 이어져 피날레의 위력이 커집니다.');hit(t,p.power*(linked?(bc.params.finaleWeakMultiplier??1.3):1));if(b.invitation?.target===t?.id)b.invitation=null;break;}
     case 'charge':{const t=one();const defender=b.party.user;const actual=b.enemyPhase&&living(defender)&&active(defender,'bodyguard',b.round)?defender:t;if(hit(t).hit&&living(actual))status(x,actual,'bleed',actual.maxHp*bc.params.bleedRatio*(easy?.4:1),bc.params.bleedTurns);break;}
     case 'smash':sweep();if(hard&&b.rageTriggered)status(x,b.boss,'defdown',bc.params.openingDef,2);break;
     case 'duel':if(hard){const t=one();if(t){for(let i=0;i<bc.params.duelHits&&living(t)&&living(b.boss);i++)hit(t,p.power,{noCrit:true});emit(x,'notice','scene','연속 검격이 멎고 코르의 자세가 잠시 열립니다.');status(x,b.boss,'defdown',bc.params.openingDef,2);}}break;
-    case 'light':if(hard&&b.domain==='lacrien')sweep(.48);else if(b.difficulty==='normal'&&b.domain==='lacrien')sweep(.38);for(const t of all())status(x,t,'dark',p.power,2);break;
-    case 'reflect':b.reflection={until:b.round+1};b.recordedDamage=0;emit(x,'notice','scene','라크리엔 주위의 빛이 거울처럼 맑아집니다.');if(hard&&b.domain==='lacrien')sweep(nightmare?.82:.72);else if(b.difficulty==='normal'&&b.domain==='lacrien')sweep(.42);break;
+    case 'light':if(hard&&b.domain==='lacrien')sweep(.48);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.38);for(const t of all())status(x,t,'dark',p.power,2);break;
+    case 'reflect':b.reflection={until:b.round+1};b.recordedDamage=0;emit(x,'notice','scene','라크리엔 주위의 빛이 거울처럼 맑아집니다.');if(hard&&b.domain==='lacrien')sweep(nightmare?.82:.72);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.42);break;
     case 'recordecho':if(hard){const amount=b.recordedDamage;emit(x,'echo','scene',amount>0?`기록의 잔향 · 만상기록에 쌓인 ${amount} 피해를 바탕으로 빛이 아군 전체에 되돌아옵니다.`:'기록의 잔향 · 기록이 비어 있어도 약한 잔광이 전원에게 되돌아옵니다.');for(const original of all()){const t=redirectArea(original);if(!living(t))continue;const echo=Math.max(amount*p.power,b.domain==='lacrien'?original.maxHp*.07:0); /* 어려움: HP 22% 상한 없음 */if(echo>0){let n=echo;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;if(t.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,t,n);} }b.recordedDamage=0;}break;
     case 'judgment':sweep();break;
     case 'summon':{
@@ -4873,7 +4929,7 @@ function bossAct(x) {
         const finalDoll=hard&&b.domain==='marionel'&&b.summonCount===1;
         summon(x,'doll',finalDoll?1:easy?1:hard&&b.domain==='marionel'&&b.team.length<2?1:Math.min(2,bc.params.summonAliveLimit));
         if(finalDoll){const u=b.summons.at(-1);u.name='미완성의 역작';u.maxHp=Math.round(u.maxHp*1.6);u.hp=u.maxHp;u.atk=Math.round(u.atk*1.2);emit(x,'phase','scene','마리오넬이 남은 실로 마지막 인형 하나를 꿰맵니다.');}
-        b.summonCount++;if(hard&&b.domain==='marionel')hit(one(),.6);else if(b.difficulty==='normal'&&b.domain==='marionel')hit(one(),.48);}
+        b.summonCount++;if(hard&&b.domain==='marionel')hit(one(),.6);else if(b.difficulty==='easy'&&b.domain==='marionel')hit(one(),.48);}
       else emit(x,'notice','scene','작업대의 실이 느슨하게 흔들립니다.');break;
     }
     case 'repair':{
@@ -4928,17 +4984,16 @@ function bossAct(x) {
         if(sealed.length)emit(x,'notice','scene',sealed.map(t=>t.name).join(' · ')+' · 다음 차례에 스킬을 사용할 수 없습니다.');
         sweep(.55,{noCrit:true});
       }
-      else if(n===4){ // 악몽 5단계: 최대 5회, 매 타격 무작위 대상 / 1인당 최대 3회, 타격 위력 100%
+      else if(n===4){ // 악몽 5단계: 최대 5회, 매 타격 무작위 대상 / 동일 대상 횟수 제한 없음, 타격 위력 100%
         emit(x,'phase','scene','주종의 인연 · 제5절. 코르의 검격이 그림자 속에서 되살아납니다.');
-        const counts=Object.create(null),hitTargets=[];
-        emit(x,'notice','scene','코르의 잔영이 다섯 차례 참격을 쏟아냅니다. 한 사람에게 최대 세 차례까지 몰릴 수 있습니다.');
+        const hitTargets=[];
+        emit(x,'notice','scene','코르의 잔영이 다섯 차례 참격을 쏟아냅니다. 한 사람에게 다섯 차례 모두 몰릴 수도 있습니다.');
         for(let i=0;i<5;i++){
-          // 쓰러진 사람은 제외하며, 피격 횟수 3회인 대상도 제외.
-          // 남은 인원이 한 명뿐인 등 5타를 채울 수 없는 상황은 조기 종료.
-          const pool=all().filter(v=>(counts[v.id]||0)<3);
+          // 쓰러진 사람만 제외. 살아 있는 대상은 이미 몇 차례 맞았든 다시 선택할 수 있다.
+          // 생존자가 전혀 남지 않은 경우에만 참격을 종료한다.
+          const pool=all();
           if(!pool.length)break;
           const victim=pick(b,pool);
-          counts[victim.id]=(counts[victim.id]||0)+1;
           emit(x,'notice','scene',`코르의 잔영 · ${i+1}타 → ${victim.name}`);
           hit(victim,1.0,{noCrit:true});
           if(living(victim))hitTargets.push(victim);
@@ -4949,6 +5004,73 @@ function bossAct(x) {
         status(x,b.boss,'defdown',.25,2);
         emit(x,'notice','scene','연속 참격이 끝나고 바시엘의 방어가 잠시 흐트러집니다.');
       }
+      break;
+    }
+    case 'dreammark':{
+      b.dreamMonochrome=true; // 스냅샷 기준으로 전투 배경과 스탠딩을 위에서 아래로 탈색
+      emit(x,'story','scene','바시엘의 눈가에 은빛 눈물이 맺힌다.');
+      emit(x,'story','scene','눈물이 양산 끝을 타고 떨어지자, 성역의 색채가 위에서부터 서서히 사라지기 시작한다.');
+      emit(x,'story','scene','옷자락도, 피부에 남은 온기도, 천장의 푸른 빛마저.');
+      emit(x,'story','scene','마침내 모든 것이 검고 흰 명암으로 물든다.');
+      emit(x,'dialogue','vaciel','……이것이 이 몸이 재현하려는 세계일세. 아무것도 갈망하지 않아 아무것도 빼앗으려 하지 않는 곳.');
+      emit(x,'dialogue','vaciel','그대들은…… 이곳에서도 내일을 바랄 수 있겠는가.');
+      emit(x,'story','scene','바시엘은 천천히 눈을 감았다.');
+      emit(x,'story','scene','성역이 숨을 죽인다. 이 고요가 끝나면, 무언가 돌이킬 수 없는 일이 벌어질 것만 같다.');
+      for(const u of all()){
+        u.buffs={};u.guard=false;u.protect=0;u.shieldHp=0;u.shieldMax=0;
+        status(x,u,'colorlessDream',1,2);
+      }
+      emit(x,'notice','system','아군 전체의 강화 및 약화 효과가 사라졌습니다. 아군 전체에 「색을 잃은 꿈」이 새겨졌습니다.');
+      break;
+    }
+    case 'dreamresonance':{
+      emit(x,'story','scene','바시엘이 천천히 눈을 뜬다.');
+      emit(x,'story','scene','빛을 잃은 눈동자가 일행을 향한다.');
+      emit(x,'dialogue','vaciel','……이제, 더는 아프지 않아도 되네.');
+      emit(x,'story','scene','성역을 뒤덮은 고요가 한순간에 무너진다.');
+      emit(x,'phase','system','「공명」');
+      const recipients=all(),hero=b.party.user;
+      // 최대 HP 기준, 표식이 해제된 대상은 기본 피해 반감. 방어/방증/피감은 적용한다.
+      const rawFor=u=>{
+        let n=u.maxHp*(active(u,'colorlessDream',b.round)?1:.5);
+        n*=1-Math.min(.65,buff(u,'defup',b));
+        if(u.guard)n*=c.rules.guardFactor;
+        if(u.protect)n*=1-u.protect;
+        if(u.distorted)n*=d.distortedDamage;
+        return Math.max(1,n);
+      };
+      if(living(hero)&&active(hero,'bodyguard',b.round)){
+        // 공명 전용: 여섯 사람의 피해를 합산해 주인공 한 명이 받아, 전원 보호 후 1 HP 이상 생존한다.
+        let n=recipients.reduce((sum,u)=>sum+u.maxHp*(active(u,'colorlessDream',b.round)?1:.5),0);
+        n*=1-Math.min(.95,buff(hero,'bodyguard',b));
+        n*=1-Math.min(.65,buff(hero,'defup',b));
+        if(hero.guard)n*=c.rules.guardFactor;
+        if(hero.protect)n*=1-hero.protect;
+        if(hero.distorted)n*=d.distortedDamage;
+        n=Math.max(1,Math.round(n*(1-Math.min(.5,buff(hero,'mitigation',b)))));
+        const absorbed=Math.min(hero.shieldHp||0,n);hero.shieldHp-=absorbed;n-=absorbed;
+        const dealt=Math.min(Math.max(0,hero.hp-1),Math.max(0,n));hero.hp-=dealt;
+        emit(x,'damage','vaciel',`공명 → ${hero.name} · ${dealt} 피해 (동료들의 피해를 대신 받음)`,{target:hero.id,amount:dealt,sourceId:'vaciel',sourceLabel:'공명'});
+        emit(x,'story','scene','당신은 모두의 앞에 섰다.');
+        emit(x,'story','scene','빛도, 온기도 사라진 세계에서 홀로 모든 절망을 짊어진다.');
+        emit(x,'story','scene','온몸에서 힘이 빠져나간다. 더는 버틸 수 없을 것만 같았다.');
+        emit(x,'story','scene','그러나 무너지는 순간, 누군가가 당신의 등을 받쳤다.');
+        emit(x,'story','scene','동료들의 희망이 당신을 감쌉니다.');
+        emit(x,'notice','system',`당신은 쓰러지지 않았습니다. (HP ${hero.hp})`);
+        emit(x,'dialogue','vaciel','……그대의 뒤에도, 그대를 지키려는 이들이 있었구나.');
+      }else{
+        for(const t of recipients)takeDamage(x,b.boss,t,rawFor(t));
+      }
+      for(const t of Object.values(b.party))delete t.buffs.colorlessDream;
+      break;
+    }
+    case 'dreamrest':{
+      b.dreamMonochrome=false;
+      emit(x,'story','scene','바시엘의 손끝에서 양산이 미끄러진다.');
+      emit(x,'story','scene','그는 쓰러지지 않았다. 다만 한동안 아무 말도 하지 못했다.');
+      emit(x,'dialogue','vaciel','……이 몸이 거두려던 것은, 대체 무엇이었을까.');
+      status(x,b.boss,'defdown',.32,3);
+      emit(x,'notice','system','바시엘이 힘을 소진했습니다. 이번 차례 행동하지 못하고 방어력이 감소합니다.');
       break;
     }
     case 'empty':sweep();for(const t of all())status(x,t,'weak',easy?.1:.2,2);break;
@@ -4973,14 +5095,14 @@ function distortionTick(x) {
     if(u.id==='jun')emit(x,'distortion',u.id,'쥰이 모두의 앞을 가로막습니다. 그의 시선은 뒤를 돌아보지 않습니다.');
     if(u.id==='rikka') {
       emit(x,'distortion','scene','모두를 감싼 덩굴이 조여들고, 꽃 아래의 가시가 살갗을 파고듭니다.');
-      for(const t of all){let n=t.maxHp*def.power*(['hard','nightmare'].includes(b.difficulty)?(b.domain==='cor'?1.5:3.2):b.difficulty==='normal'?2:1)*d.distortionEffect;if(t.guard)n*=c.rules.guardFactor;if(t.protect)n*=1-t.protect;takeDamage(x,{id:'scene',name:'가시덩굴'},t,n);if(checkEnd(x))break;}
+      for(const t of all){let n=t.maxHp*def.power*(['normal','hard'].includes(b.difficulty)?(b.domain==='cor'?1.5:3.2):b.difficulty==='easy'?2:1)*d.distortionEffect;if(t.guard)n*=c.rules.guardFactor;if(t.protect)n*=1-t.protect;takeDamage(x,{id:'scene',name:'가시덩굴'},t,n);if(checkEnd(x))break;}
     }
     if(u.id==='rinne') {
       const candidates=all.filter(t=>t.id!==u.id&&!t.distorted&&!t.permanentUnavailable&&!active(t,'bind',b.round+1));
       const t=pick(b,candidates);if(t){status(x,t,'timehold',1,2,{from:b.round+1,source});emit(x,'distortion','scene','린네가 숨을 참습니다. '+t.name+' 주위의 소리와 움직임이 길게 늘어집니다. 목소리는 아직 닿을 듯합니다.');}
     }
     if(u.id==='takumi') {
-      const t=pick(b,all.filter(t=>t.id!==u.id));if(t){emit(x,'distortion','scene','타쿠미가 손을 거뒀지만 환영은 멈추지 않습니다. 환영이 '+t.name+'에게 달려듭니다.');damage(x,{...u,id:'scene',name:'통제되지 않는 환영',crit:0},t,def.power*(['hard','nightmare'].includes(b.difficulty)?1.15:1)*d.distortionEffect,{reaction:true,noCrit:true,noMiss:true,speaker:'scene'});}
+      const t=pick(b,all.filter(t=>t.id!==u.id));if(t){emit(x,'distortion','scene','타쿠미가 손을 거뒀지만 환영은 멈추지 않습니다. 환영이 '+t.name+'에게 달려듭니다.');damage(x,{...u,id:'scene',name:'통제되지 않는 환영',crit:0},t,def.power*(['normal','hard'].includes(b.difficulty)?1.15:1)*d.distortionEffect,{reaction:true,noCrit:true,noMiss:true,speaker:'scene'});}
     }
     checkEnd(x);
   }
@@ -5001,7 +5123,7 @@ function roundEffects(x) {
     }
   }
   if(b.outcome)return;
-  if(b.domain==='cor'&&b.rageTriggered){takeDamage(x,{id:b.domain,name:'광란의 열기'},b.boss,b.boss.maxHp*bc.params.rageDot*(b.difficulty==='easy'?.5:1));if(checkEnd(x))return;}
+  if(b.domain==='cor'&&b.rageTriggered){takeDamage(x,{id:b.domain,name:'광란의 열기'},b.boss,b.boss.maxHp*bc.params.rageDot*(b.difficulty==='practice'?.5:1));if(checkEnd(x))return;}
   for(const p of b.summons.filter(u=>living(u)&&u.kind==='pillar'&&u.healTicks>0&&u.spawnedAt<b.round)){p.healTicks--;heal(x,b.boss,bc.params.pillarHeal);}
   distortionTick(x);if(b.outcome)return;
   // 위독 이벤트를 먼저 확정하고, 라운드 종료 회복은 한 번의 결과 문단으로 묶는다.
@@ -5026,7 +5148,7 @@ function endRound(input,c,expectedRevision=input.revision) {
   for(const u of Object.values(b.party))if(!b.acted[u.id]&&living(u)&&active(u,'puppet',b.round)){b.acted[u.id]=true;playerAct(x,u.id,{kind:'puppet'});if(checkEnd(x))break;}
   if(!b.outcome){b.enemyPhase=true;emit(x,'phase','system','적의 차례');bossAct(x);}
   if(!checkEnd(x))for(const u of b.summons.filter(u=>living(u)&&u.kind==='doll'&&u.spawnedAt<b.round)) {
-    if(b.outcome)break;if(active(u,'stun',b.round)){emit(x,'blocked','scene',u.name+'의 움직임이 멎습니다.');continue;}const t=choose(x);if(t){emit(x,'attack',u.id,u.name+josa(u.name,'이','가')+' '+t.name+'에게 공격합니다.');damage(x,u,t,b.difficulty==='easy'?.45:b.domain==='marionel'&&['hard','nightmare'].includes(b.difficulty)?(b.difficulty==='nightmare'?1.17:(c.bosses.marionel.params.hardDollStrikePower??1.05)):.65);}checkEnd(x);
+    if(b.outcome)break;if(active(u,'stun',b.round)){emit(x,'blocked','scene',u.name+'의 움직임이 멎습니다.');continue;}const t=choose(x);if(t){emit(x,'attack',u.id,u.name+josa(u.name,'이','가')+' '+t.name+'에게 공격합니다.');damage(x,u,t,b.difficulty==='practice'?.45:b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)?(b.difficulty==='hard'?1.17:(c.bosses.marionel.params.hardDollStrikePower??1.05)):.65);}checkEnd(x);
   }
   b.enemyPhase=false; // 출혈·화상·반사 피해는 '등 맡기기' 대신 맞기 대상에서 제외.
   if(!b.outcome)roundEffects(x);
@@ -5036,7 +5158,7 @@ function endRound(input,c,expectedRevision=input.revision) {
 function retreat(input,c) {need(!input.outcome&&!input.committed,'이미 끝난 전투입니다.');const b=copy(input),x=ctx(b,c);finish(x,'retreat');b.revision++;return {battle:b,events:x.events};}
 function commit(input) {need(input.outcome,'전투가 아직 끝나지 않았습니다.');const b=copy(input);b.committed=true;return b;}
 function validateState(b,c) {
-  need(b?.version===3&&bossIds.includes(b.domain),'현재 엔진의 저장 파일(v3)이 아닙니다.');need(['workbench','campaign'].includes(b.mode)&&['easy','normal','hard','nightmare'].includes(b.difficulty),'저장 형식 오류');
+  need(b?.version===3&&bossIds.includes(b.domain),'현재 엔진의 저장 파일(v3)이 아닙니다.');need(['workbench','campaign'].includes(b.mode)&&['practice','easy','normal','hard'].includes(b.difficulty),'저장 형식 오류');
   num(b.seed,0,4294967295,'시드',true);num(b.rng,0,4294967295,'난수',true);num(b.round,1,2000,'라운드',true);num(b.startedAt,1,b.round,'시작 라운드',true);num(b.revision,0,100000,'진행 번호',true);need(korean(b.playerName),'이름 오류');
   need(Array.isArray(b.team)&&new Set(b.team).size===b.team.length&&b.team.length<=(b.domain==='vaciel'?5:2)&&b.team.every(id=>c.heroes[id]&&id!=='user'),'파티 오류');need(Object.keys(b.party).sort().join()===['user',...b.team].sort().join(),'파티 불일치');
   need(Array.isArray(b.summons)&&b.summons.length<=30,'소환 목록 오류');need(b.boss.id===b.domain,'보스 불일치');
@@ -5055,7 +5177,7 @@ function validateState(b,c) {
   for(const k of ['medicine','revive','ether','remedy'])num(b.items?.[k],0,99,'아이템',true);
   need(b.story&&typeof b.story.occurred==='boolean'&&b.patternUsed&&b.storyFlags&&b.acted&&b.smallTalkUsed,'이벤트 상태 오류');
   need(Object.entries(b.acted).every(([id,v])=>b.party[id]&&typeof v==='boolean'),'행동 기록 오류');num(b.bossTalkCount,0,4,'보스 대화',true);num(b.talkRound,0,b.round,'구출 라운드',true);num(b.recordedDamage,0,1e9,'기록 피해');
-  if(b.finalChain!==undefined)need(['finish','rest','done'].includes(b.finalChain),'후반 연계 상태 오류');
+  if(b.finalChain!==undefined)need(['finish','rest','mark','resonate','aftershock','done'].includes(b.finalChain),'후반 연계 상태 오류');
   need(b.lastTrack===null||(Number.isInteger(b.lastTrack)&&!!c.songs[b.lastTrack]),'노래 기록 오류');
   if(b.lastCompanionSkill!=null){const rec=b.lastCompanionSkill;need(b.team.includes(rec.ownerId)&&!!c.heroSkills?.[rec.ownerId]?.find(s=>s.id===rec.skillId),'직전 동료 기술 기록 오류');if(rec.songIndex!==undefined)need(Number.isInteger(rec.songIndex)&&!!c.songs[rec.songIndex],'동료 지원곡 기록 오류');}
   need(Array.isArray(b.playerSkills)&&b.playerSkills.length<=4&&b.playerSkills.filter(isSpecial).length<=1&&b.playerSkills.filter(k=>!isSpecial(k)).length<=3&&b.playerSkills.every(id=>c.skills.some(s=>s.id===id)),'주인공 장착 기술 오류');if(!b.outcome)need(b.intent&&effects.includes(b.intent.effect),'예고 상태 오류');return true;
@@ -5065,7 +5187,7 @@ H.core={forecast,copy,canTalk,rescueTargets,combatReady,validateConfig,validateS
 </script><script>/* v3 저장을 유지한다. 이전 기본값과 정확히 같은 수치만 새 시험값으로 옮긴다.
    사용자가 바꾼 이름, 수치, HP 및 미완료 전투의 생성 능력치는 보존한다. */
 (function(g){'use strict';const H=g.HopeBattle,C=H.core;
-const defaultCueChanges=[["bellaton","easy","aria","첫 악장 · 아리아가 힘을 흐트러뜨립니다.","무대에 낮은 선율이 깔립니다. 객석의 공기가 무겁게 가라앉습니다."],["bellaton","easy","ribbon","두 번째 악장 · 리본이 객석 위를 가릅니다.","붉은 리본 하나가 무대에서 길게 뻗어 나옵니다."],["bellaton","easy","curtain","절정 · 한 사람을 무대로 초대하려 합니다.","조명이 객석의 한 자리를 비춥니다."],["bellaton","easy","finale","피날레 · 무대에 오른 이를 향해 리본이 모입니다.","흩어진 리본이 하나의 조명 아래로 모입니다."],["bellaton","normal","aria","1악장 · 아리아가 전원의 공격력을 약화시키려 합니다.","무대에 낮은 선율이 깔립니다. 객석의 공기가 무겁게 가라앉습니다."],["bellaton","normal","ribbon","2악장 · 객석의 한 사람에게 리본이 날아옵니다.","붉은 리본 하나가 무대에서 길게 뻗어 나옵니다."],["bellaton","normal","curtain","3악장 · 한 사람을 무대로 초대합니다. 다음 악장은 초대된 이를 향한 피날레입니다.","조명이 객석의 한 자리를 비춥니다."],["bellaton","normal","finale","4악장 · 피날레의 리본이 무대로 모입니다. 지목된 이의 체력과 상태를 확인하세요.","흩어진 리본이 하나의 조명 아래로 모입니다."],["bellaton","hard","aria","1악장 · 약한 음파가 전원을 공격하고 아리아가 공격력을 약화시키려 합니다.","무대에 낮은 선율이 깔립니다. 객석의 공기가 무겁게 가라앉습니다."],["bellaton","hard","ribbon","2악장 · 객석의 한 사람에게 리본이 날아옵니다.","붉은 리본 하나가 무대에서 길게 뻗어 나옵니다."],["bellaton","hard","curtain","3악장 · 약한 전체 피해와 무대 초대. 다음 악장은 초대된 이를 향한 피날레입니다.","조명이 객석의 한 자리를 비춥니다."],["bellaton","hard","finale","4악장 · 강화된 피날레가 지목된 이에게 집중됩니다. 약화 상태와 체력을 확인하세요.","흩어진 리본이 하나의 조명 아래로 모입니다."],["osteos","easy","warning","오스테오스가 물러나라는 뜻으로 손을 내밉니다.","오스테오스가 마지막으로 물러나라는 손짓을 보냅니다."],["osteos","easy","wing-calm","날개를 접어 몸을 감쌉니다.","커다란 날개가 몸을 감싸기 시작합니다."],["osteos","easy","wing","날개가 겹쳐져 단단한 감옥을 이룹니다.","겹친 날개 틈에서 뼛조각들이 떨립니다."],["osteos","easy","bones","뼛조각이 주위로 흩어지려 합니다.","잘게 부서진 뼈가 바닥에서 일어납니다."],["osteos","easy","thrust","가느다란 뼈 끝이 앞을 겨눕니다.","가느다란 뼈 끝이 전방을 겨눕니다."],["osteos","easy","blade-one","날개가 열리고 날카로운 검 끝에 힘이 모입니다.","날개가 열리며 검 끝에 힘이 모입니다."],["osteos","easy","blade-all","검을 둘러싼 뼛조각들이 사방을 향합니다.","검을 두른 파편들이 사방으로 퍼집니다."],["osteos","normal","warning","오스테오스가 물러나라는 뜻으로 손을 내밉니다.","오스테오스가 마지막으로 물러나라는 손짓을 보냅니다."],["osteos","normal","wing-calm","날개를 접어 몸을 감쌉니다.","커다란 날개가 몸을 감싸기 시작합니다."],["osteos","normal","wing","날개가 겹쳐져 단단한 감옥을 이룹니다.","겹친 날개 틈에서 뼛조각들이 떨립니다."],["osteos","normal","bones","뼛조각이 주위로 흩어지려 합니다.","잘게 부서진 뼈가 바닥에서 일어납니다."],["osteos","normal","thrust","가느다란 뼈 끝이 앞을 겨눕니다.","가느다란 뼈 끝이 전방을 겨눕니다."],["osteos","normal","blade-one","날개가 열리고 날카로운 검 끝에 힘이 모입니다.","날개가 열리며 검 끝에 힘이 모입니다."],["osteos","normal","blade-all","검을 둘러싼 뼛조각들이 사방을 향합니다.","검을 두른 파편들이 사방으로 퍼집니다."],["osteos","hard","warning","오스테오스가 물러나라는 뜻으로 손을 내밉니다.","오스테오스가 마지막으로 물러나라는 손짓을 보냅니다."],["osteos","hard","wing-calm","날개를 접어 몸을 감쌉니다.","커다란 날개가 몸을 감싸기 시작합니다."],["osteos","hard","wing","날개가 겹쳐져 방어를 굳힙니다. 동시에 골편이 전원에게 튀려 합니다.","겹친 날개 틈에서 뼛조각들이 떨립니다."],["osteos","hard","bones","뼛조각이 주위로 흩어지려 합니다.","잘게 부서진 뼈가 바닥에서 일어납니다."],["osteos","hard","thrust","가느다란 뼈 끝이 앞을 겨눕니다.","가느다란 뼈 끝이 전방을 겨눕니다."],["osteos","hard","blade-one","날개가 열리고 날카로운 검 끝에 힘이 모입니다.","날개가 열리며 검 끝에 힘이 모입니다."],["osteos","hard","blade-all","검을 둘러싼 뼛조각들이 사방을 향합니다.","검을 두른 파편들이 사방으로 퍼집니다."],["osteos","hard","pillars","바닥에서 흰 기둥의 윤곽이 솟아오릅니다.","바닥 아래서 하얀 윤곽이 솟아오릅니다."],["cor","easy","slash","검을 고쳐 쥐고 거리를 좁힙니다.","코르가 검을 고쳐 쥐고 거리를 좁힙니다."],["cor","easy","charge","몸을 낮추고 돌진을 준비합니다.","코르가 몸을 낮추며 바닥을 박찹니다."],["cor","easy","smash","검이 높이 들립니다. 바닥 전체가 울립니다.","코르가 검을 높이 듭니다. 발아래 땅이 울립니다."],["cor","normal","slash","검을 고쳐 쥐고 거리를 좁힙니다.","코르가 검을 고쳐 쥐고 거리를 좁힙니다."],["cor","normal","charge","몸을 낮추고 돌진을 준비합니다.","코르가 몸을 낮추며 바닥을 박찹니다."],["cor","normal","smash","검이 높이 들립니다. 바닥 전체가 울립니다.","코르가 검을 높이 듭니다. 발아래 땅이 울립니다."],["cor","hard","slash","검을 고쳐 쥐고 거리를 좁힙니다.","코르가 검을 고쳐 쥐고 거리를 좁힙니다."],["cor","hard","charge","몸을 낮추고 돌진을 준비합니다.","코르가 몸을 낮추며 바닥을 박찹니다."],["cor","hard","smash","검이 높이 들립니다. 바닥 전체가 울립니다.","코르가 검을 높이 듭니다. 발아래 땅이 울립니다."],["cor","hard","duel","지목한 상대를 향해 세 번의 검격을 준비합니다.","코르가 상대 한 사람에게 시선을 고정합니다. 검날이 잠깐 흔들립니다."],["lacrien","easy","light","빛이 눈앞을 흐립니다. 공격이 잠시 빗나가기 쉬워집니다.","환한 빛이 시야에 스며들기 시작합니다."],["lacrien","easy","record","빛에 움직임이 비칩니다. 받은 공격의 일부가 되돌아올 것입니다.","라크리엔 주위의 빛이 거울처럼 맑아집니다."],["lacrien","easy","judgment","모인 별빛이 전장을 향합니다.","모인 별빛이 전장 위로 떠오릅니다."],["lacrien","normal","light","빛이 눈앞을 흐립니다. 공격이 잠시 빗나가기 쉬워집니다.","환한 빛이 시야에 스며들기 시작합니다."],["lacrien","normal","record","빛에 움직임이 비칩니다. 받은 공격의 일부가 되돌아올 것입니다.","라크리엔 주위의 빛이 거울처럼 맑아집니다."],["lacrien","normal","judgment","모인 별빛이 전장을 향합니다.","모인 별빛이 전장 위로 떠오릅니다."],["lacrien","hard","light","빛이 눈앞을 흐립니다. 공격이 잠시 빗나가기 쉬워집니다.","환한 빛이 시야에 스며들기 시작합니다."],["lacrien","hard","record","만상기록이 시작됩니다. 전원에게 약한 빛의 충격이 오고, 공격 피해 일부가 반사·기록됩니다.","라크리엔 주위의 빛이 거울처럼 맑아집니다."],["lacrien","hard","judgment","모인 별빛이 전장을 향합니다.","모인 별빛이 전장 위로 떠오릅니다."],["lacrien","hard","echo","기록의 잔향 · 공격을 멈췄더라도 약한 잔광은 남습니다. 전원 방어를 고려하세요.","거울 속에 남은 빛이 다시 들끓습니다."],["marionel","easy","summon","작업대에서 인형들이 몸을 일으키려 합니다.","작업대 위의 실들이 일제히 팽팽해집니다."],["marionel","easy","wave","느슨한 실이 한순간 팽팽해집니다.","실 하나가 허공을 날카롭게 가릅니다."],["marionel","easy","repair","상처 난 인형을 향해 손을 뻗습니다.","마리오넬이 끊어진 실 한 가닥을 손가락에 감습니다."],["marionel","easy","wave-two","가느다란 실이 전장을 가릅니다.","팽팽해진 실들이 전장을 가로지릅니다."],["marionel","normal","summon","작업대에서 인형들이 몸을 일으키려 합니다.","작업대 위의 실들이 일제히 팽팽해집니다."],["marionel","normal","wave","느슨한 실이 한순간 팽팽해집니다.","실 하나가 허공을 날카롭게 가릅니다."],["marionel","normal","repair","상처 난 인형을 향해 손을 뻗습니다.","마리오넬이 끊어진 실 한 가닥을 손가락에 감습니다."],["marionel","normal","wave-two","가느다란 실이 전장을 가릅니다.","팽팽해진 실들이 전장을 가로지릅니다."],["marionel","hard","summon","작업대에서 인형들이 일어납니다. 실의 끝에서 작은 공격도 날아옵니다. 인형 수는 출전 인원에 따릅니다.","작업대 위의 실들이 일제히 팽팽해집니다."],["marionel","hard","repair","수선하는 손 · 서로 다른 두 사람의 움직임이 실로 연결되려 합니다.","마리오넬이 끊어진 실 한 가닥을 손가락에 감습니다."],["marionel","hard","wave-two","가느다란 실이 전장을 가릅니다.","팽팽해진 실들이 전장을 가로지릅니다."],["marionel","hard","thread","꼭두각시 실 · 누군가의 다음 행동이 빼앗길 것 같습니다. 다른 동료가 먼저 실을 끊어야 합니다.","마리오넬의 손끝에서 실이 살아 있는 몸을 찾아 뻗습니다."],["vaciel","easy","drain","희망을 짓누르는 기운 · 전원의 공격력이 잠시 감소합니다.","양산 아래에서 짙은 그림자가 크게 부풀어 오릅니다."],["vaciel","easy","shadow","양산의 그림자가 한 사람을 향합니다.","등 뒤로 낯선 그림자 하나가 드러납니다."],["vaciel","easy","parasol","양산 위에 빛이 모입니다. 이번 라운드 전원에게 그림자 파동.","양산에서 뻗은 그림자가 전장 위로 넓게 드리웁니다."],["vaciel","easy","silent","그림자의 물결의 움직임이 보입니다.","그림자가 바닥을 타고 빠르게 움직입니다."],["vaciel","easy","empty","공명 · 색이 사라집니다. 전원에게 파동과 짧은 약화.","주변의 색채가 하나씩 사라집니다."],["vaciel","normal","drain","희망을 짓누르는 기운 · 전원의 공격력이 잠시 감소합니다.","양산 아래에서 짙은 그림자가 크게 부풀어 오릅니다."],["vaciel","normal","shadow","양산의 그림자가 한 사람을 향합니다.","등 뒤로 낯선 그림자 하나가 드러납니다."],["vaciel","normal","parasol","양산 위에 빛이 모입니다. 이번 라운드 전원에게 그림자 파동.","양산에서 뻗은 그림자가 전장 위로 넓게 드리웁니다."],["vaciel","normal","silent","그림자의 물결의 움직임이 보입니다.","그림자가 바닥을 타고 빠르게 움직입니다."],["vaciel","normal","empty","공명 · 색이 사라집니다. 전원에게 파동과 짧은 약화.","주변의 색채가 하나씩 사라집니다."],["vaciel","hard","drain","희망을 짓누르는 기운 · 전원의 공격력이 잠시 감소합니다.","양산 아래에서 짙은 그림자가 크게 부풀어 오릅니다."],["vaciel","hard","shadow","간부의 기운 하나가 드러납니다. 전투 중 세 번까지만 이어집니다.","등 뒤로 낯선 그림자 하나가 드러납니다."],["vaciel","hard","parasol","양산 위에 빛이 모입니다. 이번 라운드 전원에게 그림자 파동.","양산에서 뻗은 그림자가 전장 위로 넓게 드리웁니다."],["vaciel","hard","silent","그림자의 물결의 움직임이 보입니다.","그림자가 바닥을 타고 빠르게 움직입니다."],["vaciel","hard","empty","공명 · 색이 사라집니다. 전원에게 파동과 짧은 약화.","주변의 색채가 하나씩 사라집니다."]];
+const defaultCueChanges=[["bellaton","practice","aria","첫 악장 · 아리아가 힘을 흐트러뜨립니다.","무대에 낮은 선율이 깔립니다. 객석의 공기가 무겁게 가라앉습니다."],["bellaton","practice","ribbon","두 번째 악장 · 리본이 객석 위를 가릅니다.","붉은 리본 하나가 무대에서 길게 뻗어 나옵니다."],["bellaton","practice","curtain","절정 · 한 사람을 무대로 초대하려 합니다.","조명이 객석의 한 자리를 비춥니다."],["bellaton","practice","finale","피날레 · 무대에 오른 이를 향해 리본이 모입니다.","흩어진 리본이 하나의 조명 아래로 모입니다."],["bellaton","easy","aria","1악장 · 아리아가 전원의 공격력을 약화시키려 합니다.","무대에 낮은 선율이 깔립니다. 객석의 공기가 무겁게 가라앉습니다."],["bellaton","easy","ribbon","2악장 · 객석의 한 사람에게 리본이 날아옵니다.","붉은 리본 하나가 무대에서 길게 뻗어 나옵니다."],["bellaton","easy","curtain","3악장 · 한 사람을 무대로 초대합니다. 다음 악장은 초대된 이를 향한 피날레입니다.","조명이 객석의 한 자리를 비춥니다."],["bellaton","easy","finale","4악장 · 피날레의 리본이 무대로 모입니다. 지목된 이의 체력과 상태를 확인하세요.","흩어진 리본이 하나의 조명 아래로 모입니다."],["bellaton","normal","aria","1악장 · 약한 음파가 전원을 공격하고 아리아가 공격력을 약화시키려 합니다.","무대에 낮은 선율이 깔립니다. 객석의 공기가 무겁게 가라앉습니다."],["bellaton","normal","ribbon","2악장 · 객석의 한 사람에게 리본이 날아옵니다.","붉은 리본 하나가 무대에서 길게 뻗어 나옵니다."],["bellaton","normal","curtain","3악장 · 약한 전체 피해와 무대 초대. 다음 악장은 초대된 이를 향한 피날레입니다.","조명이 객석의 한 자리를 비춥니다."],["bellaton","normal","finale","4악장 · 강화된 피날레가 지목된 이에게 집중됩니다. 약화 상태와 체력을 확인하세요.","흩어진 리본이 하나의 조명 아래로 모입니다."],["osteos","practice","warning","오스테오스가 물러나라는 뜻으로 손을 내밉니다.","오스테오스가 마지막으로 물러나라는 손짓을 보냅니다."],["osteos","practice","wing-calm","날개를 접어 몸을 감쌉니다.","커다란 날개가 몸을 감싸기 시작합니다."],["osteos","practice","wing","날개가 겹쳐져 단단한 감옥을 이룹니다.","겹친 날개 틈에서 뼛조각들이 떨립니다."],["osteos","practice","bones","뼛조각이 주위로 흩어지려 합니다.","잘게 부서진 뼈가 바닥에서 일어납니다."],["osteos","practice","thrust","가느다란 뼈 끝이 앞을 겨눕니다.","가느다란 뼈 끝이 전방을 겨눕니다."],["osteos","practice","blade-one","날개가 열리고 날카로운 검 끝에 힘이 모입니다.","날개가 열리며 검 끝에 힘이 모입니다."],["osteos","practice","blade-all","검을 둘러싼 뼛조각들이 사방을 향합니다.","검을 두른 파편들이 사방으로 퍼집니다."],["osteos","easy","warning","오스테오스가 물러나라는 뜻으로 손을 내밉니다.","오스테오스가 마지막으로 물러나라는 손짓을 보냅니다."],["osteos","easy","wing-calm","날개를 접어 몸을 감쌉니다.","커다란 날개가 몸을 감싸기 시작합니다."],["osteos","easy","wing","날개가 겹쳐져 단단한 감옥을 이룹니다.","겹친 날개 틈에서 뼛조각들이 떨립니다."],["osteos","easy","bones","뼛조각이 주위로 흩어지려 합니다.","잘게 부서진 뼈가 바닥에서 일어납니다."],["osteos","easy","thrust","가느다란 뼈 끝이 앞을 겨눕니다.","가느다란 뼈 끝이 전방을 겨눕니다."],["osteos","easy","blade-one","날개가 열리고 날카로운 검 끝에 힘이 모입니다.","날개가 열리며 검 끝에 힘이 모입니다."],["osteos","easy","blade-all","검을 둘러싼 뼛조각들이 사방을 향합니다.","검을 두른 파편들이 사방으로 퍼집니다."],["osteos","normal","warning","오스테오스가 물러나라는 뜻으로 손을 내밉니다.","오스테오스가 마지막으로 물러나라는 손짓을 보냅니다."],["osteos","normal","wing-calm","날개를 접어 몸을 감쌉니다.","커다란 날개가 몸을 감싸기 시작합니다."],["osteos","normal","wing","날개가 겹쳐져 방어를 굳힙니다. 동시에 골편이 전원에게 튀려 합니다.","겹친 날개 틈에서 뼛조각들이 떨립니다."],["osteos","normal","bones","뼛조각이 주위로 흩어지려 합니다.","잘게 부서진 뼈가 바닥에서 일어납니다."],["osteos","normal","thrust","가느다란 뼈 끝이 앞을 겨눕니다.","가느다란 뼈 끝이 전방을 겨눕니다."],["osteos","normal","blade-one","날개가 열리고 날카로운 검 끝에 힘이 모입니다.","날개가 열리며 검 끝에 힘이 모입니다."],["osteos","normal","blade-all","검을 둘러싼 뼛조각들이 사방을 향합니다.","검을 두른 파편들이 사방으로 퍼집니다."],["osteos","normal","pillars","바닥에서 흰 기둥의 윤곽이 솟아오릅니다.","바닥 아래서 하얀 윤곽이 솟아오릅니다."],["cor","practice","slash","검을 고쳐 쥐고 거리를 좁힙니다.","코르가 검을 고쳐 쥐고 거리를 좁힙니다."],["cor","practice","charge","몸을 낮추고 돌진을 준비합니다.","코르가 몸을 낮추며 바닥을 박찹니다."],["cor","practice","smash","검이 높이 들립니다. 바닥 전체가 울립니다.","코르가 검을 높이 듭니다. 발아래 땅이 울립니다."],["cor","easy","slash","검을 고쳐 쥐고 거리를 좁힙니다.","코르가 검을 고쳐 쥐고 거리를 좁힙니다."],["cor","easy","charge","몸을 낮추고 돌진을 준비합니다.","코르가 몸을 낮추며 바닥을 박찹니다."],["cor","easy","smash","검이 높이 들립니다. 바닥 전체가 울립니다.","코르가 검을 높이 듭니다. 발아래 땅이 울립니다."],["cor","normal","slash","검을 고쳐 쥐고 거리를 좁힙니다.","코르가 검을 고쳐 쥐고 거리를 좁힙니다."],["cor","normal","charge","몸을 낮추고 돌진을 준비합니다.","코르가 몸을 낮추며 바닥을 박찹니다."],["cor","normal","smash","검이 높이 들립니다. 바닥 전체가 울립니다.","코르가 검을 높이 듭니다. 발아래 땅이 울립니다."],["cor","normal","duel","지목한 상대를 향해 세 번의 검격을 준비합니다.","코르가 상대 한 사람에게 시선을 고정합니다. 검날이 잠깐 흔들립니다."],["lacrien","practice","light","빛이 눈앞을 흐립니다. 공격이 잠시 빗나가기 쉬워집니다.","환한 빛이 시야에 스며들기 시작합니다."],["lacrien","practice","record","빛에 움직임이 비칩니다. 받은 공격의 일부가 되돌아올 것입니다.","라크리엔 주위의 빛이 거울처럼 맑아집니다."],["lacrien","practice","judgment","모인 별빛이 전장을 향합니다.","모인 별빛이 전장 위로 떠오릅니다."],["lacrien","easy","light","빛이 눈앞을 흐립니다. 공격이 잠시 빗나가기 쉬워집니다.","환한 빛이 시야에 스며들기 시작합니다."],["lacrien","easy","record","빛에 움직임이 비칩니다. 받은 공격의 일부가 되돌아올 것입니다.","라크리엔 주위의 빛이 거울처럼 맑아집니다."],["lacrien","easy","judgment","모인 별빛이 전장을 향합니다.","모인 별빛이 전장 위로 떠오릅니다."],["lacrien","normal","light","빛이 눈앞을 흐립니다. 공격이 잠시 빗나가기 쉬워집니다.","환한 빛이 시야에 스며들기 시작합니다."],["lacrien","normal","record","만상기록이 시작됩니다. 전원에게 약한 빛의 충격이 오고, 공격 피해 일부가 반사·기록됩니다.","라크리엔 주위의 빛이 거울처럼 맑아집니다."],["lacrien","normal","judgment","모인 별빛이 전장을 향합니다.","모인 별빛이 전장 위로 떠오릅니다."],["lacrien","normal","echo","기록의 잔향 · 공격을 멈췄더라도 약한 잔광은 남습니다. 전원 방어를 고려하세요.","거울 속에 남은 빛이 다시 들끓습니다."],["marionel","practice","summon","작업대에서 인형들이 몸을 일으키려 합니다.","작업대 위의 실들이 일제히 팽팽해집니다."],["marionel","practice","wave","느슨한 실이 한순간 팽팽해집니다.","실 하나가 허공을 날카롭게 가릅니다."],["marionel","practice","repair","상처 난 인형을 향해 손을 뻗습니다.","마리오넬이 끊어진 실 한 가닥을 손가락에 감습니다."],["marionel","practice","wave-two","가느다란 실이 전장을 가릅니다.","팽팽해진 실들이 전장을 가로지릅니다."],["marionel","easy","summon","작업대에서 인형들이 몸을 일으키려 합니다.","작업대 위의 실들이 일제히 팽팽해집니다."],["marionel","easy","wave","느슨한 실이 한순간 팽팽해집니다.","실 하나가 허공을 날카롭게 가릅니다."],["marionel","easy","repair","상처 난 인형을 향해 손을 뻗습니다.","마리오넬이 끊어진 실 한 가닥을 손가락에 감습니다."],["marionel","easy","wave-two","가느다란 실이 전장을 가릅니다.","팽팽해진 실들이 전장을 가로지릅니다."],["marionel","normal","summon","작업대에서 인형들이 일어납니다. 실의 끝에서 작은 공격도 날아옵니다. 인형 수는 출전 인원에 따릅니다.","작업대 위의 실들이 일제히 팽팽해집니다."],["marionel","normal","repair","수선하는 손 · 서로 다른 두 사람의 움직임이 실로 연결되려 합니다.","마리오넬이 끊어진 실 한 가닥을 손가락에 감습니다."],["marionel","normal","wave-two","가느다란 실이 전장을 가릅니다.","팽팽해진 실들이 전장을 가로지릅니다."],["marionel","normal","thread","꼭두각시 실 · 누군가의 다음 행동이 빼앗길 것 같습니다. 다른 동료가 먼저 실을 끊어야 합니다.","마리오넬의 손끝에서 실이 살아 있는 몸을 찾아 뻗습니다."],["vaciel","practice","drain","희망을 짓누르는 기운 · 전원의 공격력이 잠시 감소합니다.","양산 아래에서 짙은 그림자가 크게 부풀어 오릅니다."],["vaciel","practice","shadow","양산의 그림자가 한 사람을 향합니다.","등 뒤로 낯선 그림자 하나가 드러납니다."],["vaciel","practice","parasol","양산 위에 빛이 모입니다. 이번 라운드 전원에게 그림자 파동.","양산에서 뻗은 그림자가 전장 위로 넓게 드리웁니다."],["vaciel","practice","silent","그림자의 물결의 움직임이 보입니다.","그림자가 바닥을 타고 빠르게 움직입니다."],["vaciel","practice","empty","공명 · 색이 사라집니다. 전원에게 파동과 짧은 약화.","주변의 색채가 하나씩 사라집니다."],["vaciel","easy","drain","희망을 짓누르는 기운 · 전원의 공격력이 잠시 감소합니다.","양산 아래에서 짙은 그림자가 크게 부풀어 오릅니다."],["vaciel","easy","shadow","양산의 그림자가 한 사람을 향합니다.","등 뒤로 낯선 그림자 하나가 드러납니다."],["vaciel","easy","parasol","양산 위에 빛이 모입니다. 이번 라운드 전원에게 그림자 파동.","양산에서 뻗은 그림자가 전장 위로 넓게 드리웁니다."],["vaciel","easy","silent","그림자의 물결의 움직임이 보입니다.","그림자가 바닥을 타고 빠르게 움직입니다."],["vaciel","easy","empty","공명 · 색이 사라집니다. 전원에게 파동과 짧은 약화.","주변의 색채가 하나씩 사라집니다."],["vaciel","normal","drain","희망을 짓누르는 기운 · 전원의 공격력이 잠시 감소합니다.","양산 아래에서 짙은 그림자가 크게 부풀어 오릅니다."],["vaciel","normal","shadow","간부의 기운 하나가 드러납니다. 전투 중 세 번까지만 이어집니다.","등 뒤로 낯선 그림자 하나가 드러납니다."],["vaciel","normal","parasol","양산 위에 빛이 모입니다. 이번 라운드 전원에게 그림자 파동.","양산에서 뻗은 그림자가 전장 위로 넓게 드리웁니다."],["vaciel","normal","silent","그림자의 물결의 움직임이 보입니다.","그림자가 바닥을 타고 빠르게 움직입니다."],["vaciel","normal","empty","공명 · 색이 사라집니다. 전원에게 파동과 짧은 약화.","주변의 색채가 하나씩 사라집니다."]];
 function migrateCues(c){for(const [bid,mode,id,before,after] of defaultCueChanges){const p=c.bosses?.[bid]?.patterns?.[mode]?.find(v=>v.id===id);if(p?.tell===before)p.tell=after;}}
 function upgradeHardBalance(c){
  const prev=c.release;
@@ -5074,20 +5196,20 @@ function upgradeHardBalance(c){
  const p=(id,mode,name)=>c.bosses?.[id]?.patterns?.[mode]?.find(v=>v.id===name);
  change(c.bosses?.bellaton?.params,'curtainDamage',10,14);
  change(c.bosses?.bellaton?.params,'finaleWeakMultiplier',1.3,1.4);
- change(p('bellaton','hard','aria'),'tell','1악장 · 아리아가 전원의 공격력을 약화시키려 합니다.','1악장 · 약한 음파가 전원을 공격하고 아리아가 공격력을 약화시키려 합니다.');
- change(p('bellaton','hard','finale'),'power',1.4,1.6);
- change(p('bellaton','hard','finale'),'tell','4악장 · 피날레의 리본이 무대로 모입니다. 지목된 이의 체력과 상태를 확인하세요.','4악장 · 강화된 피날레가 지목된 이에게 집중됩니다. 약화 상태와 체력을 확인하세요.');
- change(p('osteos','hard','wing'),'tell','날개가 겹쳐져 단단한 감옥을 이룹니다.','날개가 겹쳐져 방어를 굳힙니다. 동시에 골편이 전원에게 튀려 합니다.');
- change(p('lacrien','hard','light'),'power',.18,.22);
- change(p('lacrien','hard','record'),'tell','빛에 움직임이 비칩니다. 받은 공격의 일부가 되돌아올 것입니다.','만상기록이 시작됩니다. 전원에게 약한 빛의 충격이 오고, 공격 피해 일부가 반사·기록됩니다.');
- change(p('lacrien','hard','judgment'),'power',1,1.12);
- change(p('lacrien','hard','echo'),'power',.5,.55);
- change(p('lacrien','hard','echo'),'tell','기록된 빛이 전장으로 되돌아오려 합니다.','기록의 잔향 · 공격을 멈췄더라도 약한 잔광은 남습니다. 전원 방어를 고려하세요.');
- change(p('marionel','hard','summon'),'tell','작업대에서 인형들이 몸을 일으키려 합니다.','작업대에서 인형들이 일어납니다. 실의 끝에서 작은 공격도 날아옵니다. 인형 수는 출전 인원에 따릅니다.');
- change(p('marionel','hard','repair'),'tell','상처 난 인형을 향해 손을 뻗습니다.','실을 당겨 상처 난 인형을 수선하려 합니다. 온전한 인형뿐이면 속박으로 전환합니다.');
- change(p('marionel','hard','wave-two'),'power',1,1.25);
- change(p('marionel','hard','thread'),'power',.4,.85);
- change(p('marionel','hard','thread'),'tell','실이 동료 하나의 움직임을 붙잡으려 합니다.','실이 살아 있는 동료 한 명을 가격하고 다음 행동을 붙잡으려 합니다. 혼자면 속박 대신 직접 공격합니다.');
+ change(p('bellaton','normal','aria'),'tell','1악장 · 아리아가 전원의 공격력을 약화시키려 합니다.','1악장 · 약한 음파가 전원을 공격하고 아리아가 공격력을 약화시키려 합니다.');
+ change(p('bellaton','normal','finale'),'power',1.4,1.6);
+ change(p('bellaton','normal','finale'),'tell','4악장 · 피날레의 리본이 무대로 모입니다. 지목된 이의 체력과 상태를 확인하세요.','4악장 · 강화된 피날레가 지목된 이에게 집중됩니다. 약화 상태와 체력을 확인하세요.');
+ change(p('osteos','normal','wing'),'tell','날개가 겹쳐져 단단한 감옥을 이룹니다.','날개가 겹쳐져 방어를 굳힙니다. 동시에 골편이 전원에게 튀려 합니다.');
+ change(p('lacrien','normal','light'),'power',.18,.22);
+ change(p('lacrien','normal','record'),'tell','빛에 움직임이 비칩니다. 받은 공격의 일부가 되돌아올 것입니다.','만상기록이 시작됩니다. 전원에게 약한 빛의 충격이 오고, 공격 피해 일부가 반사·기록됩니다.');
+ change(p('lacrien','normal','judgment'),'power',1,1.12);
+ change(p('lacrien','normal','echo'),'power',.5,.55);
+ change(p('lacrien','normal','echo'),'tell','기록된 빛이 전장으로 되돌아오려 합니다.','기록의 잔향 · 공격을 멈췄더라도 약한 잔광은 남습니다. 전원 방어를 고려하세요.');
+ change(p('marionel','normal','summon'),'tell','작업대에서 인형들이 몸을 일으키려 합니다.','작업대에서 인형들이 일어납니다. 실의 끝에서 작은 공격도 날아옵니다. 인형 수는 출전 인원에 따릅니다.');
+ change(p('marionel','normal','repair'),'tell','상처 난 인형을 향해 손을 뻗습니다.','실을 당겨 상처 난 인형을 수선하려 합니다. 온전한 인형뿐이면 속박으로 전환합니다.');
+ change(p('marionel','normal','wave-two'),'power',1,1.25);
+ change(p('marionel','normal','thread'),'power',.4,.85);
+ change(p('marionel','normal','thread'),'tell','실이 동료 하나의 움직임을 붙잡으려 합니다.','실이 살아 있는 동료 한 명을 가격하고 다음 행동을 붙잡으려 합니다. 혼자면 속박 대신 직접 공격합니다.');
  c.release='0.6.7';return c;
 }
 function upgradeMarionelAndSongs(c){
@@ -5098,14 +5220,30 @@ function upgradeMarionelAndSongs(c){
  const m=c.bosses?.marionel;if(m){
   m.params.dollBreakRatio??=.05;m.params.dollShieldRatio??=.65;
   m.params.puppetAttackRatio??=.6;m.params.stitchShareRatio??=.25;
-  const hard=m.patterns?.hard;
+  const hard=m.patterns?.normal;
   replaceIf(hard?.find(v=>v.id==='repair'),'tell','실을 당겨 상처 난 인형을 수선하려 합니다. 온전한 인형뿐이면 속박으로 전환합니다.','수선하는 손 · 서로 다른 두 사람의 움직임이 실로 연결되려 합니다.');
   replaceIf(hard?.find(v=>v.id==='thread'),'tell','실이 살아 있는 동료 한 명을 가격하고 다음 행동을 붙잡으려 합니다. 혼자면 속박 대신 직접 공격합니다.','꼭두각시 실 · 누군가의 다음 행동이 빼앗길 것 같습니다. 다른 동료가 먼저 실을 끊어야 합니다.');
  }
  const ms=c.heroSkills?.takumi?.find(v=>v.id==='misdirection');if(ms?.effect==='area'&&ms.power===1.05&&ms.cooldown===0){ms.effect='misdirection';ms.power=.72;ms.secondary??=.18;ms.duration=2;ms.cooldown=1;}
  migrateCues(c);c.release='0.6.9';return c;
 }
-function config(input){const c=C.copy(input);
+function migrateLegacyDifficultyConfig(c){
+  if(c?.difficultySchemaVersion===2)return c;
+  // 구버전: normal=쉬움, hard=보통, nightmare=어려움 (easy=비공개 이전 자료)
+  const move=old=>{
+    if(!old||typeof old!=='object')return old;
+    const result={};
+    const rename={easy:'practice',normal:'easy',hard:'normal',nightmare:'hard'};
+    for(const [key,value] of Object.entries(old))result[rename[key]||key]=value;
+    return result;
+  };
+  c.difficulties=move(c.difficulties);
+  if(c.itemLoadouts)c.itemLoadouts=move(c.itemLoadouts);
+  for(const boss of Object.values(c.bosses||{}))if(boss.patterns)boss.patterns=move(boss.patterns);
+  c.difficultySchemaVersion=2;
+  return c;
+}
+function config(input){const c=migrateLegacyDifficultyConfig(C.copy(input));
  // v0.6.11 설정 가져오기: 기존 사용자의 수정값은 유지하며 기본 일그러짐 설명만 갱신합니다.
  if(c.release==='0.6.11'){
    const defaults=H.defaults.distortions;
@@ -5122,7 +5260,7 @@ function config(input){const c=C.copy(input);
    const v=c.bosses?.vaciel;if(!v)return;
    const up=(o,k,old,value)=>{if(o&&o[k]===old)o[k]=value;};
    up(v.params,'motifFirstPower',.38,.98);up(v.params,'motifSecondPower',1.2,1.75);up(v.params,'motifThirdPower',.8,1.28);
-   const hard=v.patterns?.hard;const p=id=>hard?.find(e=>e.id===id);
+   const hard=v.patterns?.normal;const p=id=>hard?.find(e=>e.id===id);
    up(p('drain'),'power',.6,1.22);up(p('parasol'),'power',1.25,1.6);up(p('silent'),'power',.9,1.3);
  };
  if(c.release==='0.6.8'){const s=c.heroSkills?.takumi?.find(v=>v.id==='misdirection');if(s?.effect==='area'&&s.power===1.05&&s.cooldown===0){s.effect='misdirection';s.power=.72;s.secondary??=.18;s.duration=2;s.cooldown=1;}migrateCues(c);c.release='0.6.9';return c;}
@@ -5137,16 +5275,16 @@ function config(input){const c=C.copy(input);
  const fire=sk('jun','firebreak');if(fire?.effect==='defall'&&fire.power===.35){fire.effect='mitigateall';fire.power=.15;}
  change(sk('jun','redline'),'power',.5,.85);change(sk('rinne','seek'),'power',.75,.9);change(sk('rinne','seek'),'cost',4,3);change(sk('takumi','misdirection'),'cost',3,2);
  change(c.bosses?.cor?.params,'duelCap',.82,.7);change(c.bosses?.osteos?.params,'calmMaxRounds',3,2);change(c.bosses?.marionel?.params,'dollAtk',12,20);change(c.bosses?.marionel?.params,'bindTurns',2,1);change(c.bosses?.vaciel,'hpPerCompanion',100,140);
- const ps=c.bosses?.marionel?.patterns?.hard,thread=ps?.find(p=>p.id==='thread'),repair=ps?.find(p=>p.id==='repair');
+ const ps=c.bosses?.marionel?.patterns?.normal,thread=ps?.find(p=>p.id==='thread'),repair=ps?.find(p=>p.id==='repair');
  if(thread?.offset===2&&repair?.offset===3){thread.offset=3;repair.offset=2;const wave=ps.find(p=>p.id==='wave');if(wave?.offset===2&&wave.effect==='strike')ps.splice(ps.indexOf(wave),1);}
- const motif=c.bosses?.vaciel?.patterns?.hard?.find(p=>p.effect==='motif');if(motif?.cycle===4&&motif.offset===2&&motif.priority===10){motif.cycle=2;motif.priority=20;}
+ const motif=c.bosses?.vaciel?.patterns?.normal?.find(p=>p.effect==='motif');if(motif?.cycle===4&&motif.offset===2&&motif.priority===10){motif.cycle=2;motif.priority=20;}
  if(c.bosses?.bellaton?.params){c.bosses.bellaton.params.curtainDamage??=10;c.bosses.bellaton.params.finaleWeakMultiplier??=1.3;}
- if(!c.itemLoadouts){c.itemLoadouts=Object.fromEntries(['easy','normal','hard','final'].map(k=>[k,C.copy(c.items)]));if(JSON.stringify(c.items)===JSON.stringify(H.defaults.items))c.itemLoadouts.hard=C.copy(H.defaults.itemLoadouts.hard);}
+ if(!c.itemLoadouts){c.itemLoadouts=Object.fromEntries(['practice','easy','normal','final'].map(k=>[k,C.copy(c.items)]));if(JSON.stringify(c.items)===JSON.stringify(H.defaults.items))c.itemLoadouts.normal=C.copy(H.defaults.itemLoadouts.normal);}
  }
  change(c.bosses.marionel.params,'dollAtk',20,24);
  c.bosses.marionel.params.exposedDamageBonus??=.2;
  c.bosses.vaciel.params.lateChainHp??=.45;
- const tells=[["bellaton","normal","aria","첫 악장 · 아리아가 힘을 흐트러뜨립니다.","1악장 · 아리아가 전원의 공격력을 약화시키려 합니다."],["bellaton","normal","ribbon","두 번째 악장 · 리본이 객석 위를 가릅니다.","2악장 · 객석의 한 사람에게 리본이 날아옵니다."],["bellaton","normal","curtain","절정 · 한 사람을 무대로 초대하려 합니다.","3악장 · 한 사람을 무대로 초대합니다. 다음 악장은 초대된 이를 향한 피날레입니다."],["bellaton","normal","finale","피날레 · 무대에 오른 이를 향해 리본이 모입니다.","4악장 · 피날레의 리본이 무대로 모입니다. 지목된 이의 체력과 상태를 확인하세요."],["bellaton","hard","aria","첫 악장 · 아리아가 힘을 흐트러뜨립니다.","1악장 · 아리아가 전원의 공격력을 약화시키려 합니다."],["bellaton","hard","ribbon","두 번째 악장 · 리본이 객석 위를 가릅니다.","2악장 · 객석의 한 사람에게 리본이 날아옵니다."],["bellaton","hard","curtain","절정 · 한 사람을 무대로 초대하려 합니다.","3악장 · 약한 전체 피해와 무대 초대. 다음 악장은 초대된 이를 향한 피날레입니다."],["bellaton","hard","finale","피날레 · 무대에 오른 이를 향해 리본이 모입니다.","4악장 · 피날레의 리본이 무대로 모입니다. 지목된 이의 체력과 상태를 확인하세요."]];
+ const tells=[["bellaton","easy","aria","첫 악장 · 아리아가 힘을 흐트러뜨립니다.","1악장 · 아리아가 전원의 공격력을 약화시키려 합니다."],["bellaton","easy","ribbon","두 번째 악장 · 리본이 객석 위를 가릅니다.","2악장 · 객석의 한 사람에게 리본이 날아옵니다."],["bellaton","easy","curtain","절정 · 한 사람을 무대로 초대하려 합니다.","3악장 · 한 사람을 무대로 초대합니다. 다음 악장은 초대된 이를 향한 피날레입니다."],["bellaton","easy","finale","피날레 · 무대에 오른 이를 향해 리본이 모입니다.","4악장 · 피날레의 리본이 무대로 모입니다. 지목된 이의 체력과 상태를 확인하세요."],["bellaton","normal","aria","첫 악장 · 아리아가 힘을 흐트러뜨립니다.","1악장 · 아리아가 전원의 공격력을 약화시키려 합니다."],["bellaton","normal","ribbon","두 번째 악장 · 리본이 객석 위를 가릅니다.","2악장 · 객석의 한 사람에게 리본이 날아옵니다."],["bellaton","normal","curtain","절정 · 한 사람을 무대로 초대하려 합니다.","3악장 · 약한 전체 피해와 무대 초대. 다음 악장은 초대된 이를 향한 피날레입니다."],["bellaton","normal","finale","피날레 · 무대에 오른 이를 향해 리본이 모입니다.","4악장 · 피날레의 리본이 무대로 모입니다. 지목된 이의 체력과 상태를 확인하세요."]];
  for(const [id,mode,key,before,after]of tells){const p=c.bosses[id].patterns[mode].find(p=>p.id===key);if(p?.tell===before)p.tell=after;}
  // Apply incremental final-battle upgrades to legacy settings (only when matching default prior values).
  const fire=sk('jun','firebreak');change(fire,'power',.15,.2);change(fire,'cost',3,2);
@@ -5167,7 +5305,7 @@ const H=g.HopeBattle,previous=H.compat.config;
 H.compat.config=function(input){
  const c=previous(input);if(['0.6.10','0.6.11','0.6.12'].includes(c.release))return c;
  const changes=[['wing-calm',0,.75],['wing',0,.9],['bones',.7,1],['thrust',1,1.3]];
- const patterns=c.bosses?.osteos?.patterns?.hard||[];
+ const patterns=c.bosses?.osteos?.patterns?.normal||[];
  for(const [id,before,after] of changes){const p=patterns.find(x=>x.id===id);if(p&&p.power===before)p.power=after;}
  const cue=patterns.find(x=>x.id==='wing-calm');if(cue?.tell==='커다란 날개가 몸을 감싸기 시작합니다.')cue.tell='날개 사이로 뼛조각들이 일어나기 시작합니다.';
  c.release='0.6.10';return c;
@@ -5211,7 +5349,7 @@ H.compat.config=function(input){
    }
    const changes={osteos:[['wing-calm',0,.4],['wing',0,.48],['bones',.7,.85],['thrust',1,1.13]],bellaton:[['ribbon',1.15,1.25],['finale',1.4,1.5]],cor:[['smash',.9,1]],lacrien:[['judgment',1,1.1]],marionel:[['wave',.9,1.05],['wave-two',1,1.15]],vaciel:[['drain',.6,.72],['parasol',1.05,1.17]]};
    for(const [id,changeList]of Object.entries(changes)){
-     const patterns=c.bosses?.[id]?.patterns?.normal||[];
+     const patterns=c.bosses?.[id]?.patterns?.easy||[];
      for(const [pid,oldValue,newValue]of changeList){const p=patterns.find(x=>x.id===pid);if(p&&p.power===oldValue)p.power=newValue;}
    }
    c.release='0.6.14';return c;
@@ -5220,7 +5358,7 @@ H.compat.config=function(input){
 /* 실리 연결 경계. 개인 대화 원문은 가져오거나 내보내지 않습니다. */
 (function(g){'use strict';const H=g.HopeBattle,C=H.core;
 function result(b){if(!b.outcome)throw Error('전투가 끝나지 않았습니다.');return {version:3,engine:'hope-battle-0.4',id:b.id,domain:b.domain,mode:b.mode,confirmed:b.committed,meaningful:!!b.meaningful,outcome:b.outcome,rounds:b.round-b.startedAt+1,seed:b.seed,difficulty:b.difficulty,playerDisplayName:b.playerName,participants:['user',...b.team],statuses:Object.fromEntries(Object.entries(b.party).map(([id,u])=>[id,{alive:u.alive,hp:u.hp,sp:u.sp,injured:u.injured,severeInjury:u.severeInjury,incapacitated:u.hp===0,distorted:u.distorted,hasHope:u.hasHope,permanentUnavailable:u.permanentUnavailable,rescue:u.rescue,talkCount:u.talkCount}])),storyEvent:{occurred:b.story.occurred,hero:b.story.hero,branch:b.story.branch,resolved:b.story.resolved},privateEvents:Object.fromEntries(b.team.map(id=>[id,{completed:b.party[id].eventCompleted,feeling:b.party[id].eventCompleted?b.party[id].eventFeeling:''}])),remainingItems:C.copy(b.items),rewards:[],summary:b.boss.name+' 전투 · '+({victory:'격파',yield:'자발적 철수',retreat:'후퇴',loss:'패배',limit:'시험 상한'})[b.outcome]};}
-function optionsFromLegacy(s){if(!s||s.formatVersion!==3)throw Error('formatVersion=3 상태가 필요합니다.');return {mode:'campaign',id:s.campaign?.encounter?.id,bossId:s.campaign?.current||'bellaton',playerName:s.battleDisplayName||'당신',team:[...(s.campaign?.team||[])],difficulty:s.battleDifficulty||'normal',deathAllowed:!!s.deathAllowed,seed:s.rng>>>0,playerSkills:Object.entries(s.playerSkills||{}).filter(([,x])=>x.enabled).slice(0,4).map(([id])=>id),conditions:Object.fromEntries(Object.entries(s.heroes||{}).map(([id,h])=>[id,{alive:h.alive!==false,injured:!!h.injured,severeInjury:!!h.severeInjury,permanentUnavailable:!!h.permanentUnavailable,distorted:!!h.distorted,hasHope:h.hope!==false,eventCompleted:!!h.eventCompleted,eventFeeling:h.eventFeeling||'',hpPercent:h.incapacitated?0:100}])),storyFlags:C.copy(s.battleStoryFlags||{})};}
+function optionsFromLegacy(s){if(!s||s.formatVersion!==3)throw Error('formatVersion=3 상태가 필요합니다.');return {mode:'campaign',id:s.campaign?.encounter?.id,bossId:s.campaign?.current||'bellaton',playerName:s.battleDisplayName||'당신',team:[...(s.campaign?.team||[])],difficulty:s.battleDifficulty||'easy',deathAllowed:!!s.deathAllowed,seed:s.rng>>>0,playerSkills:Object.entries(s.playerSkills||{}).filter(([,x])=>x.enabled).slice(0,4).map(([id])=>id),conditions:Object.fromEntries(Object.entries(s.heroes||{}).map(([id,h])=>[id,{alive:h.alive!==false,injured:!!h.injured,severeInjury:!!h.severeInjury,permanentUnavailable:!!h.permanentUnavailable,distorted:!!h.distorted,hasHope:h.hope!==false,eventCompleted:!!h.eventCompleted,eventFeeling:h.eventFeeling||'',hpPercent:h.incapacitated?0:100}])),storyFlags:C.copy(s.battleStoryFlags||{})};}
 function eligible(h){return !!h&&h.alive!==false&&h.hope!==false&&!h.permanentUnavailable&&!h.distorted&&!h.away&&!h.captured&&!h.incapacitated;}
 function applyCampaignResult(s,r){if(r.mode!=='campaign'||r.version!==3||r.confirmed!==true)throw Error('확정된 캠페인 전투 결과만 반영합니다.');if((s.battleResults||[]).some(x=>x.id===r.id))return C.copy(s);if(s.formatVersion!==3||s.campaign?.encounter?.id!==r.id||s.campaign.current!==r.domain)throw Error('현재 회차의 전투 ID·영역과 일치하지 않습니다.');if(!['victory','yield','retreat','loss'].includes(r.outcome))throw Error('반영할 수 없는 결과입니다.');
  const n=C.copy(s);for(const id of n.campaign.team){const t=r.statuses[id],h=n.heroes[id];if(!t||!h)throw Error('참가자 결과가 누락되었습니다.');if(h.permanentUnavailable&&!t.permanentUnavailable)throw Error('영구 이탈은 전투 결과나 RP로 복구할 수 없습니다.');if(!t.alive&&!t.permanentUnavailable)throw Error('출전 불가능 상태의 결과가 올바르지 않습니다.');Object.assign(h,{alive:t.alive,injured:t.injured,severeInjury:t.severeInjury,incapacitated:t.incapacitated,distorted:t.distorted,permanentUnavailable:t.permanentUnavailable,rescue:t.rescue,talkCount:t.talkCount});}
@@ -5261,9 +5399,9 @@ H.adapter={newCampaign,openBosses,available,beginCampaign,fieldCare,result,optio
      for(const k of ['pressure','steady','distort','talk','withdrawal'])if(defaults.story?.[k]!==undefined)b.story[k]=clone(defaults.story[k]);
      if(id==='marionel'){
        b.params.stitchShareEasy=.10;b.params.stitchShareNormal=.20;b.params.stitchShareRatio=.30;
-       for(const mode of ['easy','normal','hard']){
+       for(const mode of ['practice','easy','normal']){
          const p=b.patterns?.[mode]?.find(p=>p.id==='repair');
-         if(p){p.effect='repair';p.power=({easy:.15,normal:.30,hard:.55})[mode];p.tell='서로 다른 두 사람의 움직임이 실로 이어지려 합니다.';}
+         if(p){p.effect='repair';p.power=({practice:.15,easy:.30,normal:.55})[mode];p.tell='서로 다른 두 사람의 움직임이 실로 이어지려 합니다.';}
        }
      }
    }
@@ -5287,8 +5425,8 @@ H.adapter={newCampaign,openBosses,available,beginCampaign,fieldCare,result,optio
   H.compat.config=function(input){
     const c=previous(input);
     // 이전 두 기본 프리셋(원본 및 직전 수정판)만 조정하고 직접 편집한 확률은 보존합니다.
-    const oldWeights={healthy:[35,15,15,35],hp:[25,35,15,25],sp:[25,15,35,25],normal:[25,25,25,25]};
-    const previousPatch={healthy:[40,10,10,40],hp:[20,45,15,20],sp:[20,15,45,20],normal:[30,20,20,30]};
+    const oldWeights={healthy:[35,15,15,35],hp:[25,35,15,25],sp:[25,15,35,25],normal: [25,25,25,25]};
+    const previousPatch={healthy:[40,10,10,40],hp:[20,45,15,20],sp:[20,15,45,20],normal: [30,20,20,30]};
     for(const key of Object.keys(oldWeights)){
       const current=JSON.stringify(c.songWeights?.[key]);
       if(current===JSON.stringify(oldWeights[key])||current===JSON.stringify(previousPatch[key]))c.songWeights[key]=H.core.copy(H.defaults.songWeights[key]);
@@ -5324,7 +5462,7 @@ H.adapter={newCampaign,openBosses,available,beginCampaign,fieldCare,result,optio
       c.bosses.marionel.params.hardDollStrikePower??=1.05;
       c.bosses.marionel.params.hardThreadInitialPower??=.85;
     }
-    const duel=c.bosses?.cor?.patterns?.hard?.find(p=>p.id==='duel');
+    const duel=c.bosses?.cor?.patterns?.normal?.find(p=>p.id==='duel');
     if(duel?.cycle===4&&duel.offset===1)duel.cycle=1;
     return c;
   };
@@ -5332,7 +5470,7 @@ H.adapter={newCampaign,openBosses,available,beginCampaign,fieldCare,result,optio
 </script><script>
 /* 0.7 이전 설정 가져오기: 새 악몽 설정만 보강하고 기존 커스텀 값은 유지. */
 (function(g){'use strict';const H=g.HopeBattle,previous=H.compat.config;
-H.compat.config=function(input){return H.nightmare.extend(previous(input));};
+H.compat.config=function(input){return H.hardDifficulty.extend(previous(input));};
 })(globalThis);
 </script>
 <script>/* 기록은 전부 보관하되, 한 기술의 여러 피해 결과는 한 묶음으로 표시한다. */
@@ -5467,12 +5605,12 @@ H.auto={choose};
 })(globalThis);
 </script><script>/* 0.8: 시온 SP 회복곡의 추첨 비율을 낮춤. 구형 저장/설정 호환 */
 (function(g){'use strict';const H=g.HopeBattle,previous=H.compat.config;
-const weights={healthy:[35,25,5,35],hp:[35,35,5,25],sp:[35,25,5,35],normal:[35,25,5,35]};
+const weights={healthy:[35,25,5,35],hp:[35,35,5,25],sp:[35,25,5,35],normal: [35,25,5,35]};
 H.compat.config=function(input){const c=previous(input);c.songWeights=H.core.copy(weights);return c;};
 })(globalThis);
 </script><script>/* 주인공 기본 능력치 및 악몽 기본 배율: 새 전투에만 적용할 최신 기본값. */
 (function(g){'use strict';
-  const c=g.HopeBattle.defaults,u=c.heroes?.user,nm=c.difficulties?.nightmare;
+  const c=g.HopeBattle.defaults,u=c.heroes?.user,nm=c.difficulties?.hard;
   if(u){if(u.hp===150||u.hp===170)u.hp=160;if(u.atk===24||u.atk===30)u.atk=27;if(u.def===12)u.def=15;}
   if(nm){if(nm.hp===1.42)nm.hp=1.33;if(nm.atk===1.22)nm.atk=1.16;}
 })(globalThis);
@@ -5484,12 +5622,12 @@ H.compat.config=function(input){const c=previous(input);c.songWeights=H.core.cop
    const tank=c?.skills?.find(s=>s.id==='shield');
    if(tank?.effect==='shield'){tank.target='self';tank.power=.75;tank.secondary=0;tank.duration=1;tank.detail='다음 적 차례의 공격을 대신 받고 피해를 75% 줄입니다. 동료를 지키면 다음 공격 피해 20% 증가.';}
    const b=c?.bosses?.marionel;if(!b)return c;
-   for(const mode of ['easy','normal','hard','nightmare']){
+   for(const mode of ['practice','easy','normal','hard']){
      const p=b.patterns?.[mode]?.find(p=>p.id==='repair');
      if(p&&p.effect==='repair'){
        p.name='수선하는 손';
        p.power=0;
-       p.tell=mode==='nightmare'?'마리오넬의 실이 두 사람의 손끝을 향합니다. 다음 차례에 스킬을 사용할 수 없습니다.':'마리오넬의 실이 한 사람의 손끝을 향합니다. 다음 차례에 스킬을 사용할 수 없습니다.';
+       p.tell=mode==='hard'?'마리오넬의 실이 두 사람의 손끝을 향합니다. 다음 차례에 스킬을 사용할 수 없습니다.':'마리오넬의 실이 한 사람의 손끝을 향합니다. 다음 차례에 스킬을 사용할 수 없습니다.';
      }
    }
    b.battleCues??={};
@@ -5514,6 +5652,46 @@ H.compat.config=function(input){const c=previous(input);c.songWeights=H.core.cop
  }
  normalize(H.defaults);
  H.compat.config=function(input){return normalize(prev(input));};
+})(globalThis);
+</script>
+<script>
+/* TRACK #???? 지원곡 3종 및 난이도 화면명 호환:
+   기존 저장/가져오기 설정의 4곡 목록도 새 형식으로 정규화합니다. */
+(function(g){'use strict';
+ const H=g.HopeBattle, oldCompat=H.compat.config;
+ const ids=['healthy','hp','sp','normal'];
+ const songDefaults={healthy:[33,34,33],hp:[29,44,27],sp:[33,34,33],normal: [33,34,33]};
+ function normalizeWeights(values,removedIndex){
+   if(!Array.isArray(values))return null;
+   const remaining=values.filter((_,i)=>i!==removedIndex);
+   if(remaining.length!==3||remaining.some(v=>!Number.isFinite(v)||v<0))return null;
+   const total=remaining.reduce((a,v)=>a+v,0);
+   if(total<=0)return null;
+   const exact=remaining.map(v=>v*100/total),result=exact.map(Math.floor);
+   const missing=100-result.reduce((a,v)=>a+v,0);
+   const order=[0,1,2].sort((a,b)=>(exact[b]-Math.floor(exact[b]))-(exact[a]-Math.floor(exact[a]))||a-b);
+   for(let i=0;i<missing;i++)result[order[i%3]]++;
+   return result;
+ }
+ function apply(c){
+   if(!c||!Array.isArray(c.songs))return c;
+   const oldCount=c.songs.length;
+   let removed=c.songs.findIndex(s=>s.id==='breath'||s.name==='여름을 깨우는 방법');
+   if(removed>=0)c.songs.splice(removed,1);
+   if(!c.songWeights)c.songWeights={};
+   for(const key of ids){
+     const weights=c.songWeights[key];
+     if(Array.isArray(weights)&&weights.length===3&&weights.every(v=>Number.isInteger(v)&&v>=0)&&weights.reduce((a,v)=>a+v,0)===100)continue;
+     c.songWeights[key]=normalizeWeights(weights,oldCount===4?removed:-1)||songDefaults[key].slice();
+   }
+   // Actual playable presets are normal, hard, nightmare (the legacy easy is hidden).
+   if(c.difficulties?.easy)c.difficulties.easy.name='쉬움';
+   if(c.difficulties?.normal)c.difficulties.normal.name='보통';
+   if(c.difficulties?.hard)c.difficulties.hard.name='어려움';
+   return c;
+ }
+ apply(H.defaults);
+ H.compat.config=function(input){return apply(oldCompat(input));};
 })(globalThis);
 </script>
 <script>window.HR_EMBEDDED_IMAGES=Object.create(null);window.HR_EMBEDDED_BGM=Object.create(null);</script>
@@ -5571,7 +5749,7 @@ function refreshBattleDefaults(c){
  const brave=findSong('brave'),rest=findSong('rest'),breath=findSong('breath'),hush=findSong('hush');
  tune(brave,'power',.2,.24);tune(brave,'duration',2,3);
  tune(rest,'power',.2,.35);tune(rest,'power',.34,.35);
- // 네 곡은 그대로 유지합니다. SP 회복곡은 아군 전체 3 회복입니다.
+ // 남은 세 곡은 유지하며, 이전 SP 회복곡은 지원곡 목록에서 제거합니다.
  // 이전 시험판의 피해 감소곡으로 저장된 경우에만 SP 회복곡으로 돌립니다.
  if(breath?.effect==='mitigateall'&&breath.power===.22&&breath.duration===3){
    breath.effect='spall';breath.power=3;breath.duration=1;
@@ -5589,19 +5767,22 @@ function refreshBattleDefaults(c){
  displaySong(rest,['아군 전체 체력 회복','아군 전체 최대 HP 34% 회복','아군 전체 최대 HP 35% 회복'],song=>`아군 전체 최대 HP ${Math.round(song.power*100)}% 회복`);
  displaySong(breath,['아군 전체 기력 회복','아군 전체 SP 3 회복'],song=>`아군 전체 SP ${song.power} 회복`);
  displaySong(hush,['적 전체 공격력 감소','적 전체 공격력 22% 감소 · 3라운드'],song=>`적 전체 공격력 ${Math.round(song.power*100)}% 감소 · ${song.duration}라운드`);
- // 체력 부족일 때만 회복곡 35%. 그 외에는 네 곡 동일 25%.
- const adjustedWeights={healthy:[25,25,25,25],hp:[23,35,21,21],sp:[25,25,25,25],normal:[25,25,25,25]};
+  // 마지막 연계의 그림자의 물결은 공명으로 교체. 종료 후 일반 단일 공격 이름만 변경.
+  const lastStrike=c.bosses?.vaciel?.patterns?.hard?.find(v=>v.id==='silent');
+  if(lastStrike&&lastStrike.name==='그림자의 물결')lastStrike.name='잔영의 일격';
+  // SP 회복곡은 제거하고 남은 세 곡만 추첨합니다. 체력 부족 시 회복곡 비중이 올라갑니다.
+ const adjustedWeights={healthy:[33,34,33],hp:[29,44,27],sp:[33,34,33],normal: [33,34,33]};
  c.songWeights=H.core.copy(adjustedWeights);
- // 보통(hard) / 어려움(nightmare) 보스별 목표 HP. 쉬움(normal)은 영향받지 않는다.
+ // 하드(hard) / 나이트메어(nightmare) 보스별 목표 HP. 쉬움(normal)은 영향받지 않는다.
  // 전투 엔진의 동료 인원별 HP 증가와 코르의 광란 전용 배율은 유지한다.
  // 간부는 동료 2명, 바시엘은 동료 5명 출전 시 목표 HP와 일치한다.
  const tunedBossHp={
-  bellaton:{hard:390,nightmare:425},
-  cor:{hard:540,nightmare:745},
-  lacrien:{hard:460,nightmare:540},
-  marionel:{hard:480,nightmare:600},
-  osteos:{hard:450,nightmare:515},
-  vaciel:{hard:1350,nightmare:1895}
+  bellaton:{normal:390,hard:425},
+  cor:{normal:540,hard:745},
+  lacrien:{normal:460,hard:540},
+  marionel:{normal:480,hard:600},
+  osteos:{normal:450,hard:515},
+  vaciel:{normal:1350,hard:1895}
  };
  for(const [id,target] of Object.entries(tunedBossHp)){
   const boss=c.bosses?.[id];if(!boss)continue;
@@ -5609,18 +5790,18 @@ function refreshBattleDefaults(c){
   const extra=id==='vaciel'?(boss.params.hardHpPerCompanionBonus||0)*teamCount:0;
   const baseHp=boss.hp+boss.hpPerCompanion*teamCount+extra;
   const corScale=id==='cor'?(boss.params.hardHpScale||1):1;
+  if(baseHp>0&&c.difficulties?.normal?.hp>0)
+    boss.params.normalHpScale=target.normal/(baseHp*c.difficulties.normal.hp*corScale);
   if(baseHp>0&&c.difficulties?.hard?.hp>0)
-    boss.params.normalHpScale=target.hard/(baseHp*c.difficulties.hard.hp*corScale);
-  if(baseHp>0&&c.difficulties?.nightmare?.hp>0)
-    boss.params.nightmareHpScale=target.nightmare/(baseHp*c.difficulties.nightmare.hp*corScale);
+    boss.params.nightmareHpScale=target.hard/(baseHp*c.difficulties.hard.hp*corScale);
  }
  return c;
 }
 refreshBattleDefaults(H.defaults);
-const DIFFICULTY_LABELS={normal:'쉬움',hard:'보통',nightmare:'어려움'};
-const defaults=()=>({series:false,bossId:'bellaton',playerName:'당신',team:[],difficulty:'normal',plusMode:false,seed:47291,round:1,bossHpPercent:100,playerSkills:['mimic'],deathAllowed:false,eventOccurred:false,storyFlags:{returnedCommanders:[],composureRestored:false},conditions:Object.fromEntries(Object.keys(H.defaults.heroes).map(id=>[id,{alive:true,injured:false,distorted:false,hasHope:true,eventCompleted:false,eventFeeling:'',hpPercent:100,spPercent:100}]))});
+const DIFFICULTY_LABELS={easy:'쉬움',normal:'보통',hard:'어려움'};
+const defaults=()=>({series:false,bossId:'bellaton',playerName:'당신',team:[],difficulty:'easy',plusMode:false,seed:47291,round:1,bossHpPercent:100,playerSkills:['mimic'],deathAllowed:false,eventOccurred:false,storyFlags:{returnedCommanders:[],composureRestored:false},conditions:Object.fromEntries(Object.keys(H.defaults.heroes).map(id=>[id,{alive:true,injured:false,distorted:false,hasHope:true,eventCompleted:false,eventFeeling:'',hpPercent:100,spPercent:100}]))});
 function normalizeOptions(v){const o=defaults();for(const key of Object.keys(o))if(v?.[key]!==undefined)o[key]=clone(v[key]);
-  if(!DIFFICULTY_LABELS[o.difficulty])o.difficulty='normal';o.plusMode=false;
+  if(!DIFFICULTY_LABELS[o.difficulty])o.difficulty='easy';o.plusMode=false;
   delete o.playerBuild;if(!o.playerSkills.some(id=>C.isSpecial(id)))o.playerSkills=['mimic',...o.playerSkills.filter(id=>!C.isSpecial(id)).slice(0,3)];o.conditions=Object.fromEntries(Object.entries(defaults().conditions).map(([id,d])=>[id,Object.fromEntries(Object.entries(d).map(([k,value])=>[k,o.conditions?.[id]?.[k]??value]))]));return o;}
 let config=clone(H.defaults),activeConfig,options=defaults(),startOptions,battle,events=[],cursor=0,actor='user',menu='attack',chosenSkill='',chosenTarget='',chosenItem='medicine',tab='setup',dirty=false,toastTimer,rawDrafts={},fileHandler,mediaKey='bellaton:boss',audio=null,soundOn=false,volume=.35;
 let campaign=H.adapter.newCampaign(),journey={started:false,inventory:null,roster:{},supplyRule:'choice',pendingSupply:false,stageCount:0,failed:false,history:[],currentStartItems:null},playTimer=null,page=0,autoRound=null,retreatOpen=false,shownImpactKey=null,atTitle=true;
@@ -5646,10 +5827,10 @@ function tell(s){
 const playing=()=>cursor<events.length,current=()=>P.frame(events,cursor,battle.playerName),view=()=>{const v=clone(current()?.view||C.snapshot(battle));v.party.user.name=battle.playerName;for(const u of v.summons){const actual=battle.summons.find(t=>t.id===u.id);if(actual)u.name=actual.name;}return v;};
 const label=id=>C.actorName(battle,id),bar=(v,max,sp=false)=>`<div class="hr-life ${sp?'hr-sp':''}"><i style="width:${Math.max(0,Math.min(100,v/(max||1)*100))}%"></i></div>`;
 const outcomeName=o=>({victory:'격파',yield:'자발적 철수',retreat:'후퇴',loss:'패배',limit:'시험 상한'})[o]||'';
-function stateLabel(u,round){return [u.permanentUnavailable?'영구 이탈':u.hp===0?'전투불능':u.injured?'부상':null,u.severeInjury?'중상':null,u.distorted?'일그러짐':null,u.rescue==='rescued'?'구출 성공':null,u.guard?'방어':null,u.protect?'보호':null,...Object.entries({mitigation:'피해 감소',bind:'속박',puppet:'꼭두각시 실 · 행동 강탈',stitch:'수선하는 손',skillseal:'수선하는 손 · 스킬 봉인',timehold:'늘어진 순간',weak:'공격력↓',defdown:'방어력↓',defup:'방어력↑',buff:'공격력↑',dark:'명중↓',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',songAtk:'불안정한 노래',songDef:'불안정한 노래',counter:'반격 준비',riposte:'다음 공격 피해 +20%',followup:'추격 준비'}).filter(([k])=>C.active(u,k,round)).map(([,v])=>v)].filter(Boolean).join(' · ');}
-function packageSave(){return {version:3,kind:'hope-battle-save',config:clone(activeConfig),editorConfig:clone(config),options:clone(options),startOptions:clone(startOptions),battle:clone(battle),events:clone(events),cursor,page,presentationVersion:5,campaign:clone(campaign),rawDrafts:clone(rawDrafts),journey:clone(journey),titleScreen:atTitle};}
+function stateLabel(u,round){return [u.permanentUnavailable?'영구 이탈':u.hp===0?'전투불능':u.injured?'부상':null,u.severeInjury?'중상':null,u.distorted?'일그러짐':null,u.rescue==='rescued'?'구출 성공':null,u.guard?'방어':null,u.protect?'보호':null,...Object.entries({mitigation:'피해 감소',bind:'속박',puppet:'꼭두각시 실 · 행동 강탈',stitch:'수선하는 손',skillseal:'수선하는 손 · 스킬 봉인',timehold:'늘어진 순간',colorlessDream:'색을 잃은 꿈',weak:'공격력↓',defdown:'방어력↓',defup:'방어력↑',buff:'공격력↑',dark:'명중↓',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',songAtk:'불안정한 노래',songDef:'불안정한 노래',counter:'반격 준비',riposte:'다음 공격 피해 +20%',followup:'추격 준비'}).filter(([k])=>C.active(u,k,round)).map(([,v])=>v)].filter(Boolean).join(' · ');}
+function packageSave(){return {version:3,songCatalogVersion:3,difficultySchemaVersion:2,kind:'hope-battle-save',config:clone(activeConfig),editorConfig:clone(config),options:clone(options),startOptions:clone(startOptions),battle:clone(battle),events:clone(events),cursor,page,presentationVersion:5,campaign:clone(campaign),rawDrafts:clone(rawDrafts),journey:clone(journey),titleScreen:atTitle};}
 function checkpoint(){try{localStorage.setItem('hope-player-campaign-v1-progress',JSON.stringify(packageSave()));}catch{/* 자동 저장을 사용할 수 없는 브라우저에서는 진행 데이터를 유지할 수 없습니다. */}}
-function persistConfig(){try{localStorage.setItem('hope-player-campaign-v1-config',JSON.stringify({version:3,config,options}));}catch{tell('이 브라우저에서는 자동 저장이 제한됩니다. 브라우저의 저장소 설정을 확인해 주세요.');}}
+function persistConfig(){try{localStorage.setItem('hope-player-campaign-v1-config',JSON.stringify({version:3,difficultySchemaVersion:2,config,options}));}catch{tell('이 브라우저에서는 자동 저장이 제한됩니다. 브라우저의 저장소 설정을 확인해 주세요.');}}
 function marked(){dirty=true;$('dirty-message').textContent='편집 중 · 이 설정으로 시작을 누르면 적용됩니다.';checkpoint();}
 function setPath(obj,path,value){const keys=path.split('.');if(keys.some(k=>['__proto__','prototype','constructor'].includes(k)))throw Error('잘못된 편집 경로입니다.');let t=obj;for(const k of keys.slice(0,-1)){if(t[k]===undefined)t[k]={};t=t[k];}t[keys.at(-1)]=value;}
 function applyDrafts(){const next=clone(config);for(const [path,raw]of Object.entries(rawDrafts))setPath(next,path,JSON.parse(raw));C.validateConfig(next);config=next;rawDrafts={};}
@@ -5659,7 +5840,7 @@ function randomSeed(){
 /* 과거 설정의 기본값만 새 밸런스로 옮기고, 사용자가 직접 바꾼 수치는 보존한다.
    진행 중인 전투용 activeConfig는 손대지 않는다. */
 function migrateFutureBalance(c){
-  const u=c?.heroes?.user,nm=c?.difficulties?.nightmare;
+  const u=c?.heroes?.user,nm=c?.difficulties?.hard;
   if(u){if(u.hp===150||u.hp===170)u.hp=160;if(u.atk===24||u.atk===30)u.atk=27;if(u.def===12)u.def=15;}
   if(nm){if(nm.hp===1.42)nm.hp=1.33;if(nm.atk===1.22)nm.atk=1.16;}
   return refreshBattleDefaults(c);
@@ -5741,7 +5922,7 @@ function newGame(){
  options=previous;
  // 타이틀로 복귀한다. 전투 시드는 전투 시작을 누를 때마다 새로 뽑는다.
  atTitle=true;document.body.classList.add('hr-at-title');
- launch(config,{...options,series:false,bossId:'bellaton'});
+ launch(config,{...options,series:false,bossId:'bellaton',team:options.team.slice(0,2)});
  persistConfig();openSettings('setup');
 }
 function advance(){
@@ -5944,7 +6125,17 @@ function render(){if(!playing()&&battle?.outcome&&!battle.committed)finalizeBatt
  const bg=urls.get(battle.domain+':background')||EMBEDDED_IMAGES[battle.domain+':background'];
  if(bg!==lastStageBackground){$('stage').style.backgroundImage=bg?`url("${bg}")`:'none';lastStageBackground=bg;}
  const art=urls.get(battle.domain+':boss')||EMBEDDED_IMAGES[battle.domain+':boss'];
- if(art!==lastBossIllustration){$('boss-art').innerHTML=art?`<img src="${art}" alt="${esc(bc.name)}">`:`<div class="hr-stage-label">${esc(bc.name)}<br>스탠딩 미등록</div>`;lastBossIllustration=art;}
+ if(art!==lastBossIllustration){$('boss-art').innerHTML=art?`<img src="${art}" alt="${esc(bc.name)}">${battle.domain==='vaciel'?`<img src="${art}" alt="" aria-hidden="true" class="dream-art-layer">`:''}`:`<div class="hr-stage-label">${esc(bc.name)}<br>스탠딩 미등록</div>`;lastBossIllustration=art;}
+ // 전투 로그 스냅샷에 맞추어 위에서 아래로 사라지는 색 / 되돌아오는 색 연출.
+ const dreamStage=$('stage'),dreamActive=battle.domain==='vaciel'&&battle.difficulty==='hard'&&!!v.dreamMonochrome;
+ dreamStage.style.setProperty('--dream-bg',bg?`url("${bg}")`:'none');
+ if(dreamStage.dataset.dreamActive!==String(dreamActive)){
+   dreamStage.dataset.dreamActive=String(dreamActive);
+   dreamStage.classList.remove('dream-wiping','dream-complete','dream-restoring');
+   if(dreamActive)dreamStage.classList.add('dream-wiping');
+   else if(dreamStage.dataset.dreamEver==='true')dreamStage.classList.add('dream-restoring');
+   if(dreamActive)dreamStage.dataset.dreamEver='true';
+ }
  $('enemy-status').innerHTML=`<b>${esc(v.boss.name)}</b> HP ${v.boss.hp} / ${v.boss.maxHp}${bar(v.boss.hp,v.boss.maxHp)}${bossStateLabels(v).length?`<div class="hr-boss-effects" aria-label="보스 상태 효과">${bossStateLabels(v).map(t=>`<span class="hr-boss-effect">${esc(t)}</span>`).join('')}</div>`:''}`;
  $('summons').innerHTML=v.summons.filter(C.living).sort((a,z)=>(a.slot==='right'?1:0)-(z.slot==='right'?1:0)).map(u=>`<span class="hr-echo">${esc(u.name)} ${u.hp}/${u.maxHp}</span>`).join('');
  
@@ -6039,7 +6230,7 @@ const ENDING_LETTERS=[{"name": "쥰", "color": "#cb5550", "text": "자자, 이�
 const ENDING_NIGHTMARE_EXTRA=["인간들의 희망을 더는 빼앗지 않기로 한 뒤, 바시엘과 다섯 간부가 머무는 고요한 회랑에는 사뭇 낯선 평화가 찾아왔다.", "바시엘은 여전히 온전히 서기 힘들었지만 오스테오스의 품에 안긴 그의 표정만큼은 오랜 짐을 내려놓은 듯 평온했다.", "문제는 당장 인간들을 심판하러 갈 일이 사라진 다섯 간부들의 넘치는 충성심이었다.", "\"아아, 바시엘 님께서 방금 작게 숨을 내쉬셨도다♭ 이는 곧 '긴 잠에 들기 전에 따뜻한 차라도 한 잔 마시고 싶구나'라는 숭고한 뜻이 분명하노라♬\"", "벨라톤이 보랏빛 눈을 반짝이며 망토 자락을 화려하게 휘날렸다. 그러자 구석에서 대검을 닦던 코르가 인상을 팍 찌푸리며 으르렁거렸다.", "\"시끄러워! 그냥 하품하신 거잖아! ……차 끓일 물은 내가 당장 끓여 오지. 땔감이고 뭐고 내 심장 불꽃으로 단숨에 태워버리면 그만이니까!\"", "\"코르, 진정하시지요. 주전자까지 녹여버릴 셈입니까.\"", "바시엘을 조심스럽게 안아 올린 오스테오스가 뼈 날개를 달그락거리며 한심하다는 듯 고개를 저었다. 그는 곧장 바시엘이 흔들리지 않도록 자세를 고쳐 잡으며 정중하게 덧붙였다.", "\"바시엘 님, 소란을 피워 송구합니다. 이 뼈가 조금 더 푹신한 의자가 되어드려야 하는데 재질이 재질인지라 늘 마음이 무겁군요.\"", "\"푹신한 게 필요하면 내가 만들면 돼.\"", "빈 왼쪽 소매를 나부끼며 다가온 마리오넬이 오른손 손가락을 꼼지락거렸다. 그의 손끝에서 뻗어 나온 가느다란 실이 허공에서 얽히더니 순식간에 인형 솜을 잔뜩 채운 거대한 쿠션 하나가 뚝딱 만들어졌다. 마리오넬은 무표정한 얼굴로 고개를 갸웃했다.", "\"오스테오스의 갈비뼈 사이에 이 솜을 전부 채워 넣으면…… 바시엘이 훨씬 편하지 않을까? 자, 가만히 있어 봐. 금방 꿰매 줄게.\"", "\"정중히 사양하겠습니다, 마리오넬. 뼈 사이에 솜이 낀 집사라니, 품위가 떨어지는군요.\"", "그 모습을 지켜보던 라크리엔의 머리 위에서 푸른 촛불이 잔잔하게 흔들렸다.", "\"아아…… 다들 바시엘 님을 생각하는 마음이 이토록 깊다니, 참으로 눈물겨운 광경입니다…… 코르가 주전자를 태워 먹을 미래도, 오스테오스가 솜인형이 될 뻔한 참사도 이 눈에는 전부 보입니다. 이토록 어수선하면서도 지극한 충성심이라니…… 감탄을 금할 수 없군요.\"", "\"야! 주전자 아직 멀쩡하거든!\"", "코르가 버럭 소리를 지르자, 벨라톤은 그 고함마저 장엄한 합창의 일부인 양 비장한 아리아를 뽑아내기 시작했다.", "한순간에 소란스러워진 회랑 한가운데서 바시엘은 무릎 위에 놓인 하얀 레이스 양산을 가만히 만지작거렸다. 자신이 떼어낸 감정과 감각들이 저마다의 모양으로 살아 움직이며 아웅다웅하는 모습은 꽤나 시끄러웠지만 결코 싫지 않았다.", "\"……조금만 더, 깨어 있어도 괜찮겠군.\"", "바시엘의 입가에서 흘러나온 희미한 속삭임은 코르의 고함과 벨라톤의 노랫소리에 묻혀 아무에게도 닿지 않았다. 하지만 그의 잿빛 눈동자에는 그날 인간들에게서 보았던 것과 닮은 온기가 아주 옅게 어려 있었다."];
 function endingPages(){
  const alternate=trueEnding();
- const nightmareExtra=alternate&&startOptions.difficulty==='nightmare';
+ const nightmareExtra=alternate&&startOptions.difficulty==='hard';
  return [{kind:'story',title:alternate?'우리가 그려갈 내일':'남겨진 내일',text:alternate?ENDING_TRUE:ENDING_NORMAL},
    ...(alternate?ENDING_LETTERS.map(letter=>({kind:'letter',title:letter.name,...letter})):[]),
    ...(nightmareExtra?[{kind:'extra',title:'평범한 오후',text:ENDING_NIGHTMARE_EXTRA}]:[])];
@@ -6120,7 +6311,7 @@ function field(label,path,value,type='number',asOption=false){return `<label>${e
 const cfg=(l,p,v,t)=>field(l,p,v,t||'number'),opt=(l,p,v,t)=>field(l,p,v,t||'number',true);
 const jsonField=(label,path,value)=>`<details><summary>${esc(label)}</summary><textarea class="hr-json" data-json="${esc(path)}" spellcheck="false">${esc(rawDrafts[path]??JSON.stringify(value,null,2))}</textarea><small>JSON 형식입니다. 이 설정으로 시작할 때 검사합니다.</small></details>`;
 const supplyNames={medicine:'회복약',revive:'응급 소생 키트',ether:'SP 회복제',remedy:'해제약'};
-const recoveryHp=d=>d==='nightmare'?70:d==='hard'?90:100;
+const recoveryHp=d=>d==='hard'?70:d==='normal'?90:100;
 const statusOf=h=>h.alive===false?'dead':h.permanentUnavailable?'unavailable':h.severeInjury?'severe':h.injured?'injured':'normal';
 function journeyPanel(){
  const open=H.adapter.openBosses(campaign);
@@ -6144,7 +6335,7 @@ function renderPanel(){
  <div class="start-fields start-fields-game">
  <label class="start-label">이름<input type="text" data-option="playerName" maxlength="20" value="${esc(options.playerName)}" placeholder="당신의 이름"></label>
  <div class="start-label start-difficulty-block"><span class="game-field-caption">난이도</span>
-   <div class="game-difficulty-options">${['normal','hard','nightmare'].map(id=>{const selected=options.difficulty===id;return `<button type="button" data-difficulty-pick="${id}" class="game-choice ${selected?'is-selected':''}" aria-pressed="${selected}" ${isRunning?'disabled':''}>${esc(DIFFICULTY_LABELS[id])}</button>`;}).join('')}</div>
+   <div class="game-difficulty-options">${['easy','normal','hard'].map(id=>{const selected=options.difficulty===id;return `<button type="button" data-difficulty-pick="${id}" class="game-choice ${selected?'is-selected':''}" aria-pressed="${selected}" ${isRunning?'disabled':''}>${esc(DIFFICULTY_LABELS[id])}</button>`;}).join('')}</div>
  </div>
  </div>
  <div class="start-map-block">
@@ -6185,8 +6376,28 @@ function withoutOldAttackPreviews(raw,at,c,bossId){
  }
  return {events:raw.filter((e,i)=>!blocked.has(i)),cursor:raw.slice(0,at).filter((e,i)=>!blocked.has(i)).length};
 }
-function loadSave(p){if(p?.version!==3||p.kind!=='hope-battle-save')throw Error('v3 진행 저장 파일이 필요합니다.');const playConfig=enforceSupportSkillBalance(H.compat.config(p.config)),editConfig=migrateFutureBalance(H.compat.config(p.editorConfig));C.validateConfig(playConfig);C.validateConfig(editConfig);C.validateState(p.battle,playConfig);if(p.battle.mode==='campaign'&&!p.campaign)throw Error('연속 출전 정보가 누락되었습니다.');C.initial(playConfig,p.startOptions);if(!Array.isArray(p.events)||p.events.length>1000||!Number.isInteger(p.cursor)||p.cursor<0||p.cursor>p.events.length)throw Error('장면 진행 번호 오류');for(const e of p.events){if(!e.view||typeof e.text!=='string'||typeof e.id!=='number'||e.id>p.battle.eventSerial)throw Error('장면 저장 오류');for(const u of [e.view.boss,...Object.values(e.view.party),...e.view.summons])if(!Number.isFinite(u.hp)||u.hp<0||u.hp>u.maxHp)throw Error('장면 HP 오류');}
- config=editConfig;activeConfig=playConfig;options=normalizeOptions(p.options);startOptions=normalizeOptions(p.startOptions);battle=H.compat.state(p.battle);battle.log=withoutOldAttackPreviews(battle.log||[],(battle.log||[]).length,playConfig,battle.domain).events;{const cleaned=withoutOldAttackPreviews(clone(p.events),p.cursor,playConfig,p.battle.domain);events=cleaned.events;cursor=cleaned.cursor;}page=p.presentationVersion===5?(p.page||0):0;campaign=p.campaign?clone(p.campaign):H.adapter.newCampaign();journey=p.journey?clone(p.journey):{started:false,inventory:null,roster:{},supplyRule:"choice",pendingSupply:false,stageCount:0,failed:false,history:[],currentStartItems:null};journey.history??=[];journey.currentStartItems??=null;
+function loadSave(p){if(p?.version!==3||p.kind!=='hope-battle-save')throw Error('v3 진행 저장 파일이 필요합니다.');
+ if(p.difficultySchemaVersion!==2){
+   const convert=old=>({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[old]||old;
+   if(p.battle)p.battle.difficulty=convert(p.battle.difficulty);
+   for(const key of ['options','startOptions'])if(p[key])p[key].difficulty=convert(p[key].difficulty);
+   if(p.campaign)p.campaign.battleDifficulty=convert(p.campaign.battleDifficulty);
+   if(p.journey?.initialOptions)p.journey.initialOptions.difficulty=convert(p.journey.initialOptions.difficulty);
+ }
+
+ // 저장된 기존 전투는 인덱스 2=SP 회복곡, 3=약화곡이었으므로 새 목록으로 변환합니다.
+ const savedBattle=clone(p.battle);
+ if(p.songCatalogVersion!==3){
+   const fixIndex=i=>i===3?2:i===2?null:i;
+   savedBattle.lastTrack=fixIndex(savedBattle.lastTrack);
+   if(savedBattle.lastCompanionSkill&&Number.isInteger(savedBattle.lastCompanionSkill.songIndex)){
+     const next=fixIndex(savedBattle.lastCompanionSkill.songIndex);
+     if(next===null)delete savedBattle.lastCompanionSkill.songIndex;
+     else savedBattle.lastCompanionSkill.songIndex=next;
+   }
+ }
+ const playConfig=enforceSupportSkillBalance(H.compat.config(p.config)),editConfig=migrateFutureBalance(H.compat.config(p.editorConfig));C.validateConfig(playConfig);C.validateConfig(editConfig);C.validateState(savedBattle,playConfig);if(savedBattle.mode==='campaign'&&!p.campaign)throw Error('연속 출전 정보가 누락되었습니다.');C.initial(playConfig,p.startOptions);if(!Array.isArray(p.events)||p.events.length>1000||!Number.isInteger(p.cursor)||p.cursor<0||p.cursor>p.events.length)throw Error('장면 진행 번호 오류');for(const e of p.events){if(!e.view||typeof e.text!=='string'||typeof e.id!=='number'||e.id>p.battle.eventSerial)throw Error('장면 저장 오류');for(const u of [e.view.boss,...Object.values(e.view.party),...e.view.summons])if(!Number.isFinite(u.hp)||u.hp<0||u.hp>u.maxHp)throw Error('장면 HP 오류');}
+ config=editConfig;activeConfig=playConfig;options=normalizeOptions(p.options);startOptions=normalizeOptions(p.startOptions);battle=H.compat.state(savedBattle);battle.log=withoutOldAttackPreviews(battle.log||[],(battle.log||[]).length,playConfig,battle.domain).events;{const cleaned=withoutOldAttackPreviews(clone(p.events),p.cursor,playConfig,p.battle.domain);events=cleaned.events;cursor=cleaned.cursor;}page=p.presentationVersion===5?(p.page||0):0;campaign=p.campaign?clone(p.campaign):H.adapter.newCampaign();journey=p.journey?clone(p.journey):{started:false,inventory:null,roster:{},supplyRule:"choice",pendingSupply:false,stageCount:0,failed:false,history:[],currentStartItems:null};journey.history??=[];journey.currentStartItems??=null;
  // If an older save was opened mid-fight, reconstruct prior ordinary knockouts
  // from its existing event log. Completed old fights cannot be reconstructed.
  if(journey.currentKnockouts===undefined){
@@ -6330,8 +6541,8 @@ bind('retreat',()=>{if(playing()||battle.outcome)return;clearTimeout(playTimer);
 bind('cancel-retreat',()=>{retreatOpen=false;$('retreat-confirm').hidden=true;render();$('retreat').focus();});
 bind('confirm-retreat',()=>{if(!retreatOpen)return;retreatOpen=false;$('retreat-confirm').hidden=true;accept(C.retreat(battle,activeConfig));});
 /* 진행 파일 수동 저장/불러오기 버튼은 제거. 자동 저장과 이어하기는 그대로 유지합니다. */
-bind('export-config',()=>{applyDrafts();C.initial(config,options);persistConfig();download('희망탈환_시험설정.json',{version:3,kind:'hope-battle-config',config,options});});
-bind('import-config',()=>chooseFile(p=>{if(p?.version!==3||p.kind!=='hope-battle-config')throw Error('v3 설정 파일이 필요합니다.');const migrated=migrateFutureBalance(H.compat.config(p.config));C.validateConfig(migrated);C.initial(migrated,p.options);config=migrated;options=normalizeOptions(p.options);rawDrafts={};marked();openSettings();}));
+bind('export-config',()=>{applyDrafts();C.initial(config,options);persistConfig();download('희망탈환_시험설정.json',{version:3,kind:'hope-battle-config',difficultySchemaVersion:2,config,options});});
+bind('import-config',()=>chooseFile(p=>{if(p?.version!==3||p.kind!=='hope-battle-config')throw Error('v3 설정 파일이 필요합니다.');const migrated=migrateFutureBalance(H.compat.config(p.config));C.validateConfig(migrated);const importedOptions=p.difficultySchemaVersion===2?p.options:{...p.options,difficulty:({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[p.options?.difficulty]||'easy'};C.initial(migrated,importedOptions);config=migrated;options=normalizeOptions(p.difficultySchemaVersion===2?p.options:{...p.options,difficulty:({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[p.options?.difficulty]||'easy'});rawDrafts={};marked();openSettings();}));
 bind('sound',()=>{soundOn=!soundOn;const musicBtn=$('sound');musicBtn.textContent=soundOn?'♫ ON':'♫ OFF';musicBtn.setAttribute('aria-pressed',String(soundOn));musicBtn.setAttribute('aria-label',soundOn?'배경음악 끄기':'배경음악 켜기');musicBtn.title=soundOn?'배경음악 끄기':'배경음악 켜기';updateAudio();if(soundOn&&!rushCompleted()&&!urls.get(battle.domain+':bgm')&&!EMBEDDED_BGM[battle.domain])tell('이 보스에는 등록된 음악이 없습니다.');});
 document.addEventListener('click',async e=>{const el=e.target.closest('button');if(!el||el.disabled)return;try{if(el.dataset.tab){tab=el.dataset.tab;renderPanel();}if(el.dataset.gameMode){if(journey.started)throw Error('진행 중인 보스 러시는 모드를 바꿀 수 없습니다. 새 게임을 시작하세요.');options.series=el.dataset.gameMode==='rush';if(!options.series)options.plusMode=false;options.bossId=options.series?(H.adapter.openBosses(campaign).includes(options.bossId)?options.bossId:H.adapter.openBosses(campaign)[0]):options.bossId;options.team=options.team.slice(0,options.bossId==='vaciel'?5:2);marked();renderPanel();return;}if(el.dataset.bossPick){
   options.bossId=el.dataset.bossPick;
@@ -6403,7 +6614,7 @@ document.addEventListener('keydown',e=>{
   }
   if(!$('resume-overlay').hidden){if(e.key==='Escape'){e.preventDefault();return;}if(e.key==='Tab'){const buttons=[$('resume-new'),$('resume-continue')];if(e.shiftKey&&document.activeElement===buttons[0]){e.preventDefault();buttons[1].focus();}else if(!e.shiftKey&&document.activeElement===buttons[1]){e.preventDefault();buttons[0].focus();}}return;}if(retreatOpen&&e.key==='Escape'){$('cancel-retreat').click();return;}if(!$('settings').hidden){if(e.key==='Escape'){e.preventDefault();if(!atTitle)closeSettings();}if(e.key==='Tab'){const nodes=[...$('settings').querySelectorAll('button,input,select,textarea')].filter(n=>!n.disabled&&n.offsetParent!==null),first=nodes[0],last=nodes.at(-1);if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}else if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}}return;}if(!['INPUT','TEXTAREA','SELECT','BUTTON'].includes(document.activeElement?.tagName)&&(e.key==='Enter'||e.key===' ')){e.preventDefault();step();}});
 addEventListener('pagehide',()=>{stopAudio(true);checkpoint();});document.addEventListener('visibilitychange',()=>{if(document.hidden){if(audio){cancelBgmFade(audio);audio.pause();}for(const track of [...bgmFadingOut])fadeAwayBgm(track,true);clearTimeout(playTimer);}else{updateAudio();schedule();}});
-let resumed=false;try{const cfg=JSON.parse(localStorage.getItem('hope-player-campaign-v1-config')||'null');if(cfg?.version===3){const migrated=migrateFutureBalance(H.compat.config(cfg.config));C.validateConfig(migrated);config=migrated;options=normalizeOptions(cfg.options);}const saved=JSON.parse(localStorage.getItem('hope-player-campaign-v1-progress')||'null');if(saved){loadSave(saved);resumed=true;offerResume();}}catch{config=clone(H.defaults);options=defaults();tell('이전 임시 저장을 읽을 수 없어 기본 조건으로 시작합니다.');}if(!resumed){launch(config,{...options,series:false});openSettings('setup');}initMedia();window.HR_BOOT_LOADER?.complete();
+let resumed=false;try{const cfg=JSON.parse(localStorage.getItem('hope-player-campaign-v1-config')||'null');if(cfg?.version===3){const migrated=migrateFutureBalance(H.compat.config(cfg.config));C.validateConfig(migrated);config=migrated;options=normalizeOptions(cfg.difficultySchemaVersion===2?cfg.options:{...cfg.options,difficulty:({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[cfg.options?.difficulty]||'easy'});}const saved=JSON.parse(localStorage.getItem('hope-player-campaign-v1-progress')||'null');if(saved){loadSave(saved);resumed=true;offerResume();}}catch{config=clone(H.defaults);options=defaults();tell('이전 임시 저장을 읽을 수 없어 기본 조건으로 시작합니다.');}if(!resumed){launch(config,{...options,series:false});openSettings('setup');}initMedia();window.HR_BOOT_LOADER?.complete();
 })();
 </script>
 <script>
