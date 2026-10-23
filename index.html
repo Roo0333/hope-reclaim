@@ -809,7 +809,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 @keyframes hr-boot-pulse{0%{left:-35%}100%{left:105%}}
 @media(prefers-reduced-motion:reduce){#hr-boot-loading .hr-boot-bar::before{animation:none;left:32%;}#hr-boot-loading{transition:none}}
 
-/* 공명 · 색을 잃은 꿈: 원본 보스 스탠딩과 배경을 위에서 아래로 흑백으로 덮습니다. */
+/* 공명 · 색 잃은 꿈: 원본 보스 스탠딩과 배경을 위에서 아래로 흑백으로 덮습니다. */
 .hr-stage[data-boss="vaciel"]::before{
   content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
   background-color:#f0f0f0;background-image:var(--dream-bg,none);
@@ -7617,7 +7617,7 @@ function adaptiveIntent(b,c,p) {
   // 바시엘 어려움 한정: 장막 뒤에 표식 1턴 -> 공명 -> 탈진 1턴.
   if(b.difficulty==='hard'){
     const closing={target:'all',phase:'any',power:0,cycle:1,offset:1,fromRound:1,priority:100,once:false,cooldown:0};
-    if(b.finalChain==='mark')return {...closing,id:'dreammark-closing',name:'색을 잃은 꿈',effect:'dreammark',closingStep:'mark',tell:'바시엘의 눈가에서 은빛 눈물이 떨어집니다. 성역의 색이 천천히 사라집니다.'};
+    if(b.finalChain==='mark')return {...closing,id:'dreammark-closing',name:'색 잃은 꿈',effect:'dreammark',closingStep:'mark',tell:'바시엘의 눈가에서 은빛 눈물이 떨어집니다. 성역의 색이 천천히 사라집니다.'};
     if(b.finalChain==='resonate')return {...closing,id:'dreamresonance-closing',name:'공명',effect:'dreamresonance',closingStep:'resonate',tell:'색채를 잃은 성역에 한 점의 소리도 들리지 않습니다. 바시엘이 눈을 뜨려 합니다.'};
     if(b.finalChain==='aftershock')return {...closing,id:'dreamrest-closing',name:'공명의 반동',effect:'dreamrest',closingStep:'aftershock',tell:'바시엘의 손끝이 떨립니다. 양산의 그림자가 잠시 흔들립니다.'};
   }
@@ -7758,7 +7758,7 @@ function heal(x,u,ratio,reason=''){
   if(n)emit(x,'heal','system',u.name+' · HP +'+n,{target:u.id,amount:n,reason});
 }
 function sp(x,u,n,reason='기력 회복'){if(!living(u)||u.permanentUnavailable)return;const amount=Math.min(u.maxSp-u.sp,Math.round(n));u.sp+=amount;if(amount)emit(x,'sp','system',u.name+' · SP +'+amount+(reason==='라운드 종료 자동 회복'?'':' ('+reason+')'),{target:u.id,amount,reason});}
-const stateNames={mitigation:'받는 피해 감소',weak:'공격력 감소',defdown:'방어력 감소',dark:'명중 저하',buff:'공격력 상승',defup:'방어력 상승',counter:'반격 준비',followup:'추격 준비',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:'회복량 감소',bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색을 잃은 꿈',timehold:'늘어진 순간',songAtk:'불안정한 노래',songDef:'불안정한 노래'};
+const stateNames={mitigation:'받는 피해 감소',weak:'공격력 감소',defdown:'방어력 감소',dark:'명중 저하',buff:'공격력 상승',defup:'방어력 상승',counter:'반격 준비',followup:'추격 준비',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:'회복량 감소',bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색 잃은 꿈',timehold:'늘어진 순간',songAtk:'불안정한 노래',songDef:'불안정한 노래'};
 const playerStackCaps={buff:.40,weak:.40,defdown:.50,dark:.32,defup:.65,mitigation:.45};
 function status(x,u,key,value,duration=2,extra={}) {
   if(!living(u))return;
@@ -7786,8 +7786,8 @@ function status(x,u,key,value,duration=2,extra={}) {
     buff:`공격력 +${percent}%`,weak:`공격력 −${percent}%`,defup:`방어력 +${percent}%`,defdown:`방어력 −${percent}%`,
     mitigation:`받는 피해 ${percent}% 감소`,dark:`명중률 −${percent}%`,
     spotlight:`공격력 +${percent}% (스포트라이트)`,counter:`직접 반격 준비 (라운드당 최대 ${extra.limit||1}회)`,
-    colorlessDream:'색을 잃은 꿈',followup:'레드라인 추격 준비 (2라운드 동안 횟수 제한 없음)',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',
-    bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:`HP 회복량 ${percent}% 감소`,bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색을 잃은 꿈',timehold:'늘어진 순간',songAtk:`공격력 +${percent}% (노래)`,songDef:`방어력 −${percent}% (노래)`
+    colorlessDream:'색 잃은 꿈',followup:'레드라인 추격 준비 (2라운드 동안 횟수 제한 없음)',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',
+    bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:`HP 회복량 ${percent}% 감소`,bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색 잃은 꿈',timehold:'늘어진 순간',songAtk:`공격력 +${percent}% (노래)`,songDef:`방어력 −${percent}% (노래)`
   };
   const lasting=key==='colorlessDream'?'다음 적 차례까지':key==='puppet'?'다음 아군 차례의 행동 1회':key==='skillseal'?'다음 아군 차례 1회 (스킬 사용 불가)':key==='healdown'?'다음 아군 차례 1회':key==='stitch'?'다음 적 차례까지':`${duration}라운드 지속`+(key==='burn'&&extra.stackable?` · 화상 ${stackCount}/2겹`:stackCount>1?' · 효과 중첩':'');
   emit(x,'status','system',`${u.name} · ${labels[key]||stateNames[key]||'상태 변화'} · ${lasting}`,{target:u.id,statusKey:key,statusValue:extra.stackable?combined:value,statusDuration:duration});
@@ -8039,7 +8039,7 @@ function playerAct(x,id,a) {
         emit(x,'story','scene','빛을 잃은 세계에 작은 온기가 번진다.');
         emit(x,'story','scene','검게 바래던 표식에 작은 균열이 생긴다.');
         emit(x,'story','scene','당신들의 희망은 아직 이곳에 있습니다.');
-        emit(x,'notice','system','아군 전체의 「색을 잃은 꿈」이 해제되었습니다!');
+        emit(x,'notice','system','아군 전체의 「색 잃은 꿈」이 해제되었습니다!');
         emit(x,'dialogue','vaciel','……분명 거두었을 터인데.');
         emit(x,'story','scene','바시엘은 잠시 말을 잇지 못했다.');
       }
@@ -8265,7 +8265,7 @@ function bossAct(x) {
         u.buffs={};u.guard=false;u.protect=0;u.shieldHp=0;u.shieldMax=0;
         status(x,u,'colorlessDream',1,2);
       }
-      emit(x,'notice','system','아군 전체의 강화 및 약화 효과가 사라졌습니다. 아군 전체에 「색을 잃은 꿈」이 새겨졌습니다.');
+      emit(x,'notice','system','아군 전체의 강화 및 약화 효과가 사라졌습니다. 아군 전체에 「색 잃은 꿈」이 새겨졌습니다.');
       break;
     }
     case 'dreamresonance':{
@@ -9021,6 +9021,10 @@ function normalizeOptions(v){const o=defaults();for(const key of Object.keys(o))
   if(!DIFFICULTY_LABELS[o.difficulty])o.difficulty='easy';o.plusMode=false;
   delete o.playerBuild;if(!o.playerSkills.some(id=>C.isSpecial(id)))o.playerSkills=['mimic',...o.playerSkills.filter(id=>!C.isSpecial(id)).slice(0,3)];o.conditions=Object.fromEntries(Object.entries(defaults().conditions).map(([id,d])=>[id,Object.fromEntries(Object.entries(d).map(([k,value])=>[k,o.conditions?.[id]?.[k]??value]))]));return o;}
 let config=clone(H.defaults),activeConfig,options=defaults(),startOptions,battle,events=[],cursor=0,actor='user',menu='attack',chosenSkill='',chosenTarget='',chosenItem='medicine',tab='setup',dirty=false,toastTimer,rawDrafts={},fileHandler,mediaKey='bellaton:boss',audio=null,soundOn=false,volume=.35;
+/* 새 저장 형식은 공식 게임 데이터를 통째로 저장하지 않고 직접 수정한 항목만 저장합니다. */
+const configOverridePaths=new Set();
+let trackedPreferencesLoaded=false;
+
 let campaign=H.adapter.newCampaign(),journey={started:false,inventory:null,roster:{},supplyRule:'choice',pendingSupply:false,stageCount:0,failed:false,history:[],currentStartItems:null},playTimer=null,page=0,autoRound=null,retreatOpen=false,shownImpactKey=null,atTitle=true;
 const media=new Map(),urls=new Map();let db=null;
 /* 이 문서에 직접 내장된 보스별 스탠딩 및 전투 배경 (외부 파일 의존 없음). */
@@ -9044,13 +9048,85 @@ function tell(s){
 const playing=()=>cursor<events.length,current=()=>P.frame(events,cursor,battle.playerName),view=()=>{const v=clone(current()?.view||C.snapshot(battle));v.party.user.name=battle.playerName;for(const u of v.summons){const actual=battle.summons.find(t=>t.id===u.id);if(actual)u.name=actual.name;}return v;};
 const label=id=>C.actorName(battle,id),bar=(v,max,sp=false)=>`<div class="hr-life ${sp?'hr-sp':''}"><i style="width:${Math.max(0,Math.min(100,v/(max||1)*100))}%"></i></div>`;
 const outcomeName=o=>({victory:'격파',yield:'자발적 철수',retreat:'후퇴',loss:'패배',limit:'시험 상한'})[o]||'';
-function stateLabel(u,round){return [u.permanentUnavailable?'영구 이탈':u.hp===0?'전투불능':u.injured?'부상':null,u.severeInjury?'중상':null,u.distorted?'일그러짐':null,u.rescue==='rescued'?'구출 성공':null,u.guard?'방어':null,u.protect?'보호':null,...Object.entries({mitigation:'피해 감소',bind:'속박',puppet:'꼭두각시 실 · 행동 강탈',stitch:'수선하는 손',skillseal:'수선하는 손 · 스킬 봉인',timehold:'늘어진 순간',colorlessDream:'색을 잃은 꿈',weak:'공격력↓',defdown:'방어력↓',defup:'방어력↑',buff:'공격력↑',dark:'명중↓',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',songAtk:'불안정한 노래',songDef:'불안정한 노래',counter:'반격 준비',riposte:'다음 공격 피해 +20%',followup:'추격 준비'}).filter(([k])=>C.active(u,k,round)).map(([,v])=>v)].filter(Boolean).join(' · ');}
-function packageSave(){return {version:3,songCatalogVersion:3,difficultySchemaVersion:2,kind:'hope-battle-save',config:clone(activeConfig),editorConfig:clone(config),options:clone(options),startOptions:clone(startOptions),battle:clone(battle),events:clone(events),cursor,page,presentationVersion:5,campaign:clone(campaign),rawDrafts:clone(rawDrafts),journey:clone(journey),titleScreen:atTitle};}
+function stateLabel(u,round){return [u.permanentUnavailable?'영구 이탈':u.hp===0?'전투불능':u.injured?'부상':null,u.severeInjury?'중상':null,u.distorted?'일그러짐':null,u.rescue==='rescued'?'구출 성공':null,u.guard?'방어':null,u.protect?'보호':null,...Object.entries({mitigation:'피해 감소',bind:'속박',puppet:'꼭두각시 실 · 행동 강탈',stitch:'수선하는 손',skillseal:'수선하는 손 · 스킬 봉인',timehold:'늘어진 순간',colorlessDream:'색 잃은 꿈',weak:'공격력↓',defdown:'방어력↓',defup:'방어력↑',buff:'공격력↑',dark:'명중↓',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',songAtk:'불안정한 노래',songDef:'불안정한 노래',counter:'반격 준비',riposte:'다음 공격 피해 +20%',followup:'추격 준비'}).filter(([k])=>C.active(u,k,round)).map(([,v])=>v)].filter(Boolean).join(' · ');}
+function packageSave(){return {version:3,songCatalogVersion:3,difficultySchemaVersion:2,configStorageVersion:2,configOverrides:collectConfigOverrides(),kind:'hope-battle-save',config:clone(activeConfig),editorConfig:clone(config),options:clone(options),startOptions:clone(startOptions),battle:clone(battle),events:clone(events),cursor,page,presentationVersion:5,campaign:clone(campaign),rawDrafts:clone(rawDrafts),journey:clone(journey),titleScreen:atTitle};}
 function checkpoint(){try{localStorage.setItem('hope-player-campaign-v1-progress',JSON.stringify(packageSave()));}catch{/* 자동 저장을 사용할 수 없는 브라우저에서는 진행 데이터를 유지할 수 없습니다. */}}
-function persistConfig(){try{localStorage.setItem('hope-player-campaign-v1-config',JSON.stringify({version:3,difficultySchemaVersion:2,config,options}));}catch{tell('이 브라우저에서는 자동 저장이 제한됩니다. 브라우저의 저장소 설정을 확인해 주세요.');}}
+function persistConfig(){try{localStorage.setItem('hope-player-campaign-v1-config',JSON.stringify({version:3,difficultySchemaVersion:2,configStorageVersion:2,configOverrides:collectConfigOverrides(),options}));}catch{tell('이 브라우저에서는 자동 저장이 제한됩니다. 브라우저의 저장소 설정을 확인해 주세요.');}}
 function marked(){dirty=true;$('dirty-message').textContent='편집 중 · 이 설정으로 시작을 누르면 적용됩니다.';checkpoint();}
 function setPath(obj,path,value){const keys=path.split('.');if(keys.some(k=>['__proto__','prototype','constructor'].includes(k)))throw Error('잘못된 편집 경로입니다.');let t=obj;for(const k of keys.slice(0,-1)){if(t[k]===undefined)t[k]={};t=t[k];}t[keys.at(-1)]=value;}
-function applyDrafts(){const next=clone(config);for(const [path,raw]of Object.entries(rawDrafts))setPath(next,path,JSON.parse(raw));C.validateConfig(next);config=next;rawDrafts={};}
+function applyDrafts(){const next=clone(config);for(const [path,raw]of Object.entries(rawDrafts))setPath(next,path,JSON.parse(raw));C.validateConfig(next);config=next;for(const path of Object.keys(rawDrafts))configOverridePaths.add(path);rawDrafts={};}
+/* 공식 데이터(H.defaults)를 우선하고, 화면 편집기에서 수정한 경로만 덧씌웁니다.
+   구 저장에는 수정 경로가 없어서 모든 값이 사용자 편집인지 구분할 수 없습니다.
+   이 경우 과거 공식 값은 무시하고, 식별 가능한 숫자 커스텀만 가져옵니다. */
+const PREVIOUS_OFFICIAL_NUMBERS={"difficulties.easy.hp":[0.75],"difficulties.easy.atk":[0.7],"difficulties.easy.def":[0.9],"difficulties.easy.speed":[0.9],"difficulties.easy.hpRegen":[0.04],"difficulties.easy.spRegen":[2],"difficulties.easy.enemyCrit":[0],"difficulties.easy.distortedDamage":[0.45],"difficulties.easy.distortedRegen":[0.08],"difficulties.easy.distortionEffect":[0.45],"difficulties.normal.hp":[1],"difficulties.normal.atk":[1],"difficulties.normal.speed":[1],"difficulties.normal.distortedDamage":[0.8],"difficulties.hard.hp":[1.15,1.42],"difficulties.hard.atk":[1.1,1.22],"difficulties.hard.def":[1],"difficulties.hard.enemyCrit":[0.05],"difficulties.hard.distortionEffect":[1],"bosses.bellaton.patterns.easy.0.power":[0.08],"bosses.bellaton.patterns.easy.1.power":[0.6],"bosses.bellaton.patterns.easy.3.power":[0.7],"bosses.bellaton.patterns.normal.1.power":[1.25],"bosses.bellaton.patterns.normal.3.power":[1.5],"bosses.bellaton.patterns.hard.0.power":[0.2],"bosses.bellaton.patterns.hard.1.power":[1.15],"bosses.bellaton.patterns.hard.3.power":[1.6],"bosses.osteos.patterns.easy.1.power":[0.4,0],"bosses.osteos.patterns.easy.2.power":[0.48,0],"bosses.osteos.patterns.easy.3.power":[0.4],"bosses.osteos.patterns.easy.4.power":[0.6],"bosses.osteos.patterns.easy.5.power":[0.9],"bosses.osteos.patterns.easy.6.power":[0.5],"bosses.osteos.patterns.normal.1.power":[0.4],"bosses.osteos.patterns.normal.2.power":[0.48],"bosses.osteos.patterns.normal.3.power":[0.85],"bosses.osteos.patterns.normal.4.power":[1.13],"bosses.osteos.patterns.hard.1.power":[0.73,0.75],"bosses.osteos.patterns.hard.2.power":[0.8,0.9],"bosses.osteos.patterns.hard.3.power":[1],"bosses.osteos.patterns.hard.4.power":[1.3],"bosses.cor.patterns.easy.0.power":[0.6],"bosses.cor.patterns.easy.1.power":[0.7],"bosses.cor.patterns.easy.2.power":[0.45],"bosses.cor.patterns.normal.2.power":[1],"bosses.cor.patterns.normal.3.power":[1.3],"bosses.cor.patterns.hard.1.power":[1.25],"bosses.cor.patterns.hard.2.power":[0.9],"bosses.cor.patterns.hard.3.power":[1.25],"bosses.lacrien.patterns.easy.0.power":[0.1],"bosses.lacrien.patterns.easy.2.power":[0.5],"bosses.lacrien.patterns.easy.3.power":[0.6],"bosses.lacrien.patterns.normal.0.power":[0.18],"bosses.lacrien.patterns.normal.2.power":[1.1],"bosses.lacrien.patterns.hard.0.power":[0.22],"bosses.lacrien.patterns.hard.2.power":[1.12],"bosses.lacrien.patterns.hard.4.power":[0.55],"bosses.marionel.patterns.easy.1.power":[0.5],"bosses.marionel.patterns.easy.3.power":[0.6],"bosses.marionel.patterns.normal.1.power":[1.05],"bosses.marionel.patterns.normal.2.power":[0],"bosses.marionel.patterns.normal.2.offset":[3],"bosses.marionel.patterns.normal.3.power":[1.15],"bosses.marionel.patterns.normal.3.offset":[4],"bosses.marionel.patterns.normal.3.priority":[10],"bosses.marionel.patterns.normal.3.cooldown":[0],"bosses.marionel.patterns.hard.2.power":[1.25],"bosses.marionel.patterns.hard.3.power":[0.85],"bosses.vaciel.patterns.easy.0.power":[0.35],"bosses.vaciel.patterns.easy.1.power":[0.6],"bosses.vaciel.patterns.easy.2.power":[0.5],"bosses.vaciel.patterns.easy.3.power":[0.6],"bosses.vaciel.patterns.easy.4.power":[0.55],"bosses.vaciel.patterns.normal.0.power":[0.72],"bosses.vaciel.patterns.normal.1.cycle":[4],"bosses.vaciel.patterns.normal.1.offset":[2],"bosses.vaciel.patterns.normal.1.fromRound":[1],"bosses.vaciel.patterns.normal.1.priority":[10],"bosses.vaciel.patterns.normal.2.power":[1.17],"bosses.vaciel.patterns.normal.3.power":[0.9],"bosses.vaciel.patterns.hard.0.power":[1.22],"bosses.vaciel.patterns.hard.1.priority":[40],"bosses.vaciel.patterns.hard.2.power":[1.6],"songs.2.power":[3],"songs.2.duration":[1],"songWeights.healthy.0":[25],"songWeights.healthy.1":[25],"songWeights.healthy.2":[25],"songWeights.hp.0":[23],"songWeights.hp.1":[35],"songWeights.hp.2":[21],"songWeights.sp.0":[25],"songWeights.sp.1":[25],"songWeights.sp.2":[25],"songWeights.normal.0":[25],"songWeights.normal.1":[25],"songWeights.normal.2":[25],"itemLoadouts.normal.medicine":[5],"itemLoadouts.normal.ether":[3],"itemLoadouts.normal.remedy":[3],"itemLoadouts.hard.medicine":[4],"heroes.user.hp":[150,170],"heroes.user.atk":[24,30],"heroes.user.def":[12]};
+const CONFIG_EDITOR_ROOTS=new Set(['bosses','heroes','heroSkills','skills','songs','songWeights','difficulties','rules','items','itemLoadouts','distortions','storyRules']);
+function validEditorPath(path){return typeof path==='string'&&path.length<220&&path.split('.').length<14&&path.split('.').every(k=>k&&!['__proto__','prototype','constructor'].includes(k))&&CONFIG_EDITOR_ROOTS.has(path.split('.')[0]);}
+function readConfigPath(obj,path){return path.split('.').reduce((v,k)=>v?.[k],obj);}
+function collectConfigOverrides(){
+ const found=Object.create(null);
+ for(const path of [...configOverridePaths].sort((a,b)=>a.split('.').length-b.split('.').length)){
+   if(!validEditorPath(path))continue;
+   const value=readConfigPath(config,path),official=readConfigPath(H.defaults,path);
+   if(official===undefined||value===undefined)continue;
+   if(JSON.stringify(value)===JSON.stringify(official)){configOverridePaths.delete(path);continue;}
+   found[path]=clone(value);
+ }
+ return found;
+}
+function restoreConfigOverrides(values){
+ config=clone(H.defaults);configOverridePaths.clear();
+ let size=0;
+ for(const [path,value] of Object.entries(values||{}).slice(0,500).sort(([a],[b])=>a.split('.').length-b.split('.').length)){
+   if(!validEditorPath(path)||readConfigPath(H.defaults,path)===undefined)continue;
+   const bytes=JSON.stringify(value)?.length||0;
+   size+=bytes;if(size>200000)break;
+   setPath(config,path,clone(value));configOverridePaths.add(path);
+ }
+ C.validateConfig(config);trackedPreferencesLoaded=true;
+}
+function preserveLegacyEditorSnapshot(previous){
+ if(!previous||typeof previous!=='object')return;
+ try{const key='hope-player-campaign-v1-legacy-editor-backup';
+   if(!localStorage.getItem(key))localStorage.setItem(key,JSON.stringify(previous));
+ }catch{/* 저장소 제한 시 원래 저장 데이터는 건드리지 않습니다. */}
+}
+function inferLegacyNumericOverrides(previous){
+ if(!previous||typeof previous!=='object')return {};
+ const overrides=Object.create(null);
+ function scan(current,old,path){
+   if(typeof current==='number'){
+     if(typeof old==='number'&&Number.isFinite(old)&&old!==current&&!((PREVIOUS_OFFICIAL_NUMBERS[path]||[]).includes(old)))overrides[path]=old;
+     return;
+   }
+   if(!current||typeof current!=='object'||!old||typeof old!=='object')return;
+   if(Array.isArray(current)!==Array.isArray(old))return;
+   if(Array.isArray(current)&&current.length!==old.length)return;
+   for(const [k,v] of Object.entries(current)){
+     const p=path?path+'.'+k:k;
+     if(old[k]!==undefined)scan(v,old[k],p);
+   }
+ }
+ for(const root of CONFIG_EDITOR_ROOTS){if(H.defaults[root]!==undefined&&previous[root]!==undefined)scan(H.defaults[root],previous[root],root);}
+ return overrides;
+}
+function restoreLegacyEditor(previous){
+ preserveLegacyEditorSnapshot(previous);
+ restoreConfigOverrides(inferLegacyNumericOverrides(previous));
+}
+/* 명시적으로 가져온 JSON 설정은 사용자의 편집으로 취급합니다. */
+function importEditorConfig(imported){
+ config=clone(imported);configOverridePaths.clear();
+ function diff(current,official,path){
+   if(JSON.stringify(current)===JSON.stringify(official))return;
+   if(!current||!official||typeof current!=='object'||typeof official!=='object'||Array.isArray(current)!==Array.isArray(official)){
+     if(validEditorPath(path)&&official!==undefined)configOverridePaths.add(path);return;
+   }
+   if(Array.isArray(current)&&current.length!==official.length){if(validEditorPath(path))configOverridePaths.add(path);return;}
+   for(const [k,ref] of Object.entries(official))if(current[k]!==undefined)diff(current[k],ref,path?path+'.'+k:k);
+ }
+ diff(config,H.defaults,'');
+}
+
 function randomSeed(){
  let n;const a=new Uint32Array(1);do{crypto.getRandomValues(a);n=a[0];}while(n===(battle?.seed??-1));return n;
 }
@@ -9569,7 +9645,7 @@ function renderPanel(){
  <div class="start-event-grid">${Object.entries(config.heroes).filter(([id])=>id!=='user').map(([id,h])=>{const condition=isRunning?(journey.roster[id]||options.conditions[id]):options.conditions[id];const completed=!!condition?.eventCompleted;return `<div class="start-event-row"><strong>${esc(h.name)}</strong><div class="start-event-choice"><button type="button" data-event-pick="${id}:done" aria-pressed="${completed}" class="game-choice ${completed?'is-selected':''}" ${isRunning?'disabled':''}>완료</button><button type="button" data-event-pick="${id}:pending" aria-pressed="${!completed}" class="game-choice ${!completed?'is-selected':''}" ${isRunning?'disabled':''}>미완료</button></div></div>`;}).join('')}</div></div>
  <div class="start-section"><div class="start-heading"><span>04</span><h3>주인공 스킬 <small>기본 기술 3개 + 특수 기술 1개</small></h3></div><p class="start-caption">스킬 이름과 효과를 보고 장착할 수 있어요. SP는 전투 중 소모됩니다.</p>
  <div class="start-skill-grid">${config.skills.filter(s=>!C.isSpecial(s.id)).map(s=>`<button type="button" data-equip-pick="${s.id}" aria-pressed="${options.playerSkills.includes(s.id)}" class="start-skill game-pick ${options.playerSkills.includes(s.id)?'selected is-selected':''}"><span class="start-skill-info"><b>${esc(s.name)}</b><small>${esc(skillDescription(s)||s.detail)}</small></span><span class="start-cost">SP ${s.cost}</span></button>`).join('')}</div>
- <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 속박, 출혈, 화상, 꼭두각시 실, 수선하는 손, 「색을 잃은 꿈」을 해제합니다.</p></details></div>
+ <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 속박, 출혈, 화상, 꼭두각시 실, 수선하는 손, 색 잃은 꿈을 해제합니다.</p></details></div>
 `;
  $('apply-restart').disabled=journey.pendingSupply||(options.series&&(journey.failed||!open.length));
  $('apply-restart').textContent=options.series?(journey.started?'다음 전투 시작 ▶':'보스 러시 시작 ▶'):'전투 시작 ▶';
@@ -9614,7 +9690,12 @@ function loadSave(p){if(p?.version!==3||p.kind!=='hope-battle-save')throw Error(
      else savedBattle.lastCompanionSkill.songIndex=next;
    }
  }
- const playConfig=enforceSupportSkillBalance(H.compat.config(p.config)),editConfig=migrateFutureBalance(H.compat.config(p.editorConfig));C.validateConfig(playConfig);C.validateConfig(editConfig);C.validateState(savedBattle,playConfig);if(savedBattle.mode==='campaign'&&!p.campaign)throw Error('연속 출전 정보가 누락되었습니다.');C.initial(playConfig,p.startOptions);if(!Array.isArray(p.events)||p.events.length>1000||!Number.isInteger(p.cursor)||p.cursor<0||p.cursor>p.events.length)throw Error('장면 진행 번호 오류');for(const e of p.events){if(!e.view||typeof e.text!=='string'||typeof e.id!=='number'||e.id>p.battle.eventSerial)throw Error('장면 저장 오류');for(const u of [e.view.boss,...Object.values(e.view.party),...e.view.summons])if(!Number.isFinite(u.hp)||u.hp<0||u.hp>u.maxHp)throw Error('장면 HP 오류');}
+ const playConfig=enforceSupportSkillBalance(H.compat.config(p.config));
+ // 진행 중 전투는 과거의 실제 상태·수치를 유지합니다. 다음 새 전투는 최신 공식 기본값을 사용합니다.
+ if(p.configStorageVersion===2&&p.configOverrides){restoreConfigOverrides(p.configOverrides);}
+ else if(!trackedPreferencesLoaded){restoreLegacyEditor(p.editorConfig||p.config);}
+ const editConfig=clone(config);
+ C.validateConfig(playConfig);C.validateConfig(editConfig);C.validateState(savedBattle,playConfig);if(savedBattle.mode==='campaign'&&!p.campaign)throw Error('연속 출전 정보가 누락되었습니다.');C.initial(playConfig,p.startOptions);if(!Array.isArray(p.events)||p.events.length>1000||!Number.isInteger(p.cursor)||p.cursor<0||p.cursor>p.events.length)throw Error('장면 진행 번호 오류');for(const e of p.events){if(!e.view||typeof e.text!=='string'||typeof e.id!=='number'||e.id>p.battle.eventSerial)throw Error('장면 저장 오류');for(const u of [e.view.boss,...Object.values(e.view.party),...e.view.summons])if(!Number.isFinite(u.hp)||u.hp<0||u.hp>u.maxHp)throw Error('장면 HP 오류');}
  config=editConfig;activeConfig=playConfig;options=normalizeOptions(p.options);startOptions=normalizeOptions(p.startOptions);battle=H.compat.state(savedBattle);battle.log=withoutOldAttackPreviews(battle.log||[],(battle.log||[]).length,playConfig,battle.domain).events;{const cleaned=withoutOldAttackPreviews(clone(p.events),p.cursor,playConfig,p.battle.domain);events=cleaned.events;cursor=cleaned.cursor;}page=p.presentationVersion===5?(p.page||0):0;campaign=p.campaign?clone(p.campaign):H.adapter.newCampaign();journey=p.journey?clone(p.journey):{started:false,inventory:null,roster:{},supplyRule:"choice",pendingSupply:false,stageCount:0,failed:false,history:[],currentStartItems:null};journey.history??=[];journey.currentStartItems??=null;
  // If an older save was opened mid-fight, reconstruct prior ordinary knockouts
  // from its existing event log. Completed old fights cannot be reconstructed.
@@ -9760,7 +9841,7 @@ bind('cancel-retreat',()=>{retreatOpen=false;$('retreat-confirm').hidden=true;re
 bind('confirm-retreat',()=>{if(!retreatOpen)return;retreatOpen=false;$('retreat-confirm').hidden=true;accept(C.retreat(battle,activeConfig));});
 /* 진행 파일 수동 저장/불러오기 버튼은 제거. 자동 저장과 이어하기는 그대로 유지합니다. */
 bind('export-config',()=>{applyDrafts();C.initial(config,options);persistConfig();download('희망탈환_시험설정.json',{version:3,kind:'hope-battle-config',difficultySchemaVersion:2,config,options});});
-bind('import-config',()=>chooseFile(p=>{if(p?.version!==3||p.kind!=='hope-battle-config')throw Error('v3 설정 파일이 필요합니다.');const migrated=migrateFutureBalance(H.compat.config(p.config));C.validateConfig(migrated);const importedOptions=p.difficultySchemaVersion===2?p.options:{...p.options,difficulty:({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[p.options?.difficulty]||'easy'};C.initial(migrated,importedOptions);config=migrated;options=normalizeOptions(p.difficultySchemaVersion===2?p.options:{...p.options,difficulty:({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[p.options?.difficulty]||'easy'});rawDrafts={};marked();openSettings();}));
+bind('import-config',()=>chooseFile(p=>{if(p?.version!==3||p.kind!=='hope-battle-config')throw Error('v3 설정 파일이 필요합니다.');const migrated=migrateFutureBalance(H.compat.config(p.config));C.validateConfig(migrated);const importedOptions=p.difficultySchemaVersion===2?p.options:{...p.options,difficulty:({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[p.options?.difficulty]||'easy'};C.initial(migrated,importedOptions);importEditorConfig(migrated);options=normalizeOptions(p.difficultySchemaVersion===2?p.options:{...p.options,difficulty:({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[p.options?.difficulty]||'easy'});rawDrafts={};marked();openSettings();}));
 bind('sound',()=>{soundOn=!soundOn;const musicBtn=$('sound');musicBtn.textContent=soundOn?'♫ ON':'♫ OFF';musicBtn.setAttribute('aria-pressed',String(soundOn));musicBtn.setAttribute('aria-label',soundOn?'배경음악 끄기':'배경음악 켜기');musicBtn.title=soundOn?'배경음악 끄기':'배경음악 켜기';updateAudio();if(soundOn&&!rushCompleted()&&!urls.get(battle.domain+':bgm')&&!EMBEDDED_BGM[battle.domain])tell('이 보스에는 등록된 음악이 없습니다.');});
 document.addEventListener('click',async e=>{const el=e.target.closest('button');if(!el||el.disabled)return;try{if(el.dataset.tab){tab=el.dataset.tab;renderPanel();}if(el.dataset.gameMode){if(journey.started)throw Error('진행 중인 보스 러시는 모드를 바꿀 수 없습니다. 새 게임을 시작하세요.');options.series=el.dataset.gameMode==='rush';if(!options.series)options.plusMode=false;options.bossId=options.series?(H.adapter.openBosses(campaign).includes(options.bossId)?options.bossId:H.adapter.openBosses(campaign)[0]):options.bossId;options.team=options.team.slice(0,options.bossId==='vaciel'?5:2);marked();renderPanel();return;}if(el.dataset.bossPick){
   options.bossId=el.dataset.bossPick;
@@ -9820,7 +9901,7 @@ if(el.dataset.actor&&!playing()&&!retreatOpen){actor=el.dataset.actor;menu='atta
    journey.endingStep=0;journey.endingDismissed=false;checkpoint();renderEnding();return;
  }
  if(a==='perform')perform();if(a==='result-export')download('희망탈환_확정결과.json',H.adapter.result(battle));if(a==='retry')newGame();if(a==='new-test'){if(options.series){const open=H.adapter.openBosses(campaign);options.bossId=open[0]||options.bossId;options.team=options.team.filter(id=>journey.roster[id]?.alive!==false&&!journey.roster[id]?.permanentUnavailable&&!journey.roster[id]?.severeInjury);}openSettings('setup');}if(a==='field-care')throw Error('일반 부상은 다음 출전에서 쓰러지지 않고 승리하면 회복됩니다.');if(a==='remove-media'){await dbWrite(mediaKey,null);useMedia(mediaKey,null);renderPanel();render();updateAudio();}if(a==='export-media')await exportMedia();if(a==='import-media')chooseFile(importMedia);}catch(err){tell(err.message);}});
-document.addEventListener('change',async e=>{const t=e.target;try{if(t.dataset.heroStatus){const h=options.conditions[t.dataset.heroStatus];const k=t.value;Object.assign(h,{alive:k!=='dead',injured:k==='injured',severeInjury:k==='severe',permanentUnavailable:k==='dead'||k==='severe',hasHope:k!=='dead'});if(k==='dead'||k==='severe')options.team=options.team.filter(id=>id!==t.dataset.heroStatus);checkpoint();renderPanel();return;}if(t.dataset.option==='playerName'){if(!liveName(t.value))tell('전투용 이름은 한국어 20자 이내로 입력해 주세요.');return;}if(t.dataset.config||t.dataset.option){let value=t.type==='checkbox'?t.checked:t.type==='number'?Number(t.value):t.value;if(t.dataset.option==='series')value=value==='true';if(t.hasAttribute('data-boolean'))value=value==='true';if(t.hasAttribute('data-nullable')&&value==='')value=null;if(t.dataset.config?.endsWith('.effect')&&t.dataset.config.includes('.patterns.'))setPath(config,t.dataset.config.replace(/\.effect$/,'.target'),['sweep','aria','smash','light','judgment','recordecho','drain','parasol','empty'].includes(value)?'all':'one');if(t.dataset.config?.endsWith('.effect')&&(t.dataset.config.startsWith('heroSkills.')||t.dataset.config.startsWith('skills.')))setPath(config,t.dataset.config.replace(/\.effect$/,'.target'),C.skillTargets[value]);setPath(t.dataset.config?config:options,t.dataset.config||t.dataset.option,value);marked();if(t.dataset.option==='series'){options.bossId=options.series?(H.adapter.openBosses(campaign)[0]||'bellaton'):'bellaton';options.team=[];}if(t.dataset.option==='bossId'&&options.series)options.team=options.team.filter(id=>H.adapter.available(campaign,options.bossId).includes(id));if(['bossId','difficulty','series'].includes(t.dataset.option))renderPanel();return;}if(t.dataset.team){if(t.checked){if(options.team.length>=(options.bossId==='vaciel'?5:2)){t.checked=false;throw Error('출전 인원 상한입니다.');}options.team.push(t.dataset.team);}else options.team=options.team.filter(id=>id!==t.dataset.team);marked();renderPanel();}if(t.dataset.special!==undefined){options.playerSkills=[...options.playerSkills.filter(id=>!C.isSpecial(id)),t.value];marked();renderPanel();}
+document.addEventListener('change',async e=>{const t=e.target;try{if(t.dataset.heroStatus){const h=options.conditions[t.dataset.heroStatus];const k=t.value;Object.assign(h,{alive:k!=='dead',injured:k==='injured',severeInjury:k==='severe',permanentUnavailable:k==='dead'||k==='severe',hasHope:k!=='dead'});if(k==='dead'||k==='severe')options.team=options.team.filter(id=>id!==t.dataset.heroStatus);checkpoint();renderPanel();return;}if(t.dataset.option==='playerName'){if(!liveName(t.value))tell('전투용 이름은 한국어 20자 이내로 입력해 주세요.');return;}if(t.dataset.config||t.dataset.option){let value=t.type==='checkbox'?t.checked:t.type==='number'?Number(t.value):t.value;if(t.dataset.option==='series')value=value==='true';if(t.hasAttribute('data-boolean'))value=value==='true';if(t.hasAttribute('data-nullable')&&value==='')value=null;if(t.dataset.config?.endsWith('.effect')&&t.dataset.config.includes('.patterns.'))setPath(config,t.dataset.config.replace(/\.effect$/,'.target'),['sweep','aria','smash','light','judgment','recordecho','drain','parasol','empty'].includes(value)?'all':'one');if(t.dataset.config?.endsWith('.effect')&&(t.dataset.config.startsWith('heroSkills.')||t.dataset.config.startsWith('skills.')))setPath(config,t.dataset.config.replace(/\.effect$/,'.target'),C.skillTargets[value]);setPath(t.dataset.config?config:options,t.dataset.config||t.dataset.option,value);if(t.dataset.config)configOverridePaths.add(t.dataset.config);marked();if(t.dataset.option==='series'){options.bossId=options.series?(H.adapter.openBosses(campaign)[0]||'bellaton'):'bellaton';options.team=[];}if(t.dataset.option==='bossId'&&options.series)options.team=options.team.filter(id=>H.adapter.available(campaign,options.bossId).includes(id));if(['bossId','difficulty','series'].includes(t.dataset.option))renderPanel();return;}if(t.dataset.team){if(t.checked){if(options.team.length>=(options.bossId==='vaciel'?5:2)){t.checked=false;throw Error('출전 인원 상한입니다.');}options.team.push(t.dataset.team);}else options.team=options.team.filter(id=>id!==t.dataset.team);marked();renderPanel();}if(t.dataset.special!==undefined){options.playerSkills=[...options.playerSkills.filter(id=>!C.isSpecial(id)),t.value];marked();renderPanel();}
  if(t.dataset.equip){if(t.checked){if(options.playerSkills.filter(id=>!C.isSpecial(id)).length>=3){t.checked=false;throw Error('일반 기술은 최대 세 개입니다.');}options.playerSkills.push(t.dataset.equip);}else options.playerSkills=options.playerSkills.filter(id=>id!==t.dataset.equip);marked();renderPanel();}if(t.dataset.returned){const a=options.storyFlags.returnedCommanders;options.storyFlags.returnedCommanders=t.checked?[...new Set([...a,t.dataset.returned])]:a.filter(id=>id!==t.dataset.returned);marked();}if(t.id==='skill-choice'){chosenSkill=t.value;chosenTarget='';renderCommand();}if(t.id==='item-choice'){chosenItem=t.value;chosenTarget='';renderCommand();}if(t.id==='target-choice'){chosenTarget=t.value;renderCommand();}if(t.id==='media-slot'){mediaKey=t.value;renderPanel();}if(t.id==='media-upload'&&t.files[0])await storeMedia(mediaKey,t.files[0]);if(t.id==='file-input'&&t.files[0]){if(t.files[0].size>55*1024*1024)throw Error('파일이 너무 큽니다.');const parsed=JSON.parse(await t.files[0].text());await fileHandler(parsed);}}catch(err){tell(err.message);}});
 document.addEventListener('input',e=>{if(e.target.dataset.option==='playerName')liveName(e.target.value);if(e.target.dataset.json){rawDrafts[e.target.dataset.json]=e.target.value;marked();}if(e.target.id==='volume'){volume=Number(e.target.value)/100;if(audio)rampBgm(audio,volume,100);}});
 document.addEventListener('keydown',e=>{
@@ -9832,7 +9913,19 @@ document.addEventListener('keydown',e=>{
   }
   if(!$('resume-overlay').hidden){if(e.key==='Escape'){e.preventDefault();return;}if(e.key==='Tab'){const buttons=[$('resume-new'),$('resume-continue')];if(e.shiftKey&&document.activeElement===buttons[0]){e.preventDefault();buttons[1].focus();}else if(!e.shiftKey&&document.activeElement===buttons[1]){e.preventDefault();buttons[0].focus();}}return;}if(retreatOpen&&e.key==='Escape'){$('cancel-retreat').click();return;}if(!$('settings').hidden){if(e.key==='Escape'){e.preventDefault();if(!atTitle)closeSettings();}if(e.key==='Tab'){const nodes=[...$('settings').querySelectorAll('button,input,select,textarea')].filter(n=>!n.disabled&&n.offsetParent!==null),first=nodes[0],last=nodes.at(-1);if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}else if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}}return;}if(!['INPUT','TEXTAREA','SELECT','BUTTON'].includes(document.activeElement?.tagName)&&(e.key==='Enter'||e.key===' ')){e.preventDefault();step();}});
 addEventListener('pagehide',()=>{stopAudio(true);checkpoint();});document.addEventListener('visibilitychange',()=>{if(document.hidden){if(audio){cancelBgmFade(audio);audio.pause();}for(const track of [...bgmFadingOut])fadeAwayBgm(track,true);clearTimeout(playTimer);}else{updateAudio();schedule();}});
-let resumed=false;try{const cfg=JSON.parse(localStorage.getItem('hope-player-campaign-v1-config')||'null');if(cfg?.version===3){const migrated=migrateFutureBalance(H.compat.config(cfg.config));C.validateConfig(migrated);config=migrated;options=normalizeOptions(cfg.difficultySchemaVersion===2?cfg.options:{...cfg.options,difficulty:({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[cfg.options?.difficulty]||'easy'});}const saved=JSON.parse(localStorage.getItem('hope-player-campaign-v1-progress')||'null');if(saved){loadSave(saved);resumed=true;offerResume();}}catch{config=clone(H.defaults);options=defaults();tell('이전 임시 저장을 읽을 수 없어 기본 조건으로 시작합니다.');}if(!resumed){launch(config,{...options,series:false});openSettings('setup');}initMedia();window.HR_BOOT_LOADER?.complete();
+let resumed=false;try{
+ const cfg=JSON.parse(localStorage.getItem('hope-player-campaign-v1-config')||'null');
+ const saved=JSON.parse(localStorage.getItem('hope-player-campaign-v1-progress')||'null');
+ if(cfg?.version===3){
+   options=normalizeOptions(cfg.difficultySchemaVersion===2?cfg.options:{...cfg.options,difficulty:({normal:'easy',hard:'normal',nightmare:'hard',easy:'practice'})[cfg.options?.difficulty]||'easy'});
+   if(cfg.configStorageVersion===2&&cfg.configOverrides)restoreConfigOverrides(cfg.configOverrides);
+   else if(!saved?.editorConfig)restoreLegacyEditor(cfg.config);
+   else preserveLegacyEditorSnapshot(cfg.config);
+ }
+ if(saved){loadSave(saved);resumed=true;offerResume();}
+}catch{config=clone(H.defaults);configOverridePaths.clear();options=defaults();tell('이전 임시 저장을 읽을 수 없어 기본 조건으로 시작합니다.');}
+if(!resumed){launch(config,{...options,series:false});openSettings('setup');}
+initMedia();window.HR_BOOT_LOADER?.complete();
 })();
 </script>
 <script>
