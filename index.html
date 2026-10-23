@@ -1,5 +1,6 @@
-<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>수호대 LiSER · 희망탈환</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css"><style>.hr-app{--hr-bg:#ffffff;--hr-ink:#303030;--hr-frame:#353535;--hr-line:#bdbdbd;--hr-muted:#666666;color-scheme:light;font-family:HopeGalmuri,monospace;font-size:13px;line-height:1.65;color:var(--hr-ink);text-align:left}
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="light" name="color-scheme"/><title>수호대 LiSER · 희망탈환</title><link href="https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css" rel="stylesheet"/><style>.hr-app{--hr-bg:#ffffff;--hr-ink:#303030;--hr-frame:#353535;--hr-line:#bdbdbd;--hr-muted:#666666;color-scheme:light;font-family:HopeGalmuri,monospace;font-size:13px;line-height:1.65;color:var(--hr-ink);text-align:left}
 .hr-app *{box-sizing:border-box}.hr-app button,.hr-app input,.hr-app select,.hr-app textarea{font:inherit;color:inherit;border-radius:0;box-sizing:border-box}
 .hr-app button{border:1px solid var(--hr-frame);background:var(--hr-bg);padding:7px 11px;cursor:pointer;min-height:38px;box-shadow:2px 2px 0 var(--hr-line);text-shadow:none;margin:0}
 .hr-app button:hover:not(:disabled){background:#f3f3f3}.hr-app button:active:not(:disabled){transform:translate(1px,1px);box-shadow:1px 1px 0 var(--hr-line)}
@@ -809,7 +810,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 @keyframes hr-boot-pulse{0%{left:-35%}100%{left:105%}}
 @media(prefers-reduced-motion:reduce){#hr-boot-loading .hr-boot-bar::before{animation:none;left:32%;}#hr-boot-loading{transition:none}}
 
-/* 공명 · 색 잃은 꿈: 원본 보스 스탠딩과 배경을 위에서 아래로 흑백으로 덮습니다. */
+/* 공명 · 색을 잃은 꿈: 원본 보스 스탠딩과 배경을 위에서 아래로 흑백으로 덮습니다. */
 .hr-stage[data-boss="vaciel"]::before{
   content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
   background-color:#f0f0f0;background-image:var(--dream-bg,none);
@@ -872,18 +873,28 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
   body.hr-page[data-hand-mode="left"] #utility-actions>#auto-attack{order:-1}
   body.hr-page[data-hand-mode="left"] #utility-actions>#reservation-count{margin-right:0;margin-left:auto}
 }
-</style></head>
+</style><style id="new-boss-mechanics-style">
+.hr-special-alert{white-space:pre-line;margin:8px 0;padding:9px 12px;background:#fff4eb;color:#602b26;border:2px solid #8c4e47;font-size:12px;font-weight:700;line-height:1.7}
+.hr-special-alert[hidden]{display:none!important}
+.hr-stage #boss-art:has(.hr-twin-view){width:100%;height:auto;min-height:140px}
+.hr-twin-view{display:flex;gap:9px;align-items:flex-end;justify-content:center;width:100%}
+.hr-twin{min-width:0;flex:0 1 45%;display:flex;flex-direction:column;align-items:center;gap:2px}
+.hr-stage .hr-twin img{height:135px!important;max-width:100%!important;width:auto;object-fit:contain;image-rendering:pixelated}
+.hr-twin small{font-size:12px;font-weight:700;background:#181818;color:white;padding:2px 6px}
+@media(max-width:520px){.hr-stage .hr-twin img{height:105px!important}.hr-special-alert{font-size:11px;padding:7px 9px}}
+</style>
+</head>
 <body class="hr-app hr-page">
-<div id="hr-boot-loading" role="status" aria-live="polite" aria-label="희망탈환 시작 준비">
-  <div class="hr-boot-inner">
-    <p class="hr-boot-decor" aria-hidden="true">✦ ✦ ✦</p>
-    <h1 class="hr-boot-title">희망탈환</h1>
-    <p class="hr-boot-subtitle">여섯 사람이 되찾을 하나의 내일</p>
-    <p class="hr-boot-line" id="hr-boot-line">모두가 출발할 준비를 하고 있습니다.</p>
-    <div class="hr-boot-bar" aria-hidden="true"></div>
-    <p class="hr-boot-status" id="hr-boot-status">여정을 준비하고 있습니다...</p>
-    <button class="hr-boot-retry" type="button" id="hr-boot-retry" onclick="location.reload()">다시 불러오기</button>
-  </div>
+<div aria-label="희망탈환 시작 준비" aria-live="polite" id="hr-boot-loading" role="status">
+<div class="hr-boot-inner">
+<p aria-hidden="true" class="hr-boot-decor">✦ ✦ ✦</p>
+<h1 class="hr-boot-title">희망탈환</h1>
+<p class="hr-boot-subtitle">여섯 사람이 되찾을 하나의 내일</p>
+<p class="hr-boot-line" id="hr-boot-line">모두가 출발할 준비를 하고 있습니다.</p>
+<div aria-hidden="true" class="hr-boot-bar"></div>
+<p class="hr-boot-status" id="hr-boot-status">여정을 준비하고 있습니다...</p>
+<button class="hr-boot-retry" id="hr-boot-retry" onclick="location.reload()" type="button">다시 불러오기</button>
+</div>
 </div>
 <script>
 /* 첫 시작 준비 중 16개의 확정 문구를 3초마다 무작위로 교체합니다. */
@@ -939,115 +950,107 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
   };
 })();
 </script>
-
-<main class="hr-panel hr-battle-panel" aria-label="희망탈환 전투">
- <div class="hr-heading"><span class="hr-star" aria-hidden="true"></span><h1 id="arena-title">희망탈환</h1><button id="mobile-battle-log" type="button" aria-controls="battle-log-popup" aria-haspopup="dialog" aria-expanded="false">전투 기록</button><button id="open-settings">전투 준비</button></div>
- <div class="hr-battle-scroll">
-  <div class="hr-version-row hr-quick-tools"><div class="hr-version-info"><strong id="build-version">희망탈환</strong><span id="difficulty-label"></span><span id="seed-label" hidden></span></div><div class="hr-quick-buttons"><button id="hand-toggle" type="button" aria-pressed="false" title="모바일 하단 버튼 위치 바꾸기">⇄ 오른손</button><button id="sound" type="button" aria-pressed="false" aria-label="배경음악 켜기" title="배경음악 켜기">♫ OFF</button><button id="restart" type="button" title="새 게임 시작 (확인 후 진행)">↻ 새 게임</button></div></div>
-  <div class="hr-stage" id="stage">
-   <div class="hr-stage-label" id="round-label"></div>
-   <div id="boss-art"></div><div id="boss-floats" class="hr-boss-floats" aria-hidden="true"></div>
-   <div class="hr-boss-life" id="enemy-status"></div><div id="summons"></div><div id="effect" aria-hidden="true"></div>
-  </div>
-  <div class="hr-party" id="party" aria-label="행동할 인물"></div>
-  <section id="control-panel" class="hr-control" aria-label="대화와 전투 명령">
-  <div id="progress-panel" class="hr-progress" aria-label="전투 진행">
-   <div class="hr-progress-heading"><b id="speaker-name"></b><span id="playback-info"></span></div>
-   <div id="telegraph" class="hr-progress-text" aria-live="polite"></div>
-  </div>
-  <div id="command-panel" class="hr-command"></div>
-  <div id="action-dock" class="hr-action-dock">
-  <div class="hr-main-actions" id="main-actions">
-   <button id="next-event" class="hr-primary" hidden>다음 →</button>
-   <button id="skip-narration" type="button" title="이어지는 대사와 장면을 건너뜁니다. 중요한 사건과 전투 결과에서는 멈춥니다." hidden>건너뛰기</button>
-   <button id="perform-action" data-action="perform" class="hr-primary">지금 행동</button>
-   <button id="execute" class="hr-enemy-turn">적의 차례로 →</button>
-  </div>
-  <div class="hr-utility-actions" id="utility-actions"><span id="reservation-count"></span><button id="auto-attack" title="이번 라운드의 남은 아군 행동을 자동으로 실행하고 일반 결과를 건너뜁니다. 이야기·중요 사건에서는 멈춥니다.">자동공격</button><button id="retreat">후퇴</button></div>
-  </div>
-  <div id="retreat-confirm" class="hr-card" role="group" aria-label="후퇴 확인" hidden>
-   <p id="retreat-message"></p><div class="hr-actions"><button id="cancel-retreat">취소 · 계속 싸우기</button><button id="confirm-retreat">후퇴하기</button></div>
-  </div>
-  </section>
-  <div id="result-box" class="hr-card" hidden></div>
-  
-  
- </div>
+<main aria-label="희망탈환 전투" class="hr-panel hr-battle-panel">
+<div class="hr-heading"><span aria-hidden="true" class="hr-star"></span><h1 id="arena-title">희망탈환</h1><button aria-controls="battle-log-popup" aria-expanded="false" aria-haspopup="dialog" id="mobile-battle-log" type="button">전투 기록</button><button id="open-settings">전투 준비</button></div>
+<div class="hr-battle-scroll">
+<div class="hr-version-row hr-quick-tools"><div class="hr-version-info"><strong id="build-version">희망탈환</strong><span id="difficulty-label"></span><span hidden="" id="seed-label"></span></div><div class="hr-quick-buttons"><button aria-pressed="false" id="hand-toggle" title="모바일 하단 버튼 위치 바꾸기" type="button">⇄ 오른손</button><button aria-label="배경음악 켜기" aria-pressed="false" id="sound" title="배경음악 켜기" type="button">♫ OFF</button><button id="restart" title="새 게임 시작 (확인 후 진행)" type="button">↻ 새 게임</button></div></div>
+<div class="hr-stage" id="stage">
+<div class="hr-stage-label" id="round-label"></div>
+<div id="boss-art"></div><div aria-hidden="true" class="hr-boss-floats" id="boss-floats"></div>
+<div class="hr-boss-life" id="enemy-status"></div><div id="summons"></div><div aria-hidden="true" id="effect"></div>
+</div>
+<div id="battle-special-alert" class="hr-special-alert" role="status" hidden></div>
+  <div aria-label="행동할 인물" class="hr-party" id="party"></div>
+<section aria-label="대화와 전투 명령" class="hr-control" id="control-panel">
+<div aria-label="전투 진행" class="hr-progress" id="progress-panel">
+<div class="hr-progress-heading"><b id="speaker-name"></b><span id="playback-info"></span></div>
+<div aria-live="polite" class="hr-progress-text" id="telegraph"></div>
+</div>
+<div class="hr-command" id="command-panel"></div>
+<div class="hr-action-dock" id="action-dock">
+<div class="hr-main-actions" id="main-actions">
+<button class="hr-primary" hidden="" id="next-event">다음 →</button>
+<button hidden="" id="skip-narration" title="이어지는 대사와 장면을 건너뜁니다. 중요한 사건과 전투 결과에서는 멈춥니다." type="button">건너뛰기</button>
+<button class="hr-primary" data-action="perform" id="perform-action">지금 행동</button>
+<button class="hr-enemy-turn" id="execute">적의 차례로 →</button>
+</div>
+<div class="hr-utility-actions" id="utility-actions"><span id="reservation-count"></span><button id="auto-attack" title="이번 라운드의 남은 아군 행동을 자동으로 실행하고 일반 결과를 건너뜁니다. 이야기·중요 사건에서는 멈춥니다.">자동공격</button><button id="retreat">후퇴</button></div>
+</div>
+<div aria-label="후퇴 확인" class="hr-card" hidden="" id="retreat-confirm" role="group">
+<p id="retreat-message"></p><div class="hr-actions"><button id="cancel-retreat">취소 · 계속 싸우기</button><button id="confirm-retreat">후퇴하기</button></div>
+</div>
+</section>
+<div class="hr-card" hidden="" id="result-box"></div>
+</div>
 </main>
-<div id="battle-log-popup" class="hr-overlay hr-log-overlay" hidden>
- <section class="hr-panel hr-log-panel" role="dialog" aria-modal="true" aria-labelledby="battle-log-title">
-  <div class="hr-heading hr-log-heading"><span class="hr-star" aria-hidden="true"></span><h2 id="battle-log-title">전투 기록 <span id="log-count"></span></h2><button id="close-battle-log" type="button" aria-label="전투 기록 닫기">닫기</button></div>
-  <div id="battle-log-scroll" class="hr-log-scroll" tabindex="0" aria-label="전투 기록 내용"><div id="battle-log" class="hr-battle-log"></div><p id="battle-log-empty" class="hr-log-empty" hidden>아직 전투 기록이 없습니다.</p></div>
- </section>
+<div class="hr-overlay hr-log-overlay" hidden="" id="battle-log-popup">
+<section aria-labelledby="battle-log-title" aria-modal="true" class="hr-panel hr-log-panel" role="dialog">
+<div class="hr-heading hr-log-heading"><span aria-hidden="true" class="hr-star"></span><h2 id="battle-log-title">전투 기록 <span id="log-count"></span></h2><button aria-label="전투 기록 닫기" id="close-battle-log" type="button">닫기</button></div>
+<div aria-label="전투 기록 내용" class="hr-log-scroll" id="battle-log-scroll" tabindex="0"><div class="hr-battle-log" id="battle-log"></div><p class="hr-log-empty" hidden="" id="battle-log-empty">아직 전투 기록이 없습니다.</p></div>
+</section>
 </div>
-<div id="new-game-confirm" class="hr-overlay hr-confirm-overlay" hidden>
- <section class="hr-panel hr-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="new-game-title" aria-describedby="new-game-message">
-  <div class="hr-heading"><h2 id="new-game-title">새 게임을 시작할까요?</h2></div>
-  <div class="hr-confirm-body"><p id="new-game-message">현재 진행 상황이 초기화되고 타이틀로 돌아갑니다. 이전 자동 저장도 새 진행 상황으로 교체됩니다.</p></div>
-  <div class="hr-confirm-actions"><button id="cancel-new-game" type="button">취소</button><button id="confirm-new-game" type="button" class="hr-primary">새 게임 시작</button></div>
- </section>
+<div class="hr-overlay hr-confirm-overlay" hidden="" id="new-game-confirm">
+<section aria-describedby="new-game-message" aria-labelledby="new-game-title" aria-modal="true" class="hr-panel hr-confirm-dialog" role="dialog">
+<div class="hr-heading"><h2 id="new-game-title">새 게임을 시작할까요?</h2></div>
+<div class="hr-confirm-body"><p id="new-game-message">현재 진행 상황이 초기화되고 타이틀로 돌아갑니다. 이전 자동 저장도 새 진행 상황으로 교체됩니다.</p></div>
+<div class="hr-confirm-actions"><button id="cancel-new-game" type="button">취소</button><button class="hr-primary" id="confirm-new-game" type="button">새 게임 시작</button></div>
+</section>
 </div>
-<div id="vaciel-team-warning" class="hr-overlay hr-confirm-overlay" hidden>
- <section class="hr-panel hr-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="vaciel-team-title" aria-describedby="vaciel-team-message">
-  <div class="hr-heading"><h2 id="vaciel-team-title">바시엘전에 동료가 부족합니다</h2></div>
-  <div class="hr-confirm-body"><p id="vaciel-team-message"></p><p>5명 모두 함께하지 않아도 도전할 수 있습니다. 이대로 출전할까요?</p></div>
-  <div class="hr-confirm-actions"><button id="revise-vaciel-team" type="button">동료 다시 선택</button><button id="confirm-vaciel-team" type="button" class="hr-primary">그대로 출전</button></div>
- </section>
+<div class="hr-overlay hr-confirm-overlay" hidden="" id="vaciel-team-warning">
+<section aria-describedby="vaciel-team-message" aria-labelledby="vaciel-team-title" aria-modal="true" class="hr-panel hr-confirm-dialog" role="dialog">
+<div class="hr-heading"><h2 id="vaciel-team-title">바시엘전에 동료가 부족합니다</h2></div>
+<div class="hr-confirm-body"><p id="vaciel-team-message"></p><p>5명 모두 함께하지 않아도 도전할 수 있습니다. 이대로 출전할까요?</p></div>
+<div class="hr-confirm-actions"><button id="revise-vaciel-team" type="button">동료 다시 선택</button><button class="hr-primary" id="confirm-vaciel-team" type="button">그대로 출전</button></div>
+</section>
 </div>
-<div id="settings" class="hr-overlay hr-settings" hidden>
- <section class="hr-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title">
-  <div class="hr-heading"><span class="hr-star" aria-hidden="true"></span><h2 id="settings-title">전투 준비</h2><button id="close-settings" aria-label="설정 닫기">닫기</button></div>
-  
-  <div id="panel" class="hr-content"></div>
-<div id="setup-alert" class="hr-setup-alert" role="alert" hidden></div>
-  <div class="hr-footer"><small class="hr-bgm-credit">음악: <a href="#bgm-credit-overlay" id="open-bgm-credit" aria-haspopup="dialog">PeriTune · 곡 정보</a></small><span id="dirty-message" hidden></span><div class="hr-actions"><button type="button" id="prep-new-game" title="확인 후 진행 상황을 초기화합니다">↻ 새 게임</button><button id="apply-restart" class="hr-primary">전투 시작</button><button id="export-config" hidden>설정 내보내기</button><button id="import-config" hidden>설정 불러오기</button></div></div>
- </section>
+<div class="hr-overlay hr-settings" hidden="" id="settings">
+<section aria-labelledby="settings-title" aria-modal="true" class="hr-panel" role="dialog">
+<div class="hr-heading"><span aria-hidden="true" class="hr-star"></span><h2 id="settings-title">전투 준비</h2><button aria-label="설정 닫기" id="close-settings">닫기</button></div>
+<div class="hr-content" id="panel"></div>
+<div class="hr-setup-alert" hidden="" id="setup-alert" role="alert"></div>
+<div class="hr-footer"><small class="hr-bgm-credit">음악: <a aria-haspopup="dialog" href="#bgm-credit-overlay" id="open-bgm-credit">PeriTune · 곡 정보</a></small><span hidden="" id="dirty-message"></span><div class="hr-actions"><button id="prep-new-game" title="확인 후 진행 상황을 초기화합니다" type="button">↻ 새 게임</button><button class="hr-primary" id="apply-restart">전투 시작</button><button hidden="" id="export-config">설정 내보내기</button><button hidden="" id="import-config">설정 불러오기</button></div></div>
+</section>
 </div>
-
-
-<div id="resume-overlay" class="hr-overlay hr-resume-overlay" hidden>
- <section class="hr-panel hr-resume-panel" role="dialog" aria-modal="true" aria-labelledby="resume-title" aria-describedby="resume-desc">
-  <div class="hr-heading"><span class="hr-star" aria-hidden="true"></span><h2 id="resume-title">저장된 진행 상황이 있습니다</h2></div>
-  <div class="hr-resume-body">
-   <p id="resume-desc">이전에 진행하던 전투를 발견했습니다. 이어서 플레이하시겠어요?</p>
-   <div id="resume-summary" class="hr-resume-summary"></div>
-   <p class="hr-note">새로 시작하면 이전 자동 저장이 새 진행 상황으로 교체됩니다.</p>
-  </div>
-  <div class="hr-actions">
-   <button type="button" id="resume-new">새로 시작</button>
-   <button type="button" id="resume-continue" class="hr-primary">계속하기 ▶</button>
-  </div>
- </section>
+<div class="hr-overlay hr-resume-overlay" hidden="" id="resume-overlay">
+<section aria-describedby="resume-desc" aria-labelledby="resume-title" aria-modal="true" class="hr-panel hr-resume-panel" role="dialog">
+<div class="hr-heading"><span aria-hidden="true" class="hr-star"></span><h2 id="resume-title">저장된 진행 상황이 있습니다</h2></div>
+<div class="hr-resume-body">
+<p id="resume-desc">이전에 진행하던 전투를 발견했습니다. 이어서 플레이하시겠어요?</p>
+<div class="hr-resume-summary" id="resume-summary"></div>
+<p class="hr-note">새로 시작하면 이전 자동 저장이 새 진행 상황으로 교체됩니다.</p>
 </div>
-
-<div id="ending-overlay" class="hr-overlay hr-ending" hidden>
- <section class="hr-panel hr-ending-panel" role="dialog" aria-modal="true" aria-labelledby="ending-title">
-  <div class="hr-heading hr-ending-heading"><span class="hr-star" aria-hidden="true"></span><h2 id="ending-title">후일담</h2><span id="ending-counter"></span></div>
-  <div class="hr-content hr-ending-scroll"><div id="ending-body" class="ending-body"></div></div>
-  <div class="hr-footer hr-ending-footer"><span id="ending-footer-text">희망탈환 · 후일담</span><button type="button" data-action="ending-next" class="hr-primary" id="ending-next">다음 →</button></div>
- </section>
+<div class="hr-actions">
+<button id="resume-new" type="button">새로 시작</button>
+<button class="hr-primary" id="resume-continue" type="button">계속하기 ▶</button>
 </div>
-
-<div id="bgm-credit-overlay" class="hr-overlay hr-bgm-credit-overlay" hidden>
- <section class="hr-panel" role="dialog" aria-modal="true" aria-labelledby="bgm-credit-title">
-  <div class="hr-heading"><h2 id="bgm-credit-title">음악 출처 · 곡 정보</h2><button type="button" id="close-bgm-credit" aria-label="음악 정보 닫기">닫기</button></div>
-  <div class="hr-content">
-   <p>음악 제작: <a href="https://peritune.com/" target="_blank" rel="noopener noreferrer">PeriTune (Sei Mutsuki)</a></p>
-   <p>희망탈환에 사용된 배경음악과 곡별 안내입니다. 수록곡은 PeriTune 제공 음악이며, 라이선스 및 이용 조건은 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> 및 <a href="https://peritune.com/about/" target="_blank" rel="noopener noreferrer">PeriTune 이용규약</a>에서 확인할 수 있습니다.</p>
-   <ul class="hr-bgm-track-list">
-    <li><span>벨라톤 · <a href="https://peritune.com/blog/2023/06/15/midnight_masquerade/" target="_blank" rel="noopener noreferrer">Midnight_Masquerade</a></span><small>사용 중</small></li>
-    <li><span>코르 · <a href="https://peritune.com/blog/2016/09/16/raid3/" target="_blank" rel="noopener noreferrer">Raid3</a></span><small>사용 중</small></li>
-    <li><span>라크리엔 · <a href="https://peritune.com/blog/2016/12/05/piano_melancholy3/" target="_blank" rel="noopener noreferrer">Piano_Melancholy3</a></span><small>사용 중</small></li>
-    <li><span>마리오넬 · <a href="https://peritune.com/blog/2022/06/28/creep/" target="_blank" rel="noopener noreferrer">Creep</a></span><small>사용 중</small></li>
-    <li><span>오스테오스 · <a href="https://peritune.com/blog/2020/02/14/holy_place3/" target="_blank" rel="noopener noreferrer">Holy_Place3</a></span><small>사용 중</small></li>
-    <li><span>바시엘 · <a href="https://peritune.com/blog/2017/01/11/lost_place4/" target="_blank" rel="noopener noreferrer">Lost Place4</a></span><small>사용 중</small></li>
-    <li><span>엔딩 · <a href="https://peritune.com/blog/2018/12/27/pv_emotional/" target="_blank" rel="noopener noreferrer">PV_Emotional</a></span><small>사용 중</small></li>
-   </ul>
-   
-  </div>
- </section>
+</section>
 </div>
-<div id="toast" role="status" aria-live="polite" hidden></div><input id="file-input" type="file" accept="application/json,.json" hidden>
+<div class="hr-overlay hr-ending" hidden="" id="ending-overlay">
+<section aria-labelledby="ending-title" aria-modal="true" class="hr-panel hr-ending-panel" role="dialog">
+<div class="hr-heading hr-ending-heading"><span aria-hidden="true" class="hr-star"></span><h2 id="ending-title">후일담</h2><span id="ending-counter"></span></div>
+<div class="hr-content hr-ending-scroll"><div class="ending-body" id="ending-body"></div></div>
+<div class="hr-footer hr-ending-footer"><span id="ending-footer-text">희망탈환 · 후일담</span><button class="hr-primary" data-action="ending-next" id="ending-next" type="button">다음 →</button></div>
+</section>
+</div>
+<div class="hr-overlay hr-bgm-credit-overlay" hidden="" id="bgm-credit-overlay">
+<section aria-labelledby="bgm-credit-title" aria-modal="true" class="hr-panel" role="dialog">
+<div class="hr-heading"><h2 id="bgm-credit-title">음악 출처 · 곡 정보</h2><button aria-label="음악 정보 닫기" id="close-bgm-credit" type="button">닫기</button></div>
+<div class="hr-content">
+<p>음악 제작: <a href="https://peritune.com/" rel="noopener noreferrer" target="_blank">PeriTune (Sei Mutsuki)</a></p>
+<p>희망탈환에 사용된 배경음악과 곡별 안내입니다. 수록곡은 PeriTune 제공 음악이며, 라이선스 및 이용 조건은 <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener noreferrer" target="_blank">CC BY 4.0</a> 및 <a href="https://peritune.com/about/" rel="noopener noreferrer" target="_blank">PeriTune 이용규약</a>에서 확인할 수 있습니다.</p>
+<ul class="hr-bgm-track-list">
+<li><span>벨라톤 · <a href="https://peritune.com/blog/2023/06/15/midnight_masquerade/" rel="noopener noreferrer" target="_blank">Midnight_Masquerade</a></span><small>사용 중</small></li>
+<li><span>코르 · <a href="https://peritune.com/blog/2016/09/16/raid3/" rel="noopener noreferrer" target="_blank">Raid3</a></span><small>사용 중</small></li>
+<li><span>라크리엔 · <a href="https://peritune.com/blog/2016/12/05/piano_melancholy3/" rel="noopener noreferrer" target="_blank">Piano_Melancholy3</a></span><small>사용 중</small></li>
+<li><span>마리오넬 · <a href="https://peritune.com/blog/2022/06/28/creep/" rel="noopener noreferrer" target="_blank">Creep</a></span><small>사용 중</small></li>
+<li><span>오스테오스 · <a href="https://peritune.com/blog/2020/02/14/holy_place3/" rel="noopener noreferrer" target="_blank">Holy_Place3</a></span><small>사용 중</small></li>
+<li><span>바시엘 · <a href="https://peritune.com/blog/2017/01/11/lost_place4/" rel="noopener noreferrer" target="_blank">Lost Place4</a></span><small>사용 중</small></li>
+<li><span>엔딩 · <a href="https://peritune.com/blog/2018/12/27/pv_emotional/" rel="noopener noreferrer" target="_blank">PV_Emotional</a></span><small>사용 중</small></li>
+</ul>
+</div>
+</section>
+</div>
+<div aria-live="polite" hidden="" id="toast" role="status"></div><input accept="application/json,.json" hidden="" id="file-input" type="file"/>
 <script>/* 전투 기본 데이터 및 최종 대사. 사용하지 않는 초기 공통 dialogue 데이터는 제거했습니다.
    보스별 최종 대사는 bosses 객체에서만 관리합니다. */
 (function(g){
@@ -3506,6 +3509,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "pillarTicks": 4,
         "rageDot": 0.025,
         "bleedRatio": 0.03,
+        "hardBleedRatio": 0.06,
         "bleedTurns": 2,
         "duelHits": 3,
         "duelCap": 0.7,
@@ -4618,11 +4622,19 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "intro": [
         {
           "speaker": "scene",
-          "text": "유성천문관의 둥근 천장 아래, 수많은 빛이 별처럼 떠 있었다. 가까이 들여다보면 별빛마다 작은 풍경이 어른거렸다. 기꺼이 선행을 베푸는 사람들과 무자비하게 악행을 저지르는 이들의 모습이 함께 비춰지고 있었다."
+          "text": "유성천문관의 둥근 천장 아래, 수많은 빛이 별처럼 떠 있었다."
         },
         {
           "speaker": "scene",
-          "text": "천구의가 조용히 회전했다. 그 곁에는 하얀 사제복을 입은 인물이 바닥에서 조금 떠오른 채 서 있었다. 머리의 은색 촛대 위로 옅푸른 불꽃이 타올랐고 천구 중앙의 눈동자가 일행을 향했다."
+          "text": "가까이 들여다보면 별빛마다 작은 풍경이 어른거렸다. 기꺼이 선행을 베푸는 사람들과 무자비하게 악행을 저지르는 이들의 모습이 함께 비춰지고 있었다."
+        },
+        {
+          "speaker": "scene",
+          "text": "천구의가 조용히 회전한다. 그 곁에는 하얀 사제복을 입은 인물이 바닥에서 조금 떠오른 채 서 있었다."
+        },
+        {
+          "speaker": "scene",
+          "text": "머리의 은색 촛대 위로 옅푸른 불꽃이 타올랐고 천구 중앙의 눈동자가 일행을 향했다."
         },
         {
           "speaker": "lacrien",
@@ -4938,7 +4950,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "jun": [
           {
             "speaker": "jun",
-            "text": " ……옛날엔 별 보면 소원부터 빌었는데."
+            "text": "옛날엔 별 보면 소원부터 빌었는데……"
           },
           {
             "speaker": "jun",
@@ -4954,7 +4966,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "shion": [
           {
             "speaker": "shion",
-            "text": "……관객석이 별이 가득한 밤하늘같다고 생각하던 때도 있었는데."
+            "text": "관객석이 별이 가득한 밤하늘같다고 생각하던 때도 있었어."
           },
           {
             "speaker": "shion",
@@ -4968,13 +4980,13 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
           },
           {
             "speaker": "rinne",
-            "text": "……아, 지금은 안 되려나? 끝나고 꼭 한 장 찍자!"
+            "text": "아, 지금은 안 되려나? 끝나고 꼭 한 장 찍자!"
           }
         ],
         "takumi": [
           {
             "speaker": "takumi",
-            "text": "……별이 쏟아지는 것 같습니다. 이런 밤하늘 실제로 본 적 있으세요?"
+            "text": "별이 쏟아지는 것 같습니다. 이런 밤하늘 실제로 본 적 있으세요?"
           },
           {
             "speaker": "takumi",
@@ -5016,7 +5028,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
           },
           {
             "speaker": "shion",
-            "text": "말하면 안 이루어지니까 비밀입니다."
+            "text": "말하면 안 이루어지니까 비밀이에요."
           }
         ],
         "jun+rinne": [
@@ -5148,7 +5160,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "rinne+takumi": [
           {
             "speaker": "rinne",
-            "text": "탓쨩, 이따  같이 사진 찍자!"
+            "text": "탓쨩, 이따 같이 사진 찍자!"
           },
           {
             "speaker": "takumi",
@@ -7382,7 +7394,6 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
   }
 };
 })(globalThis);</script>
-
 <script>
 /* 0.7: 악몽 독립 난이도. 다른 난이도의 기존 수치와 사용자 대사를 바꾸지 않습니다. */
 (function(g){'use strict';
@@ -7450,7 +7461,7 @@ H.hardDifficulty={extend};extend(H.defaults);H.defaults.difficultySchemaVersion=
 'use strict';
 const H = g.HopeBattle, copy = x => JSON.parse(JSON.stringify(x));
 const bossIds = ['osteos','bellaton','cor','lacrien','marionel','vaciel'];
-const effects = ['strike','sweep','wait','opening','wing','blade','pillars','aria','ribbon','curtain','charge','smash','duel','light','reflect','recordecho','judgment','summon','thread','repair','drain','parasol','motif','empty','dreammark','dreamresonance','dreamrest'];
+const effects = ['strike','sweep','wait','opening','wing','blade','pillars','aria','ribbon','curtain','charge','smash','duel','light','reflect','recordecho','judgment','summon','thread','repair','drain','parasol','motif','empty','dreammark','dreamresonance','dreamrest','blade-trace'];
 const skillTargets = {single:'enemy',area:'enemies',buff:'ally',debuff:'enemy',defdown:'enemy',heal:'ally',allheal:'allies',spheal:'ally',guardall:'allies',counter:'self',track:'allies',encore:'allies',cleanse:'ally',protect:'ally',defall:'allies',mitigateall:'allies',followup:'self',burnarea:'enemies',pierce:'enemy',breakhit:'enemy',triplehit:'enemy',lifesteal:'enemy',stun:'enemy',breakarea:'enemies',misdirection:'enemies',spotlight:'self',climax:'enemy',mimic:'self',shield:'self',purify:'allies'};
 const skillLabels = {single:'단일 공격',area:'전체 공격',buff:'공격력 상승',debuff:'공격력 감소',defdown:'방어력 감소',heal:'체력 회복',allheal:'전체 체력 회복',spheal:'기력 회복',guardall:'전체 방어',counter:'방어·반격',track:'랜덤 지원곡',encore:'직전 노래 재연',cleanse:'일반 약화 해제',protect:'피해 감소',defall:'전체 방어력 상승',mitigateall:'전체 받는 피해 감소',followup:'아군 공격 추격',burnarea:'전체 공격·화상',pierce:'방어력 무시',breakhit:'공격·방어력 감소',triplehit:'3연격',lifesteal:'흡혈 공격',stun:'행동 봉쇄',breakarea:'전체 공격·방어력 감소',misdirection:'전체 공격·명중률 감소',spotlight:'관객에 따른 자기 강화',climax:'강화 연계 단일 공격',mimic:'직전 동료 기술 복사',shield:'전체 공격 대신 받기',purify:'전체 약화 해제'};
 const need = (v,msg) => { if (!v) throw Error(msg); };
@@ -7512,6 +7523,7 @@ function validateConfig(c) {
     if(b.params.exposedDamageBonus!==undefined)num(b.params.exposedDamageBonus,0,1,'본체 노출 추가 피해');
     if(b.params.lateChainHp!==undefined)num(b.params.lateChainHp,0,.99,'후반 연계 체력 비율');
     for(const k of ['guardReduction','rageHp','rageAtk','rageDef','openingDef','repairRatio','wingDef','attackHp','bladeHp','bladeDef','bladeCrit','pillarHeal','rageDot','bleedRatio','duelCap','reflectRatio','reflectCap','recordCap']) num(b.params[k],0,.99,k);
+    if(b.params.hardBleedRatio!==undefined)num(b.params.hardBleedRatio,0,.99,'hardBleedRatio');
     for(const k of ['summonLimit','repairLimit','pillarCount']) num(b.params[k],0,10,k,true);
     for(const k of ['wingTurns','calmMaxRounds','pillarTicks','duelHits','bindTurns','exposeRounds','bleedTurns','summonAliveLimit']) num(b.params[k],1,20,k,true);
     for(const mode of ['practice','easy','normal','hard']) {
@@ -7558,7 +7570,7 @@ const actorName=(b,id)=>id==='system'?'전투 기록':id==='scene'?'':b.party[id
 const rand=b=>{b.rng=(Math.imul(1664525,b.rng)+1013904223)>>>0;return b.rng/4294967296;};
 const pick=(b,a)=>a.length?a[Math.floor(rand(b)*a.length)]:null;
 const pct=(n,p)=>Math.max(0,Math.round(n*p));
-function snapshot(b) {return copy({round:b.round,party:b.party,boss:b.boss,summons:b.summons,phase:b.phase,intent:b.intent,mark:b.mark,story:b.story,items:b.items,outcome:b.outcome,committed:b.committed,talkRound:b.talkRound,acted:b.acted,invitation:b.invitation,reflection:b.reflection,recordedDamage:b.recordedDamage,exposedUntil:b.exposedUntil,dreamMonochrome:!!b.dreamMonochrome,playerName:b.playerName});}
+function snapshot(b) {return copy({round:b.round,party:b.party,boss:b.boss,summons:b.summons,phase:b.phase,intent:b.intent,mark:b.mark,story:b.story,items:b.items,outcome:b.outcome,committed:b.committed,talkRound:b.talkRound,acted:b.acted,invitation:b.invitation,reflection:b.reflection,recordedDamage:b.recordedDamage,exposedUntil:b.exposedUntil,doppel:b.doppel,starCopy:b.starCopy,dissonance:b.dissonance,swordTrace:b.swordTrace,corFury:b.corFury,dreamMonochrome:!!b.dreamMonochrome,playerName:b.playerName});}
 function emit(x,type,speaker,message,extra={}) {
   const b=x.b,e={id:++b.eventSerial,type,speaker,template:String(message),text:String(message).replaceAll('{{user}}',b.playerName),...extra};
   if(b.record) {b.log.push(copy(e));if(b.log.length>600)b.log.shift();x.events.push({...e,view:snapshot(b)});}return e;
@@ -7594,6 +7606,9 @@ function forecast(b,c) {
 }
 function adaptiveIntent(b,c,p) {
   const bc=c.bosses[b.domain];
+  if(b.domain==='cor'&&b.difficulty!=='hard'&&p.effect==='duel')return {...p,id:p.id+'-strike',effect:'strike',name:'검격',power:1,tell:'코르가 대검을 겨눕니다.'};
+  if(b.domain==='osteos'&&b.difficulty==='hard'&&b.swordTrace?.ready)return {...p,id:'sword-trace',name:'예검의 궤적',effect:'blade-trace',power:1,phase:'rage',tell:'오스테오스의 세 검흔이 정해진 순서대로 빛납니다.'};
+
   if(b.domain==='marionel'&&p.effect==='repair')
     return {...p,tell:b.difficulty==='hard'?'수선하는 손 · 두 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.':'수선하는 손 · 한 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.'};
   if(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)){
@@ -7617,7 +7632,7 @@ function adaptiveIntent(b,c,p) {
   // 바시엘 어려움 한정: 장막 뒤에 표식 1턴 -> 공명 -> 탈진 1턴.
   if(b.difficulty==='hard'){
     const closing={target:'all',phase:'any',power:0,cycle:1,offset:1,fromRound:1,priority:100,once:false,cooldown:0};
-    if(b.finalChain==='mark')return {...closing,id:'dreammark-closing',name:'색 잃은 꿈',effect:'dreammark',closingStep:'mark',tell:'바시엘의 눈가에서 은빛 눈물이 떨어집니다. 성역의 색이 천천히 사라집니다.'};
+    if(b.finalChain==='mark')return {...closing,id:'dreammark-closing',name:'색을 잃은 꿈',effect:'dreammark',closingStep:'mark',tell:'바시엘의 눈가에서 은빛 눈물이 떨어집니다. 성역의 색이 천천히 사라집니다.'};
     if(b.finalChain==='resonate')return {...closing,id:'dreamresonance-closing',name:'공명',effect:'dreamresonance',closingStep:'resonate',tell:'색채를 잃은 성역에 한 점의 소리도 들리지 않습니다. 바시엘이 눈을 뜨려 합니다.'};
     if(b.finalChain==='aftershock')return {...closing,id:'dreamrest-closing',name:'공명의 반동',effect:'dreamrest',closingStep:'aftershock',tell:'바시엘의 손끝이 떨립니다. 양산의 그림자가 잠시 흔들립니다.'};
   }
@@ -7678,7 +7693,13 @@ function prepare(x) {
   if(b.domain==='vaciel'&&['normal','hard'].includes(b.difficulty)&&hp<=.65&&!b.vacielCracked){b.vacielCracked=true;emit(x,'phase','scene','바시엘의 양산 아래로 그림자가 짙게 번집니다. 간부들의 잔영이 서로 얽히며 압박이 거세집니다.');}
   storyEvent(x);ensureAgency(x);
   const p=adaptiveIntent(b,x.c,pattern(b,x.c));b.intent={...p,targetId:null};
-  if(p.effect==='duel') {b.intent.targetId=choose(x)?.id||null;b.mark={target:b.intent.targetId,due:b.round};}
+  if(p.effect==='duel') {
+    b.intent.targetId=choose(x)?.id||null;b.mark={target:b.intent.targetId,due:b.round};
+    const t=b.party[b.intent.targetId];if(t)emit(x,'notice','scene',`코르가 ${t.name}에게 검을 겨눕니다. 일대일 승부를 강요합니다.`);
+  }
+  if(b.domain==='cor'&&b.corFury>=5)emit(x,'notice','scene','코르의 검에 거센 불꽃이 휘감깁니다. 다음 공격에는 추가 타격이 이어집니다.');
+  if(b.domain==='osteos'&&p.effect==='blade-trace'&&b.swordTrace?.order)emit(x,'notice','scene','예검의 궤적 · '+b.swordTrace.order.map((id,i)=>`제${i+1}검 ${b.party[id]?.name||'대상 없음'}`).join(' · '));
+
   if(b.domain==='vaciel'&&p.effect==='motif'&&b.motifCount===1){b.intent.targetId=choose(x)?.id||null;b.mark={target:b.intent.targetId,due:b.round};b.intent.tell='희미한 잔영이 한 사람을 향해 고개를 돌립니다.';}
   if(b.domain==='vaciel'&&p.effect==='motif'&&b.motifCount===0)b.intent.tell='바시엘의 등 뒤에 얇은 장막이 겹쳐집니다.';
   if(b.domain==='vaciel'&&p.effect==='motif'&&b.motifCount===2)b.intent.tell='찬 기운이 전장을 천천히 뒤덮습니다.';
@@ -7714,7 +7735,7 @@ function initial(c,opts={}) {
   const boss=unit(id,{...bc,hp:pct(bc.hp+bc.hpPerCompanion*team.length+extra,d.hp*hpScale)+vacielNightmareTeamHp,atk:bc.atk*d.atk*attackScale,def:bc.def*d.def,speed:bc.speed*d.speed,crit:d.enemyCrit});
   num(opts.bossHpPercent??100,1,100,'보스 체력');boss.hp=Math.max(1,pct(boss.maxHp,(opts.bossHpPercent??100)/100));
   const gate=opts.storyFlags||{},returned=Array.isArray(gate.returnedCommanders)?bossIds.filter(k=>k!=='vaciel'&&gate.returnedCommanders.includes(k)):[],empty=id==='vaciel'&&returned.length===5&&gate.composureRestored===true;
-  const b={version:3,forceDefeat:!!opts.forceDefeat,id:opts.id||id+'-'+seed,mode:opts.mode==='campaign'?'campaign':'workbench',domain:id,playerName:name,difficulty:mode,seed,rng:seed,round,startedAt:round,revision:0,meaningful:false,eventSerial:0,record:opts.record!==false,team:[...team],playerSkills:[...ps],party,boss,summons:[],summonSerial:0,summonCount:0,repairCount:0,motifCount:0,phase:id==='osteos'?'calm':'base',specialFinal:empty,rageTriggered:false,patternUsed:{},intent:null,mark:null,story:{occurred:!!opts.eventOccurred,pressured:!!opts.eventOccurred,hero:null,branch:'none',resolved:false,focus:null},storyFlags:{returnedCommanders:returned,composureRestored:gate.composureRestored===true},talkRound:0,smallTalkUsed:{},bossTalkCount:0,bossTalkLimit:(bc.chat?.length||3)+((bc.bossTalkEntry?.ordinary?.length||bc.bossTalkEntry?.solo?.length)?1:0),pairTalkUsed:false,midDialogueShown:false,acted:{},items:copy(c.itemLoadouts?.[mode==='hard'?'hard':id==='vaciel'?'final':mode]||c.items),log:[],outcome:null,committed:false,deathAllowed:false,lastTrack:null,lastCompanionSkill:null,lastRandomTarget:null,invitation:null,reflection:null,recordedDamage:0,exposedUntil:0,dreamMonochrome:false};
+  const b={version:3,forceDefeat:!!opts.forceDefeat,id:opts.id||id+'-'+seed,mode:opts.mode==='campaign'?'campaign':'workbench',domain:id,playerName:name,difficulty:mode,seed,rng:seed,round,startedAt:round,revision:0,meaningful:false,eventSerial:0,record:opts.record!==false,team:[...team],playerSkills:[...ps],party,boss,summons:[],summonSerial:0,summonCount:0,repairCount:0,motifCount:0,phase:id==='osteos'?'calm':'base',specialFinal:empty,rageTriggered:false,patternUsed:{},intent:null,mark:null,story:{occurred:!!opts.eventOccurred,pressured:!!opts.eventOccurred,hero:null,branch:'none',resolved:false,focus:null},storyFlags:{returnedCommanders:returned,composureRestored:gate.composureRestored===true},talkRound:0,smallTalkUsed:{},bossTalkCount:0,bossTalkLimit:(bc.chat?.length||3)+((bc.bossTalkEntry?.ordinary?.length||bc.bossTalkEntry?.solo?.length)?1:0),pairTalkUsed:false,midDialogueShown:false,acted:{},items:copy(c.itemLoadouts?.[mode==='hard'?'hard':id==='vaciel'?'final':mode]||c.items),log:[],outcome:null,committed:false,deathAllowed:false,lastTrack:null,lastCompanionSkill:null,lastRandomTarget:null,invitation:null,reflection:null,recordedDamage:0,exposedUntil:0,corFury:0,corFuryAction:null,corFeastUsed:0,corFeastSpoke:false,dissonance:null,dissonanceLast:-99,starCopy:null,doppel:null,swordTrace:null,swordTraceLast:-99,dreamMonochrome:false};
   const existing=party[bc.story.hero];if(existing?.distorted&&existing.rescue==='pending'){b.story={occurred:true,hero:existing.id,branch:'distorted',resolved:false,focus:bc.story.focus?existing.id:null};}
   const x=ctx(b,c);
   scene(x,id==='vaciel'?(empty?bc.emptyIntro:returned.length?bc.mixedIntro||bc.intro:bc.intro):bc.intro);
@@ -7758,7 +7779,7 @@ function heal(x,u,ratio,reason=''){
   if(n)emit(x,'heal','system',u.name+' · HP +'+n,{target:u.id,amount:n,reason});
 }
 function sp(x,u,n,reason='기력 회복'){if(!living(u)||u.permanentUnavailable)return;const amount=Math.min(u.maxSp-u.sp,Math.round(n));u.sp+=amount;if(amount)emit(x,'sp','system',u.name+' · SP +'+amount+(reason==='라운드 종료 자동 회복'?'':' ('+reason+')'),{target:u.id,amount,reason});}
-const stateNames={mitigation:'받는 피해 감소',weak:'공격력 감소',defdown:'방어력 감소',dark:'명중 저하',buff:'공격력 상승',defup:'방어력 상승',counter:'반격 준비',followup:'추격 준비',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:'회복량 감소',bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색 잃은 꿈',timehold:'늘어진 순간',songAtk:'불안정한 노래',songDef:'불안정한 노래'};
+const stateNames={mitigation:'받는 피해 감소',weak:'공격력 감소',defdown:'방어력 감소',dark:'명중 저하',buff:'공격력 상승',defup:'방어력 상승',counter:'반격 준비',followup:'추격 준비',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:'회복량 감소',bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색을 잃은 꿈',timehold:'늘어진 순간',songAtk:'불안정한 노래',songDef:'불안정한 노래'};
 const playerStackCaps={buff:.40,weak:.40,defdown:.50,dark:.32,defup:.65,mitigation:.45};
 function status(x,u,key,value,duration=2,extra={}) {
   if(!living(u))return;
@@ -7786,8 +7807,8 @@ function status(x,u,key,value,duration=2,extra={}) {
     buff:`공격력 +${percent}%`,weak:`공격력 −${percent}%`,defup:`방어력 +${percent}%`,defdown:`방어력 −${percent}%`,
     mitigation:`받는 피해 ${percent}% 감소`,dark:`명중률 −${percent}%`,
     spotlight:`공격력 +${percent}% (스포트라이트)`,counter:`직접 반격 준비 (라운드당 최대 ${extra.limit||1}회)`,
-    colorlessDream:'색 잃은 꿈',followup:'레드라인 추격 준비 (2라운드 동안 횟수 제한 없음)',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',
-    bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:`HP 회복량 ${percent}% 감소`,bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색 잃은 꿈',timehold:'늘어진 순간',songAtk:`공격력 +${percent}% (노래)`,songDef:`방어력 −${percent}% (노래)`
+    colorlessDream:'색을 잃은 꿈',followup:'레드라인 추격 준비 (2라운드 동안 횟수 제한 없음)',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',
+    bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:`HP 회복량 ${percent}% 감소`,bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색을 잃은 꿈',timehold:'늘어진 순간',songAtk:`공격력 +${percent}% (노래)`,songDef:`방어력 −${percent}% (노래)`
   };
   const lasting=key==='colorlessDream'?'다음 적 차례까지':key==='puppet'?'다음 아군 차례의 행동 1회':key==='skillseal'?'다음 아군 차례 1회 (스킬 사용 불가)':key==='healdown'?'다음 아군 차례 1회':key==='stitch'?'다음 적 차례까지':`${duration}라운드 지속`+(key==='burn'&&extra.stackable?` · 화상 ${stackCount}/2겹`:stackCount>1?' · 효과 중첩':'');
   emit(x,'status','system',`${u.name} · ${labels[key]||stateNames[key]||'상태 변화'} · ${lasting}`,{target:u.id,statusKey:key,statusValue:extra.stackable?combined:value,statusDuration:duration});
@@ -7821,7 +7842,9 @@ function takeDamage(x,a,t,amount,opts={}) {
   if(!t.hp) {
     if(b.party[t.id]) {if(t.distorted)failedZero(x,t);else {t.injured=true;t.knockedOutThisBattle=true;t.downAt=b.round;t.bleed=x.c.rules.bleedRounds;emit(x,'down','system',t.name+' · 전투불능');}}
     else if(t===b.boss)emit(x,'down','system',t.name+josa(t.name,'이','가')+' 더는 전투를 이어가지 못합니다.');
-    else {t.alive=false;emit(x,'down','system',t.name+' · 격파');if(t.kind==='doll'&&!b.summons.some(u=>living(u)&&u.kind==='doll')){b.exposedUntil=b.round+x.bc.params.exposeRounds;scene(x,x.bc.battleCues?.exposed);emit(x,'notice','scene',b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)?'마지막 인형이 쓰러졌습니다. 끊어진 실의 반동이 마리오넬에게 되돌아갑니다. 본체가 노출됩니다.':'인형들의 실이 끊어졌습니다. 본체가 드러납니다.');if(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&living(b.boss))takeDamage(x,{id:'broken-threads',name:'끊어진 실'},b.boss,Math.max(1,Math.round(b.boss.maxHp*(x.bc.params.dollBreakRatio??.05))));}}
+    else {t.alive=false;
+      if(b.doppel?.active&&t.id===b.doppel.dollId){b.doppel.active=false;t.name='미완성의 역작';emit(x,'notice','scene','미완성의 역작이 쓰러지며 마리오넬의 위장이 풀립니다.');}
+      emit(x,'down','system',t.name+' · 격파');if(t.kind==='doll'&&!b.summons.some(u=>living(u)&&u.kind==='doll')){b.exposedUntil=b.round+x.bc.params.exposeRounds;scene(x,x.bc.battleCues?.exposed);emit(x,'notice','scene',b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)?'마지막 인형이 쓰러졌습니다. 끊어진 실의 반동이 마리오넬에게 되돌아갑니다. 본체가 노출됩니다.':'인형들의 실이 끊어졌습니다. 본체가 드러납니다.');if(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&living(b.boss))takeDamage(x,{id:'broken-threads',name:'끊어진 실'},b.boss,Math.max(1,Math.round(b.boss.maxHp*(x.bc.params.dollBreakRatio??.05))));}}
   }return dealt;
 }
 function damage(x,a,t,power,opts={}) {
@@ -7836,7 +7859,7 @@ function damage(x,a,t,power,opts={}) {
   const rageDef=t===b.boss&&b.rageTriggered?(b.domain==='osteos'?bc.params.bladeDef:bc.params.rageDef):0;
   const atk=a.atk*Math.max(.1,1+buff(a,'buff',b)+buff(a,'spotlight',b)+buff(a,'songAtk',b)-buff(a,'weak',b)+rageAtk);
   const def=t.def*Math.max(.05,1+buff(t,'defup',b)-buff(t,'defdown',b)-buff(t,'songDef',b)-rageDef);
-  const critChance=Math.min(c.rules.critCap,a.crit+(opts.critBonus||0)),critical=!opts.noCrit&&rand(b)<critChance;
+  const critChance=opts.critChance===undefined?Math.min(c.rules.critCap,a.crit+(opts.critBonus||0)):Math.max(0,Math.min(1,opts.critChance)),critical=!opts.noCrit&&rand(b)<critChance;
   let n=Math.max(1,atk*power-(opts.ignoreDef?0:def*c.rules.defenseFactor*(opts.defensePortion??1)))*(critical?a.critMult:1);
   if(t===b.boss&&b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&b.summons.some(u=>living(u)&&u.kind==='doll'))n*=1-(bc.params.dollShieldRatio??.65);
   if(t===b.boss&&b.domain==='marionel'&&b.difficulty!=='practice'&&b.exposedUntil>=b.round)n*=1+(bc.params.exposedDamageBonus||0)+(['normal','hard'].includes(b.difficulty)&&b.domain==='marionel'?.1:0);
@@ -7854,6 +7877,18 @@ if(t===b.boss&&b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&
   if(opts.cap!==undefined)n=Math.min(n,opts.cap);
   if(a===b.boss&&b.domain==='cor'&&b.difficulty==='hard')n*=.94;
   const dealt=takeDamage(x,a,t,n,{...opts,critical});
+  if(dealt>0&&t===b.boss&&b.domain==='cor'&&['normal','hard'].includes(b.difficulty)&&b.corFury<5&&b.corFuryAction!==x.actorActionId&&b.party[a.id]&&!opts.reaction){
+    b.corFuryAction=x.actorActionId;b.corFury=Math.min(5,(b.corFury||0)+1);
+    if(b.corFury===5){emit(x,'notice','scene','코르의 심장이 거세게 박동합니다. 검날을 따라 붉은 불꽃이 치솟습니다.');emit(x,'dialogue','cor','더 때려 봐라……! 어디까지 버틸 수 있나 보자!');}
+  }
+  if(dealt>0&&a===b.boss&&b.domain==='cor'&&['normal','hard'].includes(b.difficulty)&&b.party[t.id]&&active(t,'bleed',b.round)){
+    const cap=Math.max(1,Math.round(b.boss.maxHp*.02)),amount=Math.min(b.boss.maxHp-b.boss.hp,Math.max(0,cap-(b.corFeastUsed||0)),Math.round(dealt*.30));
+    if(amount>0){b.boss.hp+=amount;b.corFeastUsed=(b.corFeastUsed||0)+amount;
+      if(!b.corFeastSpoke){b.corFeastSpoke=true;emit(x,'dialogue','cor','크하하……! 아직 이 정도로는 부족해!');}
+      emit(x,'heal','system',`피의 포식 · 코르 HP +${amount}`,{target:'cor',amount,reason:'피의 포식'});
+    }
+  }
+
   if(savedAlly&&dealt>0&&living(b.party.user)&&!active(b.party.user,'riposte',b.round)){
     status(x,b.party.user,'riposte',.2,3);
     emit(x,'notice','scene','동료를 지켜냈습니다. 다음 주인공 공격의 피해가 20% 증가합니다.');
@@ -7868,7 +7903,7 @@ if(t===b.boss&&b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&
     if(t.counterRound!==b.round){t.counterRound=b.round;t.counterUses=0;}
     if(t.counterUses<(t.buffs.counter.limit||1)){t.counterUses++;emit(x,'counter',t.id,t.name+' 반격');damage(x,t,a,t.buffs.counter.value,{reaction:true,noCrit:true});}
   }
-  return {hit:true,amount:dealt};
+  return {hit:true,amount:dealt,critical};
 }
 function talkTargets(b,id) {
   if(!canTalk(b,id))return [];
@@ -8039,7 +8074,7 @@ function playerAct(x,id,a) {
         emit(x,'story','scene','빛을 잃은 세계에 작은 온기가 번진다.');
         emit(x,'story','scene','검게 바래던 표식에 작은 균열이 생긴다.');
         emit(x,'story','scene','당신들의 희망은 아직 이곳에 있습니다.');
-        emit(x,'notice','system','아군 전체의 「색 잃은 꿈」이 해제되었습니다!');
+        emit(x,'notice','system','아군 전체의 「색을 잃은 꿈」이 해제되었습니다!');
         emit(x,'dialogue','vaciel','……분명 거두었을 터인데.');
         emit(x,'story','scene','바시엘은 잠시 말을 잇지 못했다.');
       }
@@ -8127,6 +8162,7 @@ function bossActionText(bc,p) {
 }
 function bossAct(x) {
   const {b,bc,d}=x,p=b.intent,hard=['normal','hard'].includes(b.difficulty),nightmare=b.difficulty==='hard',easy=b.difficulty==='practice';
+  if(b.domain==='cor')b.corFeastUsed=0;
   // 봉쇄로 후반 연계가 취소되지 않도록 현재 단계 그대로 다음 라운드에 재시도한다.
   if(active(b.boss,'stun',b.round)){
     if(b.domain==='vaciel'&&b.difficulty==='hard'&&p.effect==='dreamresonance'){
@@ -8138,6 +8174,28 @@ function bossAct(x) {
       return;
     }
     emit(x,'blocked','scene',bc.name+'의 움직임이 잠시 멎습니다. 후반 연계는 잠시 늦춰집니다.');return;
+  }
+
+  // 별의 복기: 관측은 만상회귀에 무료로 붙지만 재현은 보스 행동 한 차례를 대체.
+  if(b.domain==='lacrien'&&b.starCopy?.phase==='ready'){
+    const rec=b.starCopy.record||{kind:'support',healed:0};b.starCopy=null;
+    emit(x,'dialogue','lacrien','……조금 전의 선택을 다시 비춰 드리겠습니다.');
+    emit(x,'skill','lacrien','라크리엔 · 별의 복기',{skillName:'별의 복기'});
+    const all=Object.values(b.party).filter(living);
+    if(rec.kind==='attack'){
+      emit(x,'story','scene','천구의에 남은 공격의 궤적이 빛으로 번져 일행을 향해 쏟아집니다.');
+      for(const t of all)damage(x,b.boss,t,.95,{noCrit:true});
+    }else if(rec.kind==='heal'){
+      emit(x,'story','scene','아군에게 닿았던 치유의 빛이 천구의에 비칩니다. 같은 빛이 라크리엔의 상처를 감쌉니다.');
+      const amount=Math.min(60,rec.healed||0,b.boss.maxHp-b.boss.hp);
+      if(amount>0){b.boss.hp+=amount;emit(x,'heal','system',`별의 복기 · 라크리엔 HP +${amount}`,{target:'lacrien',amount});}
+      else emit(x,'notice','scene','기록된 실제 회복량이 없어 별빛이 잠시 스쳐 갑니다.');
+    }else{
+      emit(x,'story','scene','단단히 버티던 자세의 잔상이 천구의에 비칩니다. 라크리엔 주위에 투명한 빛의 장막이 형성됩니다.');
+      b.boss.shieldMax=Math.round(b.boss.maxHp*.10);b.boss.shieldHp=b.boss.shieldMax;b.boss.shieldUntil=b.round+1;
+      emit(x,'guard','system',`별의 복기 · 라크리엔 보호막 ${b.boss.shieldHp}`);
+    }
+    return;
   }
   // 기술 연출은 예고하지 않고 적의 실제 차례에만 보여 줍니다.
   const cueKey=p.id==='repair'&&p.effect!=='repair'?null:bc.battleCues?.[p.id]?p.id:bc.battleCues?.[p.effect]?p.effect:null;
@@ -8156,24 +8214,78 @@ function bossAct(x) {
     case 'opening':emit(x,'notice','scene','수선이 끊긴 틈을 지켰습니다. 마리오넬은 이 차례에 수리하거나 공격하지 않습니다.');break;
     case 'wait':emit(x,'dialogue',b.domain,'지금이라면 돌아갈 수 있습니다.');break;
     case 'wing':status(x,b.boss,'defup',easy?bc.params.wingDef*.5:nightmare?bc.params.wingDef*.9:b.difficulty==='normal'&&b.domain==='osteos'?bc.params.wingDef*(b.phase==='calm'?.65:.8):bc.params.wingDef,b.domain==='osteos'&&b.difficulty==='normal'?bc.params.wingTurns:bc.params.wingTurns+1);if(b.domain==='osteos'&&p.power>0&&b.difficulty!=='practice')sweep(p.power);break;
-    case 'blade':if(p.target==='all')sweep(p.power,{critBonus:easy?0:bc.params.bladeCrit});else hit(one(),p.power,{critBonus:easy?0:bc.params.bladeCrit});break;
+    case 'blade':{
+      if(p.target==='all')sweep(p.power,{critBonus:easy?0:bc.params.bladeCrit});else hit(one(),p.power,{critBonus:easy?0:bc.params.bladeCrit});
+      const candidates=all();
+      if(nightmare&&b.domain==='osteos'&&b.phase==='rage'&&candidates.length>=3&&b.round-(b.swordTraceLast??-99)>=4&&!b.swordTrace){
+        const ids=candidates.map(u=>u.id);for(let i=ids.length-1;i>0;i--){const j=Math.floor(rand(b)*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]];}
+        b.swordTrace={ready:true,order:ids.slice(0,3)};b.swordTraceLast=b.round;
+        emit(x,'story','scene','오스테오스가 백골예검을 천천히 들어 올립니다. 허공을 가른 세 개의 검흔이 서로 다른 아군에게 새겨집니다.');
+        emit(x,'dialogue','osteos','……이번에는 세 합을 청하겠습니다. 부디 대비하시길.');
+        emit(x,'notice','system','예검의 궤적 · '+b.swordTrace.order.map((id,i)=>`제${i+1}검 ${b.party[id].name}`).join(' · '));
+      }
+      break;
+    }
+    case 'blade-trace':{
+      const order=b.swordTrace?.order||[];b.swordTrace=null;
+      const chances=[.50,.70,.85],powers=[1,1.15,1.30];
+      for(let i=0;i<order.length;i++){
+        const t=b.party[order[i]];
+        if(!living(t)){emit(x,'notice','scene',`제${i+1}검의 대상이 쓰러져 연격이 종료됩니다.`);break;}
+        emit(x,'notice','scene',`예검의 궤적 · 제${i+1}검 → ${t.name}`);
+        if(i===0)emit(x,'story','scene','오스테오스가 첫 번째 검흔을 향해 백골예검을 뻗습니다.');
+        const result=hit(t,powers[i],{critChance:chances[i]-(t.guard?.15:0)});
+        if(!result.hit||!result.critical){
+          emit(x,'story','scene','검격은 궤적을 벗어나고, 다음 검흔을 잇던 빛이 끊어집니다.');
+          emit(x,'dialogue','osteos','……연계를 잇지 못했군요.');
+          break;
+        }
+        if(i<2){emit(x,'story','scene','검격이 깊이 파고듭니다. 예검의 궤적이 다음 검흔을 향해 이어집니다.');emit(x,'dialogue','osteos','……다음 합으로 이어가겠습니다.');}
+        else emit(x,'story','scene','세 번째 궤적이 완성되며 백골예검이 허공을 가릅니다.');
+      }
+      break;
+    }
     case 'pillars':if(hard&&!b.summons.some(u=>u.kind==='pillar'))summon(x,'pillar',bc.params.pillarCount);break;
     case 'aria':if(hard)sweep(nightmare?.72:.6);else if(b.difficulty==='easy')sweep(.55);for(const t of all())status(x,t,'weak',p.power,hard?4:3);break;
-    case 'curtain':{if(hard)for(const original of all()){const u=redirectArea(original);if(!living(u))continue;let n=(bc.params.curtainDamage??10)*(nightmare?1.3:1);if(u.guard)n*=x.c.rules.guardFactor;if(u.protect)n*=1-u.protect;if(u.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,u,n);}const t=pick(b,all());if(t){b.invitation={target:t.id,until:b.round+1};emit(x,'mark','scene',t.name+'에게 조명이 내려앉습니다. 다음 리본이 그 무대로 향합니다.');}break;}
+    case 'curtain':{if(hard)for(const original of all()){const u=redirectArea(original);if(!living(u))continue;let n=(bc.params.curtainDamage??10)*(nightmare?1.3:1);if(u.guard)n*=x.c.rules.guardFactor;if(u.protect)n*=1-u.protect;if(u.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,u,n);}const t=pick(b,all());if(t){b.invitation={target:t.id,until:b.round+1};emit(x,'mark','scene',t.name+'에게 조명이 내려앉습니다. 다음 리본이 그 무대로 향합니다.');}
+      if(nightmare&&b.round-(b.dissonanceLast??-99)>=3&&!b.dissonance&&all().filter(u=>combatReady(u,b.round+1)&&!u.distorted&&!active(u,'puppet',b.round+1)).length>=2&&
+         !all().some(u=>u.distorted||active(u,'puppet',b.round+1))){
+        const available=all().filter(u=>combatReady(u,b.round+1)&&!u.distorted&&!active(u,'puppet',b.round+1));
+        const t1=pick(b,available);available.splice(available.indexOf(t1),1);const t2=pick(b,available);
+        b.dissonance={phase:'choose',targets:[t1.id,t2.id],chosen:{}};b.dissonanceLast=b.round;
+        emit(x,'story','scene',`벨라톤이 양팔을 펼치자 서로 다른 두 음표가 ${t1.name}과 ${t2.name}의 머리 위에 떠오릅니다.`);
+        emit(x,'dialogue','bellaton','자아, 이번에는 그대들의 차례로구나! 본좌를 위해 아름다운 화음을 들려주거라♬');
+        emit(x,'notice','system','불협화음 · 표시된 두 아군은 다음 차례에 서로 다른 종류의 행동을 선택해야 합니다.');
+      }
+      break;}
     case 'ribbon':{const t=one(),linked=hard&&b.invitation?.target===t?.id&&buff(t,'weak',b)>0;if(linked)emit(x,'combo','scene','아리아에 약해진 '+t.name+'에게 무대의 조명이 모입니다. 약화와 초대가 이어져 피날레의 위력이 커집니다.');hit(t,p.power*(linked?(bc.params.finaleWeakMultiplier??1.3):1));if(b.invitation?.target===t?.id)b.invitation=null;break;}
-    case 'charge':{const t=one();const defender=b.party.user;const actual=b.enemyPhase&&living(defender)&&active(defender,'bodyguard',b.round)?defender:t;if(hit(t).hit&&living(actual))status(x,actual,'bleed',actual.maxHp*bc.params.bleedRatio*(easy?.4:1),bc.params.bleedTurns);break;}
+    case 'charge':{const t=one();const defender=b.party.user;const actual=b.enemyPhase&&living(defender)&&active(defender,'bodyguard',b.round)?defender:t;if(hit(t).hit&&living(actual))status(x,actual,'bleed',actual.maxHp*(nightmare?(bc.params.hardBleedRatio??bc.params.bleedRatio):bc.params.bleedRatio*(easy?.4:1)),bc.params.bleedTurns);break;}
     case 'smash':sweep();if(hard&&b.rageTriggered)status(x,b.boss,'defdown',bc.params.openingDef,2);break;
-    case 'duel':if(hard){const t=one();if(t){for(let i=0;i<bc.params.duelHits&&living(t)&&living(b.boss);i++)hit(t,p.power,{noCrit:true});emit(x,'notice','scene','연속 검격이 멎고 코르의 자세가 잠시 열립니다.');status(x,b.boss,'defdown',bc.params.openingDef,2);}}break;
+    case 'duel':if(nightmare){const t=one();if(t){for(let i=0;i<bc.params.duelHits&&living(t)&&living(b.boss);i++)hit(t,p.power,{noCrit:true});emit(x,'notice','scene','연속 검격이 멎고 코르의 자세가 잠시 열립니다.');status(x,b.boss,'defdown',bc.params.openingDef,2);}}break;
     case 'light':if(hard&&b.domain==='lacrien')sweep(.48);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.51);for(const t of all())status(x,t,'dark',p.power,2);break;
     case 'reflect':b.reflection={until:b.round+1};b.recordedDamage=0;emit(x,'notice','scene','라크리엔 주위의 빛이 거울처럼 맑아집니다.');if(hard&&b.domain==='lacrien')sweep(nightmare?.82:.72);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.54);break;
-    case 'recordecho':if(hard){const amount=b.recordedDamage;emit(x,'echo','scene',amount>0?`만상회귀 · 만상기록에 쌓인 ${amount} 피해를 바탕으로 빛이 아군 전체에 되돌아옵니다.`:'만상회귀 · 기록이 비어 있어도 약한 잔광이 전원에게 되돌아옵니다.');for(const original of all()){const t=redirectArea(original);if(!living(t))continue;const echo=Math.max(amount*p.power,b.domain==='lacrien'?original.maxHp*.07:0); /* 어려움: HP 22% 상한 없음 */if(echo>0){let n=echo;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;if(t.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,t,n);} }b.recordedDamage=0;}break;
+    case 'recordecho':if(hard){const amount=b.recordedDamage;emit(x,'echo','scene',amount>0?`만상회귀 · 만상기록에 쌓인 ${amount} 피해를 바탕으로 빛이 아군 전체에 되돌아옵니다.`:'만상회귀 · 기록이 비어 있어도 약한 잔광이 전원에게 되돌아옵니다.');for(const original of all()){const t=redirectArea(original);if(!living(t))continue;const echo=Math.max(amount*p.power,b.domain==='lacrien'?original.maxHp*.07:0); /* 어려움: HP 22% 상한 없음 */if(echo>0){let n=echo;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;if(t.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,t,n);} }b.recordedDamage=0;
+      if(nightmare&&!b.starCopy){b.starCopy={phase:'watch',record:null};
+        emit(x,'story','scene','되돌아온 별빛이 사라지지 않고 천구의의 고리를 따라 흐릅니다.');
+        emit(x,'dialogue','lacrien','……이번에는 여러분이 어떤 선택을 남기시는지 지켜보겠습니다.');
+        emit(x,'notice','system','라크리엔이 당신들의 선택을 관측합니다.');}
+      }break;
     case 'judgment':sweep();break;
     case 'summon':{
       const maxWaves=easy?1:bc.params.summonLimit;
       if(b.summonCount<maxWaves&&!b.summons.some(u=>living(u)&&u.kind==='doll')&&b.round>b.exposedUntil){
         const finalDoll=hard&&b.domain==='marionel'&&b.summonCount===1;
         summon(x,'doll',finalDoll?1:easy?1:hard&&b.domain==='marionel'&&b.team.length<2?1:Math.min(2,bc.params.summonAliveLimit));
-        if(finalDoll){const u=b.summons.at(-1);u.name='미완성의 역작';u.maxHp=Math.round(u.maxHp*1.6);u.hp=u.maxHp;u.atk=Math.round(u.atk*1.2);emit(x,'phase','scene','마리오넬이 남은 실로 마지막 인형 하나를 꿰맵니다.');}
+        if(finalDoll){const u=b.summons.at(-1);u.name='미완성의 역작';u.maxHp=Math.round(u.maxHp*1.6);u.hp=u.maxHp;u.atk=Math.round(u.atk*1.2);emit(x,'phase','scene','마리오넬이 남은 실로 마지막 인형 하나를 꿰맵니다.');
+          if(nightmare){
+            b.doppel={active:true,createdRound:b.round,dollId:u.id,realSlot:rand(b)<.5?'left':'right',aoeRound:-1};
+            u.name='마리오넬';
+            emit(x,'story','scene','마리오넬이 마지막 인형의 얼굴을 천천히 매만집니다. 실에 가려졌던 인형의 모습이 마리오넬과 똑같이 바뀝니다.');
+            emit(x,'story','scene','두 형체의 위치가 뒤섞입니다. 어느 쪽이 진짜인지 알 수 없습니다.');
+            emit(x,'dialogue','marionel','……똑같지?');
+            emit(x,'notice','system','꼭두각시 대역 · 마리오넬 둘 중 하나는 인형입니다. 단일 공격으로 한 번 선택할 수 있습니다.');
+          }
+        }
         b.summonCount++;if(hard&&b.domain==='marionel')hit(one(),.6);else if(b.difficulty==='easy'&&b.domain==='marionel')hit(one(),.64);}
       else emit(x,'notice','scene','작업대의 실이 느슨하게 흔들립니다.');break;
     }
@@ -8265,7 +8377,7 @@ function bossAct(x) {
         u.buffs={};u.guard=false;u.protect=0;u.shieldHp=0;u.shieldMax=0;
         status(x,u,'colorlessDream',1,2);
       }
-      emit(x,'notice','system','아군 전체의 강화 및 약화 효과가 사라졌습니다. 아군 전체에 「색 잃은 꿈」이 새겨졌습니다.');
+      emit(x,'notice','system','아군 전체의 강화 및 약화 효과가 사라졌습니다. 아군 전체에 「색을 잃은 꿈」이 새겨졌습니다.');
       break;
     }
     case 'dreamresonance':{
@@ -8388,16 +8500,111 @@ function roundEffects(x) {
     sp(x,u,d.spRegen,'라운드 종료 자동 회복');
   }
 }
+
+function playerActionClass(x,id,a,ev){
+  if(a.kind==='attack')return 'attack';
+  if(a.kind==='defend')return 'defend';
+  if(a.kind==='item')return a.item==='medicine'||a.item==='revive'?'heal':'support';
+  if(a.kind==='skill'){
+    const skill=skills(x.b,x.c,id).find(v=>v.id===a.skill);
+    const effect=skill?.effect==='mimic'?copiedSkill(x.b,x.c)?.effect:skill?.effect;
+    if(['single','area','pierce','climax','misdirection','breakhit','breakarea','burnarea','triplehit','lifesteal','stun'].includes(effect))return 'attack';
+    if(['heal','allheal'].includes(effect))return 'heal';
+    if(['guardall','counter','protect','defall','mitigateall','shield'].includes(effect))return 'defend';
+    if(['track','encore'].includes(effect))return ev.some(v=>v.type==='heal')?'heal':'support';
+  }
+  return a.kind==='talk'?'talk':'support';
+}
+function resolvePlayerMechanics(x,id,a,ev){
+  const b=x.b,kind=playerActionClass(x,id,a,ev);
+  if(b.starCopy?.phase==='watch'&&a.kind!=='talk'){
+    const healed=ev.filter(v=>v.type==='heal'&&v.amount>0).reduce((sum,v)=>sum+(v.amount||0),0);
+    b.starCopy.record={kind,healed,actor:id};
+  }
+  if(b.dissonance?.phase==='choose'&&b.dissonance.targets.includes(id)&&a.kind!=='talk'){
+    b.dissonance.chosen[id]=kind;
+    if(b.dissonance.targets.every(k=>b.dissonance.chosen[k])){
+      const [a1,a2]=b.dissonance.targets;
+      if(b.dissonance.chosen[a1]===b.dissonance.chosen[a2]){
+        emit(x,'story','scene','두 음표가 충돌하며 귀를 찌르는 불협화음이 극장을 뒤흔듭니다.');
+        emit(x,'dialogue','bellaton','아아! 그토록 단조로운 선율이라니! 실로 애석한 공연이로다♭');
+        for(const t of Object.values(b.party).filter(living)){
+          let n=18;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;
+          takeDamage(x,b.boss,t,n);if(living(t))status(x,t,'weak',.10,2,{from:b.round+1});
+        }
+      }else{
+        emit(x,'story','scene','엇갈리던 두 음표가 하나의 화음으로 이어집니다. 무대를 감싸던 선율이 잠시 흔들립니다.');
+        emit(x,'dialogue','bellaton','오오……! 그대들에게 이만한 재주가 있었단 말인가! 후후, 제법이로구나♬');
+        status(x,b.boss,'defdown',.15,2);
+        emit(x,'notice','scene','화음 완성! 벨라톤의 방어력이 감소합니다.');
+      }
+      b.dissonance=null;
+    }
+  }
+  if(x.doppelBefore&&b.doppel){
+    const doll=b.summons.find(u=>u.id===b.doppel.dollId);
+    const single=a.kind==='attack'||(a.kind==='skill'&&['enemy'].includes(effectiveTarget(b,x.c,skills(b,x.c,id).find(v=>v.id===a.skill))));
+    const area=a.kind==='skill'&&effectiveTarget(b,x.c,skills(b,x.c,id).find(v=>v.id===a.skill))==='enemies';
+    if(single&&[b.boss.id,doll?.id].includes(a.target)){
+      const wasReal=a.target===b.boss.id;
+      b.doppel.active=false;if(doll)doll.name='미완성의 역작';
+      if(wasReal){
+        emit(x,'story','scene','공격을 받은 마리오넬의 손끝이 흔들립니다. 다른 형체가 실을 잃고 무너집니다.');
+        emit(x,'dialogue','marionel','……아. 찾았네.');
+        if(living(doll))takeDamage(x,{id:'threads',name:'끊어진 실'},doll,doll.hp);
+      }else{
+        emit(x,'story','scene','공격을 받은 형체의 관절이 뒤틀립니다. 마리오넬의 모습을 잃은 인형이 곧바로 반격합니다.');
+        emit(x,'dialogue','marionel','……그쪽이 아니야.');
+        const target=b.party[id],attacker=living(doll)?doll:{...doll,alive:true,hp:1,crit:0};
+        if(target&&attacker)damage(x,attacker,target,1.4,{reaction:true,noCrit:true,noMiss:true});
+        if(doll)doll.reactedRound=b.round;
+      }
+    }else if(area&&b.doppel.aoeRound!==b.round){
+      b.doppel.aoeRound=b.round;
+      emit(x,'story','scene',b.doppel.active?'두 형체가 동시에 충격을 받습니다. 그러나 실은 아직 어느 쪽이 진짜인지 감추고 있습니다.':'두 형체가 동시에 충격을 받습니다. 끊어진 실이 인형의 본모습을 드러냅니다.');
+      emit(x,'dialogue','marionel','……그건 반칙인데.');
+    }
+  }
+}
+
 function act(input,c,id,a,expectedRevision=input.revision) {
   need(expectedRevision===input.revision,'이미 처리된 행동입니다.');const info=validateAction(input,c,id,a),b=copy(input),x=ctx(b,c);
-  if(!info.free){b.acted[id]=true;b.meaningful=true;}playerAct(x,id,a);checkEnd(x);b.revision++;return {battle:b,events:x.events};
+  if(!info.free){b.acted[id]=true;b.meaningful=true;}x.actorActionId=b.round+':'+id;x.doppelBefore=!!b.doppel?.active;playerAct(x,id,a);resolvePlayerMechanics(x,id,a,x.events);checkEnd(x);b.revision++;return {battle:b,events:x.events};
 }
 function endRound(input,c,expectedRevision=input.revision) {
   need(!input.outcome&&!input.committed,'이미 끝난 전투입니다.');need(expectedRevision===input.revision,'이미 처리된 라운드입니다.');
   const b=copy(input),x=ctx(b,c);b.meaningful=true;
   for(const u of Object.values(b.party))if(!b.acted[u.id]&&living(u)&&active(u,'puppet',b.round)){b.acted[u.id]=true;playerAct(x,u.id,{kind:'puppet'});if(checkEnd(x))break;}
+  if(b.starCopy?.phase==='watch'){
+    const rec=b.starCopy.record||{kind:'support',healed:0};b.starCopy={phase:'ready',record:rec};
+    emit(x,'story','scene','천문관의 별빛이 마지막 움직임을 따라 흐르기 시작합니다.');
+    emit(x,'notice','system','별의 복기 · '+({'attack':'공격','heal':'회복','defend':'방어','support':'지원','talk':'대화'}[rec.kind]||'지원')+' 행동을 기록했습니다.');
+  }
+  if(b.dissonance?.phase==='choose'){
+    emit(x,'notice','scene','불협화음 · 두 사람의 행동이 모두 기록되지 않아 음표가 사라집니다.');b.dissonance=null;
+  }
   if(!b.outcome){b.enemyPhase=true;emit(x,'phase','system','적의 차례');bossAct(x);}
-  if(!checkEnd(x))for(const u of b.summons.filter(u=>living(u)&&u.kind==='doll'&&u.spawnedAt<b.round)) {
+  if(b.doppel?.active&&b.domain==='marionel'&&b.round>b.doppel.createdRound&&!b.outcome){
+    const doll=b.summons.find(u=>u.id===b.doppel.dollId);
+    if(living(doll)){
+      emit(x,'story','scene','마리오넬과 똑같이 생긴 인형이 마지막으로 실을 휘두릅니다.');
+      emit(x,'dialogue','marionel','……찾을 생각도 없었어?');
+      const target=choose(x);if(target)damage(x,doll,target,1.0,{noCrit:true});
+      b.doppel.active=false;doll.name='미완성의 역작';
+      if(living(doll))takeDamage(x,{id:'spent-thread',name:'풀려 버린 실'},doll,doll.hp);
+    }else b.doppel.active=false;
+  }
+  if(!b.outcome&&b.domain==='cor'&&['normal','hard'].includes(b.difficulty)&&b.corFury>=5&&!active(b.boss,'stun',b.round)){
+    const pool=Object.values(b.party).filter(living).filter(u=>b.intent?.effect!=='duel'||u.id!==b.intent.targetId);
+    if(pool.length){const t=pick(b,pool);
+      emit(x,'skill','cor','코르 · 분노의 추격',{skillName:'분노의 추격'});
+      emit(x,'story','scene','코르가 공격을 멈추지 않고 대검을 다시 휘두릅니다.');
+      emit(x,'dialogue','cor','아직 안 끝났다!');
+      damage(x,b.boss,t,.6,{noCrit:true,noMiss:true});
+    }
+    b.corFury=0;
+  }
+  if(!checkEnd(x))for(const u of b.summons.filter(u=>living(u)&&u.kind==='doll'&&u.spawnedAt<b.round&&u.reactedRound!==b.round)) {
     if(b.outcome)break;if(active(u,'stun',b.round)){emit(x,'blocked','scene',u.name+'의 움직임이 멎습니다.');continue;}const t=choose(x);if(t){emit(x,'attack',u.id,u.name+josa(u.name,'이','가')+' '+t.name+'에게 공격합니다.');damage(x,u,t,b.difficulty==='practice'?.45:b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)?(b.difficulty==='hard'?1.17:(c.bosses.marionel.params.hardDollStrikePower??1.05)):.65);}checkEnd(x);
   }
   b.enemyPhase=false; // 출혈·화상·반사 피해는 '등 맡기기' 대신 맞기 대상에서 제외.
@@ -8626,8 +8833,6 @@ function fieldCare(s){const n=C.copy(s);for(const h of Object.values(n.heroes))i
 H.adapter={newCampaign,openBosses,available,beginCampaign,fieldCare,result,optionsFromLegacy,eligible,applyCampaignResult,rpInstruction};
 })(globalThis);
 </script>
-
-
 <script>/* 저장 설정 변환: 0.6.14~0.7 보완을 적용 순서대로 한곳에서 관리합니다.
    사용자가 직접 수정한 설정값은 기존과 동일한 조건에서만 변경합니다. */
 (function(g){'use strict';
@@ -8830,8 +9035,6 @@ H.auto={choose};
   if(nm){if(nm.hp===1.42)nm.hp=1.33;if(nm.atk===1.22)nm.atk=1.16;}
 })(globalThis);
 </script>
-
-
 <script>/* 현재 데이터 정규화: 수선하는 손 / 레드라인 / TRACK 지원곡.
    전투 기본값과 이전 설정 불러오기에서 같은 순서로 한 번만 적용합니다. */
 (function(g){'use strict';
@@ -8896,7 +9099,13 @@ H.auto={choose};
  function normalize(c){return updateSongsAndDifficulty(updateRedline(updateSupport(c)));}
  normalize(H.defaults);
  H.compat.config=function(input){return normalize(previous(input));};
-})(globalThis);</script>
+})(globalThis);</script><script>
+/* 새 보스 기믹 공인 설정. 기존 저장의 개인 설정과 다른 콘텐츠는 유지합니다. */
+(function(g){'use strict';
+ const H=g.HopeBattle, cor=H.defaults.bosses.cor;
+ cor.patterns.normal=cor.patterns.normal.filter(p=>p.effect!=='duel');
+})(globalThis);
+</script>
 <script>window.HR_EMBEDDED_IMAGES=Object.create(null);window.HR_EMBEDDED_BGM=Object.create(null);</script>
 <script src="./assets/art_bellaton.js"></script>
 <script src="./assets/art_cor.js"></script>
@@ -9048,7 +9257,7 @@ function tell(s){
 const playing=()=>cursor<events.length,current=()=>P.frame(events,cursor,battle.playerName),view=()=>{const v=clone(current()?.view||C.snapshot(battle));v.party.user.name=battle.playerName;for(const u of v.summons){const actual=battle.summons.find(t=>t.id===u.id);if(actual)u.name=actual.name;}return v;};
 const label=id=>C.actorName(battle,id),bar=(v,max,sp=false)=>`<div class="hr-life ${sp?'hr-sp':''}"><i style="width:${Math.max(0,Math.min(100,v/(max||1)*100))}%"></i></div>`;
 const outcomeName=o=>({victory:'격파',yield:'자발적 철수',retreat:'후퇴',loss:'패배',limit:'시험 상한'})[o]||'';
-function stateLabel(u,round){return [u.permanentUnavailable?'영구 이탈':u.hp===0?'전투불능':u.injured?'부상':null,u.severeInjury?'중상':null,u.distorted?'일그러짐':null,u.rescue==='rescued'?'구출 성공':null,u.guard?'방어':null,u.protect?'보호':null,...Object.entries({mitigation:'피해 감소',bind:'속박',puppet:'꼭두각시 실 · 행동 강탈',stitch:'수선하는 손',skillseal:'수선하는 손 · 스킬 봉인',timehold:'늘어진 순간',colorlessDream:'색 잃은 꿈',weak:'공격력↓',defdown:'방어력↓',defup:'방어력↑',buff:'공격력↑',dark:'명중↓',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',songAtk:'불안정한 노래',songDef:'불안정한 노래',counter:'반격 준비',riposte:'다음 공격 피해 +20%',followup:'추격 준비'}).filter(([k])=>C.active(u,k,round)).map(([,v])=>v)].filter(Boolean).join(' · ');}
+function stateLabel(u,round){return [u.permanentUnavailable?'영구 이탈':u.hp===0?'전투불능':u.injured?'부상':null,u.severeInjury?'중상':null,u.distorted?'일그러짐':null,u.rescue==='rescued'?'구출 성공':null,u.guard?'방어':null,u.protect?'보호':null,...Object.entries({mitigation:'피해 감소',bind:'속박',puppet:'꼭두각시 실 · 행동 강탈',stitch:'수선하는 손',skillseal:'수선하는 손 · 스킬 봉인',timehold:'늘어진 순간',colorlessDream:'색을 잃은 꿈',weak:'공격력↓',defdown:'방어력↓',defup:'방어력↑',buff:'공격력↑',dark:'명중↓',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',songAtk:'불안정한 노래',songDef:'불안정한 노래',counter:'반격 준비',riposte:'다음 공격 피해 +20%',followup:'추격 준비'}).filter(([k])=>C.active(u,k,round)).map(([,v])=>v)].filter(Boolean).join(' · ');}
 function packageSave(){return {version:3,songCatalogVersion:3,difficultySchemaVersion:2,configStorageVersion:2,configOverrides:collectConfigOverrides(),kind:'hope-battle-save',config:clone(activeConfig),editorConfig:clone(config),options:clone(options),startOptions:clone(startOptions),battle:clone(battle),events:clone(events),cursor,page,presentationVersion:5,campaign:clone(campaign),rawDrafts:clone(rawDrafts),journey:clone(journey),titleScreen:atTitle};}
 function checkpoint(){try{localStorage.setItem('hope-player-campaign-v1-progress',JSON.stringify(packageSave()));}catch{/* 자동 저장을 사용할 수 없는 브라우저에서는 진행 데이터를 유지할 수 없습니다. */}}
 function persistConfig(){try{localStorage.setItem('hope-player-campaign-v1-config',JSON.stringify({version:3,difficultySchemaVersion:2,configStorageVersion:2,configOverrides:collectConfigOverrides(),options}));}catch{tell('이 브라우저에서는 자동 저장이 제한됩니다. 브라우저의 저장소 설정을 확인해 주세요.');}}
@@ -9418,7 +9627,9 @@ function render(){if(!playing()&&battle?.outcome&&!battle.committed)finalizeBatt
  const bg=urls.get(battle.domain+':background')||EMBEDDED_IMAGES[battle.domain+':background'];
  if(bg!==lastStageBackground){$('stage').style.backgroundImage=bg?`url("${bg}")`:'none';lastStageBackground=bg;}
  const art=urls.get(battle.domain+':boss')||EMBEDDED_IMAGES[battle.domain+':boss'];
- if(art!==lastBossIllustration){$('boss-art').innerHTML=art?`<img src="${art}" alt="${esc(bc.name)}">${battle.domain==='vaciel'?`<img src="${art}" alt="" aria-hidden="true" class="dream-art-layer">`:''}`:`<div class="hr-stage-label">${esc(bc.name)}<br>스탠딩 미등록</div>`;lastBossIllustration=art;}
+ const twin=!!(v.doppel?.active&&v.summons.some(u=>u.id===v.doppel.dollId&&C.living(u)));
+ const portraitKey=(art||'')+(twin?'#doppel':'');
+ if(portraitKey!==lastBossIllustration){$('boss-art').innerHTML=twin?`<div class="hr-twin-view"><div class="hr-twin">${art?`<img src="${art}" alt="마리오넬">`:'마리오넬'}<small>왼쪽 · 마리오넬</small></div><div class="hr-twin">${art?`<img src="${art}" alt="마리오넬">`:'마리오넬'}<small>오른쪽 · 마리오넬</small></div></div>`:art?`<img src="${art}" alt="${esc(bc.name)}">${battle.domain==='vaciel'?`<img src="${art}" alt="" aria-hidden="true" class="dream-art-layer">`:''}`:`<div class="hr-stage-label">${esc(bc.name)}<br>스탠딩 미등록</div>`;lastBossIllustration=portraitKey;}
  // 전투 로그 스냅샷에 맞추어 위에서 아래로 사라지는 색 / 되돌아오는 색 연출.
  const dreamStage=$('stage'),dreamActive=battle.domain==='vaciel'&&battle.difficulty==='hard'&&!!v.dreamMonochrome;
  dreamStage.style.setProperty('--dream-bg',bg?`url("${bg}")`:'none');
@@ -9429,13 +9640,22 @@ function render(){if(!playing()&&battle?.outcome&&!battle.committed)finalizeBatt
    else if(dreamStage.dataset.dreamEver==='true')dreamStage.classList.add('dream-restoring');
    if(dreamActive)dreamStage.dataset.dreamEver='true';
  }
- $('enemy-status').innerHTML=`<b>${esc(v.boss.name)}</b> HP ${v.boss.hp} / ${v.boss.maxHp}${bar(v.boss.hp,v.boss.maxHp)}${bossStateLabels(v).length?`<div class="hr-boss-effects" aria-label="보스 상태 효과">${bossStateLabels(v).map(t=>`<span class="hr-boss-effect">${esc(t)}</span>`).join('')}</div>`:''}`;
- $('summons').innerHTML=v.summons.filter(C.living).sort((a,z)=>(a.slot==='right'?1:0)-(z.slot==='right'?1:0)).map(u=>`<span class="hr-echo">${esc(u.name)} ${u.hp}/${u.maxHp}</span>`).join('');
+ $('enemy-status').innerHTML=twin?'<b>마리오넬 / 마리오넬</b> · 진짜를 구별할 수 없습니다.':`<b>${esc(v.boss.name)}</b> HP ${v.boss.hp} / ${v.boss.maxHp}${bar(v.boss.hp,v.boss.maxHp)}${bossStateLabels(v).length?`<div class="hr-boss-effects" aria-label="보스 상태 효과">${bossStateLabels(v).map(t=>`<span class="hr-boss-effect">${esc(t)}</span>`).join('')}</div>`:''}`;
+ $('summons').innerHTML=twin?'<span class="hr-echo">꼭두각시 대역 · 진짜 마리오넬을 선택하세요.</span>':v.summons.filter(C.living).sort((a,z)=>(a.slot==='right'?1:0)-(z.slot==='right'?1:0)).map(u=>`<span class="hr-echo">${esc(u.name)} ${u.hp}/${u.maxHp}</span>`).join('');
+ const hints=[];
+ if(v.intent?.effect==='duel'&&v.party[v.intent.targetId])hints.push(`코르가 ${v.party[v.intent.targetId].name}에게 검을 겨눕니다. 일대일 승부를 강요합니다.`);
+ if(v.dissonance?.phase==='choose')hints.push('불협화음 · '+v.dissonance.targets.map(id=>v.party[id]?.name||'?').join(' · ')+'의 행동 종류를 다르게 선택하세요.');
+ if(v.swordTrace?.ready)hints.push('예검의 궤적 · '+v.swordTrace.order.map((id,i)=>`${i+1}번 ${v.party[id]?.name||'?'}`).join(' · '));
+ if(v.starCopy?.phase==='watch')hints.push('별의 복기 · 이번 차례의 마지막 행동을 관측 중입니다.');
+ if(v.starCopy?.phase==='ready')hints.push('별의 복기 · '+({'attack':'공격','heal':'회복','defend':'방어','support':'지원'}[v.starCopy.record?.kind]||'지원')+' 행동을 재현할 예정입니다.');
+ if(twin)hints.push('꼭두각시 대역 · 왼쪽과 오른쪽 중 단일 공격으로 한 번 선택하세요. 전체 공격은 두 대상 모두 맞지만 위장은 유지됩니다.');
+ if(v.corFury>0)hints.push(v.corFury>=5?'코르 분노 5/5 · 다음 공격 후 0.6배 추가 타격':`코르 분노 축적 ${v.corFury}/5`);
+ $('battle-special-alert').textContent=hints.join('\n');$('battle-special-alert').hidden=!hints.length;
  
  $('speaker-name').textContent=e?(e.manual?label(e.speaker)||'장면':'행동 결과'):v.outcome?'전투 결과':'';
  const ps=e?P.pages(e.text):[];$('telegraph').textContent=e?ps[Math.min(page,ps.length-1)]:v.outcome?'':'';
  $('action-dock').hidden=retreatOpen||(!p&&!!battle.outcome);$('control-panel').setAttribute('data-mode',retreatOpen?'confirm':p?(e.manual?'story':'result'):'command');$('progress-panel').hidden=retreatOpen||!p;$('playback-info').textContent=p?(e.manual?'이야기':'전투 결과'):'';$('next-event').hidden=!p||retreatOpen;$('next-event').disabled=!p||retreatOpen;const canSkipNarration=p&&!retreatOpen&&e&&['dialogue','story'].includes(e.type);$('skip-narration').hidden=!canSkipNarration;$('skip-narration').disabled=!canSkipNarration;$('execute').hidden=p||!!battle.outcome||retreatOpen;$('retreat').hidden=p||!!battle.outcome||retreatOpen;$('auto-attack').hidden=(p&&autoRound===null)||!!battle.outcome||retreatOpen;$('utility-actions').hidden=retreatOpen||!!battle.outcome||(p&&autoRound===null);
- $('party').innerHTML=Object.values(v.party).map(u=>{const selectable=C.combatReady(u,v.round)||(u.id==='user'&&C.canTalk(battle));return `<button class="hr-fighter ${actor===u.id?'hr-turn':''}" data-actor="${u.id}" aria-pressed="${actor===u.id}" ${p||v.outcome||retreatOpen||!selectable?'disabled':''}><b>${esc(u.name)}</b>${(changeDisplay.byTarget.get(u.id)||[]).slice(0,2).map(v=>`<span class="hr-fighter-impact ${changeDisplay.cls(v)}" aria-hidden="true">${changeDisplay.small(v)}</span>`).join('')}<span>HP ${u.hp}/${u.maxHp}</span>${bar(u.hp,u.maxHp)}<small>SP ${u.sp}/${u.maxSp}</small>${bar(u.sp,u.maxSp,true)}${(u.shieldHp||0)>0?`<small>보호막 ${u.shieldHp}/${u.shieldMax}</small>${bar(u.shieldHp,u.shieldMax,true)}`:''}<small>${esc(stateLabel(u,v.round))||'상태 양호'}</small><span class="hr-reservation">${p?'진행 중':v.acted[u.id]?'행동 완료':C.combatReady(u,v.round)?'행동 가능':u.id==='user'&&C.canTalk(battle)?'대화 가능':'행동 불가'}</span></button>`;}).join('');
+ $('party').innerHTML=Object.values(v.party).map(u=>{const selectable=C.combatReady(u,v.round)||(u.id==='user'&&C.canTalk(battle));return `<button class="hr-fighter ${actor===u.id?'hr-turn':''}" data-actor="${u.id}" aria-pressed="${actor===u.id}" ${p||v.outcome||retreatOpen||!selectable?'disabled':''}><b>${esc(u.name)}</b>${(changeDisplay.byTarget.get(u.id)||[]).slice(0,2).map(v=>`<span class="hr-fighter-impact ${changeDisplay.cls(v)}" aria-hidden="true">${changeDisplay.small(v)}</span>`).join('')}<span>HP ${u.hp}/${u.maxHp}</span>${bar(u.hp,u.maxHp)}<small>SP ${u.sp}/${u.maxSp}</small>${bar(u.sp,u.maxSp,true)}${(u.shieldHp||0)>0?`<small>보호막 ${u.shieldHp}/${u.shieldMax}</small>${bar(u.shieldHp,u.shieldMax,true)}`:''}<small>${esc(stateLabel(u,v.round))||'상태 양호'}${v.dissonance?.targets?.includes(u.id)?' · '+(v.dissonance.targets[0]===u.id?'♪ 높은음':'♭ 낮은음'):''}${v.swordTrace?.order?.includes(u.id)?' · 검흔 '+(v.swordTrace.order.indexOf(u.id)+1):''}</small><span class="hr-reservation">${p?'진행 중':v.acted[u.id]?'행동 완료':C.combatReady(u,v.round)?'행동 가능':u.id==='user'&&C.canTalk(battle)?'대화 가능':'행동 불가'}</span></button>`;}).join('');
  $('reservation-count').textContent=p?'':battle.outcome?'전투 종료':`남은 행동 ${C.actions(battle).length}명`;$('execute').disabled=p||!!battle.outcome||retreatOpen;$('retreat').disabled=p||!!battle.outcome||retreatOpen;$('restart').disabled=false;$('auto-attack').disabled=(p&&autoRound===null)||!!battle.outcome||retreatOpen;$('auto-attack').textContent=autoRound!==null?'자동 중지':'자동공격';$('auto-attack').setAttribute('aria-pressed',String(autoRound!==null));
  const logs=e?battle.log.filter(l=>l.id<=e.id):battle.log;
  $('battle-log').innerHTML=logs.map(l=>{
@@ -9502,6 +9722,10 @@ function renderCommand(){const box=$('command-panel'),perform=$('perform-action'
  const skillSealed=C.active(u,'skillseal',battle.round);if(skillSealed&&menu==='skill')menu='attack';
  let kind=menu==='attack'?'enemy':menu==='skill'?C.effectiveTarget(battle,activeConfig,s):menu==='talk'?'talk':menu==='item'?'item':null;
  let targets=kind==='enemy'?C.attackable(battle):kind==='ally'?Object.values(battle.party).filter(v=>C.living(v)&&!v.permanentUnavailable):kind==='talk'?C.talkTargets(battle,actor):kind==='item'?Object.values(battle.party).filter(v=>v.alive&&!v.permanentUnavailable&&(chosenItem==='revive'?v.hp===0&&!v.distorted:C.living(v))):[];
+ if(kind==='enemy'&&battle.doppel?.active&&battle.domain==='marionel'){
+  const real=battle.doppel.realSlot,doll=battle.doppel.dollId;
+  targets=targets.map(t=>(t.id===battle.boss.id||t.id===doll)?{...t,name:`마리오넬 (${(t.id===battle.boss.id?real:(real==='left'?'right':'left'))==='left'?'왼쪽':'오른쪽'})`}:t).sort((a,z)=>(a.name.includes('왼쪽')?-1:a.name.includes('오른쪽')?1:0)-(z.name.includes('왼쪽')?-1:z.name.includes('오른쪽')?1:0));
+ }
  if(!targets.some(t=>t.id===chosenTarget))chosenTarget=targets[0]?.id||'';
  const rescue=menu==='talk'&&battle.party[chosenTarget]?.distorted,free=menu==='talk'&&!rescue;
  const disabled=retreatOpen||(!free&&battle.acted[actor])||(['enemy','ally','talk','item'].includes(kind)&&!targets.length)||(menu==='skill'&&(skillSealed||!s||u.sp<s.cost||(u.cooldowns[s.id]||0)>=battle.round||(s.effect==='encore'&&battle.lastTrack===null)||(s.effect==='mimic'&&!C.copiedSkill(battle,activeConfig))));
@@ -9645,7 +9869,7 @@ function renderPanel(){
  <div class="start-event-grid">${Object.entries(config.heroes).filter(([id])=>id!=='user').map(([id,h])=>{const condition=isRunning?(journey.roster[id]||options.conditions[id]):options.conditions[id];const completed=!!condition?.eventCompleted;return `<div class="start-event-row"><strong>${esc(h.name)}</strong><div class="start-event-choice"><button type="button" data-event-pick="${id}:done" aria-pressed="${completed}" class="game-choice ${completed?'is-selected':''}" ${isRunning?'disabled':''}>완료</button><button type="button" data-event-pick="${id}:pending" aria-pressed="${!completed}" class="game-choice ${!completed?'is-selected':''}" ${isRunning?'disabled':''}>미완료</button></div></div>`;}).join('')}</div></div>
  <div class="start-section"><div class="start-heading"><span>04</span><h3>주인공 스킬 <small>기본 기술 3개 + 특수 기술 1개</small></h3></div><p class="start-caption">스킬 이름과 효과를 보고 장착할 수 있어요. SP는 전투 중 소모됩니다.</p>
  <div class="start-skill-grid">${config.skills.filter(s=>!C.isSpecial(s.id)).map(s=>`<button type="button" data-equip-pick="${s.id}" aria-pressed="${options.playerSkills.includes(s.id)}" class="start-skill game-pick ${options.playerSkills.includes(s.id)?'selected is-selected':''}"><span class="start-skill-info"><b>${esc(s.name)}</b><small>${esc(skillDescription(s)||s.detail)}</small></span><span class="start-cost">SP ${s.cost}</span></button>`).join('')}</div>
- <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 속박, 출혈, 화상, 꼭두각시 실, 수선하는 손, 색 잃은 꿈을 해제합니다.</p></details></div>
+ <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 속박, 출혈, 화상, 꼭두각시 실, 수선하는 손, 「색을 잃은 꿈」을 해제합니다.</p></details></div>
 `;
  $('apply-restart').disabled=journey.pendingSupply||(options.series&&(journey.failed||!open.length));
  $('apply-restart').textContent=options.series?(journey.started?'다음 전투 시작 ▶':'보스 러시 시작 ▶'):'전투 시작 ▶';
@@ -9971,7 +10195,6 @@ initMedia();window.HR_BOOT_LOADER?.complete();
  },true);
 })();
 </script>
-
 <script>
 /* 오른손/왼손 조작 설정은 전투 진행 상황과 별도로 저장하고 즉시 적용합니다. */
 (function(){'use strict';
@@ -9996,7 +10219,6 @@ initMedia();window.HR_BOOT_LOADER?.complete();
  });
 })();
 </script>
-
 <script>
 /* 하단 명령줄이 접히거나 높이가 변할 때 필요한 만큼만 스크롤 공간을 보장합니다. */
 (function(){'use strict';
@@ -10014,7 +10236,6 @@ initMedia();window.HR_BOOT_LOADER?.complete();
  schedule();
 })();
 </script>
-
 <script>
 /* 배경음악은 첫 화면 렌더링 이후 천천히 불러옵니다. */
 (function(){
