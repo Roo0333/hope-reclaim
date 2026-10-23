@@ -810,7 +810,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 @keyframes hr-boot-pulse{0%{left:-35%}100%{left:105%}}
 @media(prefers-reduced-motion:reduce){#hr-boot-loading .hr-boot-bar::before{animation:none;left:32%;}#hr-boot-loading{transition:none}}
 
-/* 공명 · 색을 잃은 꿈: 원본 보스 스탠딩과 배경을 위에서 아래로 흑백으로 덮습니다. */
+/* 공명 · 색 잃은 꿈: 원본 보스 스탠딩과 배경을 위에서 아래로 흑백으로 덮습니다. */
 .hr-stage[data-boss="vaciel"]::before{
   content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
   background-color:#f0f0f0;background-image:var(--dream-bg,none);
@@ -876,6 +876,14 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 </style><style id="new-boss-mechanics-style">
 .hr-special-alert{white-space:pre-line;margin:8px 0;padding:9px 12px;background:#fff4eb;color:#602b26;border:2px solid #8c4e47;font-size:12px;font-weight:700;line-height:1.7}
 .hr-special-alert[hidden]{display:none!important}
+/* 기믹 예고 색은 보스별 data-boss 속성만으로 관리합니다. 전투/대사창과는 분리됩니다. */
+.hr-special-alert[data-boss="bellaton"]{background:#ffe6f2;color:#a51f62;border-color:#d13b87}
+.hr-special-alert[data-boss="cor"]{background:#fff4eb;color:#602b26;border-color:#8c4e47}
+.hr-special-alert[data-boss="lacrien"]{background:#eaf0fa;color:#28476b;border-color:#36547a}
+.hr-special-alert[data-boss="marionel"]{background:#fff6da;color:#79602f;border-color:#b79a61}
+.hr-special-alert[data-boss="osteos"]{background:#f4f4f0;color:#4f5349;border-color:#797c73}
+.hr-special-alert[data-boss="vaciel"]{background:#f4f4f6;color:#50505e;border-color:#858596}
+
 .hr-stage #boss-art:has(.hr-twin-view){width:100%;height:auto;min-height:140px}
 .hr-twin-view{display:flex;gap:9px;align-items:flex-end;justify-content:center;width:100%}
 .hr-twin{min-width:0;flex:0 1 45%;display:flex;flex-direction:column;align-items:center;gap:2px}
@@ -914,7 +922,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
     '라크리엔의 촛불이 조용히 흔들리고 있습니다.',
     '마리오넬이 손끝에 걸린 실을 천천히 당깁니다.',
     '벨라톤이 텅 빈 객석을 향해 우아하게 허리를 숙입니다.',
-    '코르가 입마개 너머로 낮은 으르렁거림을 흘립니다.',
+    '코르가 입마개 너머로 낮게 으르렁거립니다.',
     '오스테오스가 흐트러진 옷매무새를 단정히 정리합니다.',
     '바시엘이 희미한 눈빛으로 당신을 바라봅니다.'
   ];
@@ -994,6 +1002,13 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 <div class="hr-heading"><h2 id="new-game-title">새 게임을 시작할까요?</h2></div>
 <div class="hr-confirm-body"><p id="new-game-message">현재 진행 상황이 초기화되고 타이틀로 돌아갑니다. 이전 자동 저장도 새 진행 상황으로 교체됩니다.</p></div>
 <div class="hr-confirm-actions"><button id="cancel-new-game" type="button">취소</button><button class="hr-primary" id="confirm-new-game" type="button">새 게임 시작</button></div>
+</section>
+</div>
+<div class="hr-overlay hr-confirm-overlay" hidden="" id="skill-loadout-warning">
+<section aria-describedby="skill-loadout-message" aria-labelledby="skill-loadout-title" aria-modal="true" class="hr-panel hr-confirm-dialog" role="dialog">
+<div class="hr-heading"><h2 id="skill-loadout-title">스킬을 모두 장착하지 않았어요</h2></div>
+<div class="hr-confirm-body"><p id="skill-loadout-message"></p><p>빈 스킬 칸이 있어도 전투를 시작할 수 있습니다. 이대로 출전할까요?</p></div>
+<div class="hr-confirm-actions"><button id="revise-skill-loadout" type="button">스킬 다시 선택</button><button class="hr-primary" id="confirm-skill-loadout" type="button">이대로 출전</button></div>
 </section>
 </div>
 <div class="hr-overlay hr-confirm-overlay" hidden="" id="vaciel-team-warning">
@@ -7607,6 +7622,7 @@ function forecast(b,c) {
 function adaptiveIntent(b,c,p) {
   const bc=c.bosses[b.domain];
   if(b.domain==='cor'&&b.difficulty!=='hard'&&p.effect==='duel')return {...p,id:p.id+'-strike',effect:'strike',name:'검격',power:1,tell:'코르가 대검을 겨눕니다.'};
+  if(b.domain==='lacrien'&&b.starCopy?.phase==='ready')return {...p,id:'starcopy-ready',name:'별의 복기',effect:'wait',tell:'천구의에 새겨진 별빛이 되돌아오려 합니다.'};
   if(b.domain==='osteos'&&b.difficulty==='hard'&&b.swordTrace?.ready)return {...p,id:'sword-trace',name:'예검의 궤적',effect:'blade-trace',power:1,phase:'rage',tell:'오스테오스의 세 검흔이 정해진 순서대로 빛납니다.'};
 
   if(b.domain==='marionel'&&p.effect==='repair')
@@ -7632,7 +7648,7 @@ function adaptiveIntent(b,c,p) {
   // 바시엘 어려움 한정: 장막 뒤에 표식 1턴 -> 공명 -> 탈진 1턴.
   if(b.difficulty==='hard'){
     const closing={target:'all',phase:'any',power:0,cycle:1,offset:1,fromRound:1,priority:100,once:false,cooldown:0};
-    if(b.finalChain==='mark')return {...closing,id:'dreammark-closing',name:'색을 잃은 꿈',effect:'dreammark',closingStep:'mark',tell:'바시엘의 눈가에서 은빛 눈물이 떨어집니다. 성역의 색이 천천히 사라집니다.'};
+    if(b.finalChain==='mark')return {...closing,id:'dreammark-closing',name:'색 잃은 꿈',effect:'dreammark',closingStep:'mark',tell:'바시엘의 눈가에서 은빛 눈물이 떨어집니다. 성역의 색이 천천히 사라집니다.'};
     if(b.finalChain==='resonate')return {...closing,id:'dreamresonance-closing',name:'공명',effect:'dreamresonance',closingStep:'resonate',tell:'색채를 잃은 성역에 한 점의 소리도 들리지 않습니다. 바시엘이 눈을 뜨려 합니다.'};
     if(b.finalChain==='aftershock')return {...closing,id:'dreamrest-closing',name:'공명의 반동',effect:'dreamrest',closingStep:'aftershock',tell:'바시엘의 손끝이 떨립니다. 양산의 그림자가 잠시 흔들립니다.'};
   }
@@ -7695,7 +7711,7 @@ function prepare(x) {
   const p=adaptiveIntent(b,x.c,pattern(b,x.c));b.intent={...p,targetId:null};
   if(p.effect==='duel') {
     b.intent.targetId=choose(x)?.id||null;b.mark={target:b.intent.targetId,due:b.round};
-    const t=b.party[b.intent.targetId];if(t)emit(x,'notice','scene',`코르가 ${t.name}에게 검을 겨눕니다. 일대일 승부를 강요합니다.`);
+    // 결투 지목은 보스 아래 고정 안내창에서만 알립니다.
   }
   if(b.domain==='cor'&&b.corFury>=5)emit(x,'notice','scene','코르의 검에 거센 불꽃이 휘감깁니다. 다음 공격에는 추가 타격이 이어집니다.');
   if(b.domain==='osteos'&&p.effect==='blade-trace'&&b.swordTrace?.order)emit(x,'notice','scene','예검의 궤적 · '+b.swordTrace.order.map((id,i)=>`제${i+1}검 ${b.party[id]?.name||'대상 없음'}`).join(' · '));
@@ -7779,7 +7795,7 @@ function heal(x,u,ratio,reason=''){
   if(n)emit(x,'heal','system',u.name+' · HP +'+n,{target:u.id,amount:n,reason});
 }
 function sp(x,u,n,reason='기력 회복'){if(!living(u)||u.permanentUnavailable)return;const amount=Math.min(u.maxSp-u.sp,Math.round(n));u.sp+=amount;if(amount)emit(x,'sp','system',u.name+' · SP +'+amount+(reason==='라운드 종료 자동 회복'?'':' ('+reason+')'),{target:u.id,amount,reason});}
-const stateNames={mitigation:'받는 피해 감소',weak:'공격력 감소',defdown:'방어력 감소',dark:'명중 저하',buff:'공격력 상승',defup:'방어력 상승',counter:'반격 준비',followup:'추격 준비',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:'회복량 감소',bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색을 잃은 꿈',timehold:'늘어진 순간',songAtk:'불안정한 노래',songDef:'불안정한 노래'};
+const stateNames={mitigation:'받는 피해 감소',weak:'공격력 감소',defdown:'방어력 감소',dark:'명중 저하',buff:'공격력 상승',defup:'방어력 상승',counter:'반격 준비',followup:'추격 준비',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:'회복량 감소',bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색 잃은 꿈',timehold:'늘어진 순간',songAtk:'불안정한 노래',songDef:'불안정한 노래'};
 const playerStackCaps={buff:.40,weak:.40,defdown:.50,dark:.32,defup:.65,mitigation:.45};
 function status(x,u,key,value,duration=2,extra={}) {
   if(!living(u))return;
@@ -7807,10 +7823,10 @@ function status(x,u,key,value,duration=2,extra={}) {
     buff:`공격력 +${percent}%`,weak:`공격력 −${percent}%`,defup:`방어력 +${percent}%`,defdown:`방어력 −${percent}%`,
     mitigation:`받는 피해 ${percent}% 감소`,dark:`명중률 −${percent}%`,
     spotlight:`공격력 +${percent}% (스포트라이트)`,counter:`직접 반격 준비 (라운드당 최대 ${extra.limit||1}회)`,
-    colorlessDream:'색을 잃은 꿈',followup:'레드라인 추격 준비 (2라운드 동안 횟수 제한 없음)',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',
-    bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:`HP 회복량 ${percent}% 감소`,bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색을 잃은 꿈',timehold:'늘어진 순간',songAtk:`공격력 +${percent}% (노래)`,songDef:`방어력 −${percent}% (노래)`
+    colorlessDream:'색 잃은 꿈',followup:'레드라인 추격 준비 (2라운드 동안 횟수 제한 없음)',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',
+    bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:`HP 회복량 ${percent}% 감소`,bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색 잃은 꿈',timehold:'늘어진 순간',songAtk:`공격력 +${percent}% (노래)`,songDef:`방어력 −${percent}% (노래)`
   };
-  const lasting=key==='colorlessDream'?'다음 적 차례까지':key==='puppet'?'다음 아군 차례의 행동 1회':key==='skillseal'?'다음 아군 차례 1회 (스킬 사용 불가)':key==='healdown'?'다음 아군 차례 1회':key==='stitch'?'다음 적 차례까지':`${duration}라운드 지속`+(key==='burn'&&extra.stackable?` · 화상 ${stackCount}/2겹`:stackCount>1?' · 효과 중첩':'');
+  const lasting=key==='colorlessDream'?'다음 적 차례까지':key==='puppet'?'다음 아군 차례의 행동 1회':key==='skillseal'?'다음 아군 차례 1회 (스킬 사용 불가)':key==='healdown'?'다음 아군 차례 1회':key==='stitch'?'다음 적 차례까지':key==='timehold'?'다음 행동 1회 불가':`${duration}라운드 지속`+(key==='burn'&&extra.stackable?` · 화상 ${stackCount}/2겹`:stackCount>1?' · 효과 중첩':'');
   emit(x,'status','system',`${u.name} · ${labels[key]||stateNames[key]||'상태 변화'} · ${lasting}`,{target:u.id,statusKey:key,statusValue:extra.stackable?combined:value,statusDuration:duration});
 }
 function takeDamage(x,a,t,amount,opts={}) {
@@ -7895,9 +7911,12 @@ if(t===b.boss&&b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&
   }
   if(t===b.boss&&b.reflection&&b.reflection.until>=b.round&&!opts.reaction&&living(a)&&b.party[a.id]) {
     b.recordedDamage+=dealt;
-    // 어려움은 반사 피해량을 최대 HP의 일정 비율로 강제 제한하지 않습니다.
-    const reflected=['normal','hard'].includes(b.difficulty)?dealt*bc.params.reflectRatio*(b.domain==='lacrien'&&b.difficulty==='normal'?1.5:1):Math.min(dealt*bc.params.reflectRatio,a.maxHp*bc.params.reflectCap);
-    if(reflected>0){emit(x,'reflect','scene',`만상기록에 ${dealt} 피해가 더해졌습니다. 누적 ${b.recordedDamage} · 공격의 일부가 되돌아옵니다.`);let amount=reflected;if(a.guard)amount*=c.rules.guardFactor;if(a.protect)amount*=1-a.protect;takeDamage(x,b.boss,a,amount);}
+    if(b.reflection.recordOnly){
+      emit(x,'notice','scene',`만상기록에 ${dealt} 피해가 남았습니다. 누적 ${b.recordedDamage}.`);
+    }else{
+      const reflected=['normal','hard'].includes(b.difficulty)?dealt*bc.params.reflectRatio*(b.domain==='lacrien'&&b.difficulty==='normal'?1.5:1):Math.min(dealt*bc.params.reflectRatio,a.maxHp*bc.params.reflectCap);
+      if(reflected>0){emit(x,'reflect','scene',`만상기록에 ${dealt} 피해가 더해졌습니다. 누적 ${b.recordedDamage} · 공격의 일부가 되돌아옵니다.`);let amount=reflected;if(a.guard)amount*=c.rules.guardFactor;if(a.protect)amount*=1-a.protect;takeDamage(x,b.boss,a,amount);}
+    }
   }
   if(living(t)&&living(a)&&active(t,'counter',b.round)&&!opts.reaction) {
     if(t.counterRound!==b.round){t.counterRound=b.round;t.counterUses=0;}
@@ -8073,8 +8092,8 @@ function playerAct(x,id,a) {
       if(dreamPurified){
         emit(x,'story','scene','빛을 잃은 세계에 작은 온기가 번진다.');
         emit(x,'story','scene','검게 바래던 표식에 작은 균열이 생긴다.');
-        emit(x,'story','scene','당신들의 희망은 아직 이곳에 있습니다.');
-        emit(x,'notice','system','아군 전체의 「색을 잃은 꿈」이 해제되었습니다!');
+        emit(x,'story','scene','갈라진 틈 사이로 희미한 빛이 스민다. 손끝을 짓누르던 냉기가 천천히 걷힌다.');
+        emit(x,'notice','system','아군 전체의 「색 잃은 꿈」이 해제되었습니다!');
         emit(x,'dialogue','vaciel','……분명 거두었을 터인데.');
         emit(x,'story','scene','바시엘은 잠시 말을 잇지 못했다.');
       }
@@ -8117,7 +8136,7 @@ function followups(x,actor,target) {
     const skillName=skills(b,x.c,u.id).find(s=>s.effect==='followup')?.name||'추격';emit(x,'followup',u.id,u.name+' · '+skillName+' 추격');damage(x,u,target,u.buffs.followup.value,{reaction:true,noCrit:true,followupLabel:skillName});
   }
 }
-function summon(x,kind,count) {
+function summon(x,kind,count,{quiet=false}={}) {
   const {b,bc,d}=x;
   for(let i=0;i<count;i++) {
     const serial=++b.summonSerial,pillar=kind==='pillar';
@@ -8126,7 +8145,7 @@ function summon(x,kind,count) {
     const sameKind=b.summons.filter(u=>u.kind===kind).length+1;
     const summonName=pillar?(slot==='left'?'왼쪽 백골 기둥':slot==='right'?'오른쪽 백골 기둥':`백골 기둥 ${sameKind}`):(slot==='left'?'왼쪽 인형':slot==='right'?'오른쪽 인형':`인형 ${sameKind}`);
     const u=unit(kind+'-'+serial,{name:summonName,hp:(pillar?bc.params.pillarHp:bc.params.dollHp)*d.hp,atk:pillar?0:bc.params.dollAtk*d.atk*(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)?1.2:1),def:(pillar?bc.params.pillarDef:bc.params.dollDef)*d.def,speed:0,crit:0},{kind,slot,spawnedAt:b.round,healTicks:pillar?bc.params.pillarTicks:0});
-    b.summons.push(u);emit(x,'summon','scene',u.name+josa(u.name,'이','가')+' 나타났습니다.');
+    b.summons.push(u);if(!quiet)emit(x,'summon','scene',u.name+josa(u.name,'이','가')+' 나타났습니다.');
   }
 }
 function bossActionText(bc,p) {
@@ -8170,10 +8189,14 @@ function bossAct(x) {
       for(const u of Object.values(b.party))delete u.buffs.colorlessDream;
       b.dreamMonochrome=false;
       emit(x,'blocked','scene','린네가 붙잡은 찰나, 공명을 이루던 고요가 깨집니다. 성역을 덮은 힘이 흩어지고 바시엘의 손끝이 떨립니다.');
+      emit(x,'dialogue','vaciel','……그대들이 이 찰나를 붙들었구나.');
       emit(x,'notice','system','「공명」을 저지했습니다!');
       return;
     }
-    emit(x,'blocked','scene',bc.name+'의 움직임이 잠시 멎습니다. 후반 연계는 잠시 늦춰집니다.');return;
+    if(b.domain==='vaciel'&&b.difficulty==='hard'&&p.effect==='dreammark')
+      emit(x,'blocked','scene','바시엘이 눈을 감자, 양산 아래로 번지던 빛이 그 자리에서 멎습니다. 성역은 아직 색을 잃지 않았습니다.');
+    else emit(x,'blocked','scene',bc.name+'의 움직임이 잠시 멎습니다. 후반 연계는 잠시 늦춰집니다.');
+    return;
   }
 
   // 별의 복기: 관측은 만상회귀에 무료로 붙지만 재현은 보스 행동 한 차례를 대체.
@@ -8202,7 +8225,7 @@ function bossAct(x) {
   const cue=b.domain==='vaciel'&&p.effect==='motif'?(bc.battleCues?.['motif-'+Math.min(5,b.motifCount+1)]||bc.battleCues?.[cueKey]):bc.battleCues?.[cueKey];
   scene(x,cue||null);
   if(p.closingStep)b.finalChain=p.closingStep==='drain'?'finish':p.closingStep==='finish'?(b.domain==='vaciel'&&b.difficulty==='hard'?'mark':'rest'):p.closingStep==='mark'?'resonate':p.closingStep==='resonate'?'aftershock':'done';
-  b.patternUsed[p.id]=b.round;if(p.sourcePatternId)b.patternUsed[p.sourcePatternId]=b.round;emit(x,'skill',b.domain,b.domain==='marionel'&&p.effect==='repair'?'마리오넬이 수선하는 손을 펼쳐 동료의 손끝에 실을 감습니다.':bossActionText(bc,p),{skillName:p.name});
+  b.patternUsed[p.id]=b.round;if(p.sourcePatternId)b.patternUsed[p.sourcePatternId]=b.round;if(!(b.domain==='marionel'&&nightmare&&p.id==='final-summon'))emit(x,'skill',b.domain,b.domain==='marionel'&&p.effect==='repair'?'마리오넬이 수선하는 손을 펼쳐 동료의 손끝에 실을 감습니다.':bossActionText(bc,p),{skillName:p.name});
   let target=null;const one=()=>target||(target=choose(x,p.targetId,!!p.targetId)),all=()=>Object.values(b.party).filter(living);
   // 전체 공격의 각 명중을 쥰에게 순서대로 돌립니다. 쓰러진 뒤에는 나머지 공격이 원래 대상에게 돌아갑니다.
   const redirectArea=t=>{const jun=b.party.jun;return living(jun)&&jun.distorted&&!jun.permanentUnavailable?jun:t;};
@@ -8255,7 +8278,7 @@ function bossAct(x) {
         b.dissonance={phase:'choose',targets:[t1.id,t2.id],chosen:{}};b.dissonanceLast=b.round;
         emit(x,'story','scene',`벨라톤이 양팔을 펼치자 서로 다른 두 음표가 ${t1.name}과 ${t2.name}의 머리 위에 떠오릅니다.`);
         emit(x,'dialogue','bellaton','자아, 이번에는 그대들의 차례로구나! 본좌를 위해 아름다운 화음을 들려주거라♬');
-        emit(x,'notice','system','불협화음 · 표시된 두 아군은 다음 차례에 서로 다른 종류의 행동을 선택해야 합니다.');
+        // 음표의 의미는 플레이어가 직접 알아내도록 해설을 생략합니다.
       }
       break;}
     case 'ribbon':{const t=one(),linked=hard&&b.invitation?.target===t?.id&&buff(t,'weak',b)>0;if(linked)emit(x,'combo','scene','아리아에 약해진 '+t.name+'에게 무대의 조명이 모입니다. 약화와 초대가 이어져 피날레의 위력이 커집니다.');hit(t,p.power*(linked?(bc.params.finaleWeakMultiplier??1.3):1));if(b.invitation?.target===t?.id)b.invitation=null;break;}
@@ -8263,8 +8286,17 @@ function bossAct(x) {
     case 'smash':sweep();if(hard&&b.rageTriggered)status(x,b.boss,'defdown',bc.params.openingDef,2);break;
     case 'duel':if(nightmare){const t=one();if(t){for(let i=0;i<bc.params.duelHits&&living(t)&&living(b.boss);i++)hit(t,p.power,{noCrit:true});emit(x,'notice','scene','연속 검격이 멎고 코르의 자세가 잠시 열립니다.');status(x,b.boss,'defdown',bc.params.openingDef,2);}}break;
     case 'light':if(hard&&b.domain==='lacrien')sweep(.48);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.51);for(const t of all())status(x,t,'dark',p.power,2);break;
-    case 'reflect':b.reflection={until:b.round+1};b.recordedDamage=0;emit(x,'notice','scene','라크리엔 주위의 빛이 거울처럼 맑아집니다.');if(hard&&b.domain==='lacrien')sweep(nightmare?.82:.72);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.54);break;
-    case 'recordecho':if(hard){const amount=b.recordedDamage;emit(x,'echo','scene',amount>0?`만상회귀 · 만상기록에 쌓인 ${amount} 피해를 바탕으로 빛이 아군 전체에 되돌아옵니다.`:'만상회귀 · 기록이 비어 있어도 약한 잔광이 전원에게 되돌아옵니다.');for(const original of all()){const t=redirectArea(original);if(!living(t))continue;const echo=Math.max(amount*p.power,b.domain==='lacrien'?original.maxHp*.07:0); /* 어려움: HP 22% 상한 없음 */if(echo>0){let n=echo;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;if(t.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,t,n);} }b.recordedDamage=0;
+    case 'reflect':{
+      // 보통·어려움: 단일 빛 공격 뒤 피해 기록만 시작, 즉시 반사하지 않음.
+      // 쉬움에는 만상회귀가 없어 기존 피해 반사 성질을 유지합니다.
+      b.reflection={until:b.round+1,recordOnly:hard&&b.domain==='lacrien'};
+      b.recordedDamage=0;
+      emit(x,'notice','scene','라크리엔 주위의 빛이 거울처럼 맑아집니다.');
+      if(hard&&b.domain==='lacrien')hit(one(),p.power||1.05);
+      else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.54);
+      break;
+    }
+    case 'recordecho':if(hard){const amount=b.recordedDamage;emit(x,'echo','scene',amount>0?`만상회귀 · 만상기록에 쌓인 ${amount} 피해를 바탕으로 빛이 아군 전체에 되돌아옵니다.`:'만상회귀 · 기록이 비어 있어도 약한 잔광이 전원에게 되돌아옵니다.');for(const original of all()){const t=redirectArea(original);if(!living(t))continue;const echo=Math.max(b.domain==='lacrien'?original.maxHp*.07:0,Math.min(amount*p.power,original.maxHp*.25)); /* 기록 피해는 인당 최대 HP 25% 상한 */if(echo>0){let n=echo;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;if(t.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,t,n);} }b.recordedDamage=0;
       if(nightmare&&!b.starCopy){b.starCopy={phase:'watch',record:null};
         emit(x,'story','scene','되돌아온 별빛이 사라지지 않고 천구의의 고리를 따라 흐릅니다.');
         emit(x,'dialogue','lacrien','……이번에는 여러분이 어떤 선택을 남기시는지 지켜보겠습니다.');
@@ -8275,15 +8307,14 @@ function bossAct(x) {
       const maxWaves=easy?1:bc.params.summonLimit;
       if(b.summonCount<maxWaves&&!b.summons.some(u=>living(u)&&u.kind==='doll')&&b.round>b.exposedUntil){
         const finalDoll=hard&&b.domain==='marionel'&&b.summonCount===1;
-        summon(x,'doll',finalDoll?1:easy?1:hard&&b.domain==='marionel'&&b.team.length<2?1:Math.min(2,bc.params.summonAliveLimit));
-        if(finalDoll){const u=b.summons.at(-1);u.name='미완성의 역작';u.maxHp=Math.round(u.maxHp*1.6);u.hp=u.maxHp;u.atk=Math.round(u.atk*1.2);emit(x,'phase','scene','마리오넬이 남은 실로 마지막 인형 하나를 꿰맵니다.');
+        summon(x,'doll',finalDoll?1:easy?1:hard&&b.domain==='marionel'&&b.team.length<2?1:Math.min(2,bc.params.summonAliveLimit),{quiet:finalDoll&&nightmare});
+        if(finalDoll){const u=b.summons.at(-1);u.name='미완성의 역작';u.maxHp=Math.round(u.maxHp*1.6);u.hp=u.maxHp;u.atk=Math.round(u.atk*1.2);if(!nightmare)emit(x,'phase','scene','마리오넬이 남은 실로 마지막 인형 하나를 꿰맵니다.');
           if(nightmare){
             b.doppel={active:true,createdRound:b.round,dollId:u.id,realSlot:rand(b)<.5?'left':'right',aoeRound:-1};
             u.name='마리오넬';
-            emit(x,'story','scene','마리오넬이 마지막 인형의 얼굴을 천천히 매만집니다. 실에 가려졌던 인형의 모습이 마리오넬과 똑같이 바뀝니다.');
+            emit(x,'story','scene','마리오넬이 남은 실로 마지막 인형 하나를 꿰맵니다. 인형이 고개를 들자 두 형체의 모습이 완전히 같아집니다.');
             emit(x,'story','scene','두 형체의 위치가 뒤섞입니다. 어느 쪽이 진짜인지 알 수 없습니다.');
             emit(x,'dialogue','marionel','……똑같지?');
-            emit(x,'notice','system','꼭두각시 대역 · 마리오넬 둘 중 하나는 인형입니다. 단일 공격으로 한 번 선택할 수 있습니다.');
           }
         }
         b.summonCount++;if(hard&&b.domain==='marionel')hit(one(),.6);else if(b.difficulty==='easy'&&b.domain==='marionel')hit(one(),.64);}
@@ -8366,7 +8397,7 @@ function bossAct(x) {
     case 'dreammark':{
       b.dreamMonochrome=true; // 스냅샷 기준으로 전투 배경과 스탠딩을 위에서 아래로 탈색
       emit(x,'story','scene','바시엘의 눈가에 은빛 눈물이 맺힌다.');
-      emit(x,'story','scene','눈물이 양산 끝을 타고 떨어지자 성역의 색채가 위에서부터 서서히 사라지기 시작한다.');
+      emit(x,'story','scene','눈물 한 방울이 뺨을 타고 떨어진다. 그 순간 성역의 색채가 위에서부터 서서히 사라지기 시작한다.');
       emit(x,'story','scene','옷자락도, 피부에 남은 온기도, 천장의 푸른 빛마저.');
       emit(x,'story','scene','마침내 모든 것이 검고 흰 명암으로 물든다.');
       emit(x,'dialogue','vaciel','……이것이 이 몸이 재현하려는 세계일세. 아무것도 갈망하지 않아 아무것도 빼앗으려 하지 않는 곳.');
@@ -8377,7 +8408,7 @@ function bossAct(x) {
         u.buffs={};u.guard=false;u.protect=0;u.shieldHp=0;u.shieldMax=0;
         status(x,u,'colorlessDream',1,2);
       }
-      emit(x,'notice','system','아군 전체의 강화 및 약화 효과가 사라졌습니다. 아군 전체에 「색을 잃은 꿈」이 새겨졌습니다.');
+      emit(x,'notice','system','아군 전체의 강화 및 약화 효과가 사라졌습니다. 아군 전체에 「색 잃은 꿈」이 새겨졌습니다.');
       break;
     }
     case 'dreamresonance':{
@@ -8578,7 +8609,7 @@ function endRound(input,c,expectedRevision=input.revision) {
   if(b.starCopy?.phase==='watch'){
     const rec=b.starCopy.record||{kind:'support',healed:0};b.starCopy={phase:'ready',record:rec};
     emit(x,'story','scene','천문관의 별빛이 마지막 움직임을 따라 흐르기 시작합니다.');
-    emit(x,'notice','system','별의 복기 · '+({'attack':'공격','heal':'회복','defend':'방어','support':'지원','talk':'대화'}[rec.kind]||'지원')+' 행동을 기록했습니다.');
+    // 기록 종류를 미리 공개하지 않고 별빛의 변화만 전합니다.
   }
   if(b.dissonance?.phase==='choose'){
     emit(x,'notice','scene','불협화음 · 두 사람의 행동이 모두 기록되지 않아 음표가 사라집니다.');b.dissonance=null;
@@ -9196,6 +9227,27 @@ function refreshBattleDefaults(c){
   // 실제 전투에 사용할 세 지원곡의 가중치입니다. 체력 부족 시 회복곡 비중이 올라갑니다.
  const adjustedWeights={healthy:[33,34,33],hp:[29,44,27],sp:[33,34,33],normal: [33,34,33]};
  c.songWeights=H.core.copy(adjustedWeights);
+ // 라크리엔: 기록 뒤 심판을 거쳐 바로 회귀합니다. 별빛은 보통·어려움 모두 실제 발동합니다.
+ // 어려움에서는 회귀 다음의 복기가 행동 한 번을 대신하므로 별빛을 6번째 차례에 둡니다.
+ const lac=c.bosses?.lacrien;
+ for(const [mode,cycle] of [['normal',5],['hard',6]]){
+   const patterns=lac?.patterns?.[mode];if(!patterns)continue;
+   for(const [id,offset] of [['light',1],['record',2],['judgment',3],['echo',4],['ray',cycle]]){
+     const p=patterns.find(v=>v.id===id);if(!p)continue;
+     // 기존 기본 패턴에만 순서를 갱신하며, 편집창의 개별 위력 설정은 보존합니다.
+     p.cycle=cycle;p.offset=offset;
+     if(id==='record'){
+       p.target='one';if(p.power===0)p.power=1.05;
+       p.tell='라크리엔 주위의 빛이 거울처럼 맑아집니다.';
+     }
+     if(id==='echo'){
+       if(p.power===.55&&mode==='normal')p.power=.40;
+       if(p.power===.68&&mode==='hard')p.power=.50;
+       p.tell='거울 속에 남은 빛이 다시 들끓습니다.';
+     }
+   }
+ }
+ // 새로 시작한 전투의 기본 정보만 보정하고, 이미 진행 중인 전투는 손대지 않습니다.
  // 화면 기준 쉬움/보통/어려움 보스별 목표 HP.
  // 간부는 동료 2명, 바시엘은 동료 5명 출전 시 목표 HP와 일치한다.
  // 기존 보통/어려움 및 동료 인원별 HP 증가량은 유지하고, 쉬움 HP만 보스별 차등 조정한다.
@@ -9257,7 +9309,7 @@ function tell(s){
 const playing=()=>cursor<events.length,current=()=>P.frame(events,cursor,battle.playerName),view=()=>{const v=clone(current()?.view||C.snapshot(battle));v.party.user.name=battle.playerName;for(const u of v.summons){const actual=battle.summons.find(t=>t.id===u.id);if(actual)u.name=actual.name;}return v;};
 const label=id=>C.actorName(battle,id),bar=(v,max,sp=false)=>`<div class="hr-life ${sp?'hr-sp':''}"><i style="width:${Math.max(0,Math.min(100,v/(max||1)*100))}%"></i></div>`;
 const outcomeName=o=>({victory:'격파',yield:'자발적 철수',retreat:'후퇴',loss:'패배',limit:'시험 상한'})[o]||'';
-function stateLabel(u,round){return [u.permanentUnavailable?'영구 이탈':u.hp===0?'전투불능':u.injured?'부상':null,u.severeInjury?'중상':null,u.distorted?'일그러짐':null,u.rescue==='rescued'?'구출 성공':null,u.guard?'방어':null,u.protect?'보호':null,...Object.entries({mitigation:'피해 감소',bind:'속박',puppet:'꼭두각시 실 · 행동 강탈',stitch:'수선하는 손',skillseal:'수선하는 손 · 스킬 봉인',timehold:'늘어진 순간',colorlessDream:'색을 잃은 꿈',weak:'공격력↓',defdown:'방어력↓',defup:'방어력↑',buff:'공격력↑',dark:'명중↓',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',songAtk:'불안정한 노래',songDef:'불안정한 노래',counter:'반격 준비',riposte:'다음 공격 피해 +20%',followup:'추격 준비'}).filter(([k])=>C.active(u,k,round)).map(([,v])=>v)].filter(Boolean).join(' · ');}
+function stateLabel(u,round){return [u.permanentUnavailable?'영구 이탈':u.hp===0?'전투불능':u.injured?'부상':null,u.severeInjury?'중상':null,u.distorted?'일그러짐':null,u.rescue==='rescued'?'구출 성공':null,u.guard?'방어':null,u.protect?'보호':null,...Object.entries({mitigation:'피해 감소',bind:'속박',puppet:'꼭두각시 실 · 행동 강탈',stitch:'수선하는 손',skillseal:'수선하는 손 · 스킬 봉인',timehold:'늘어진 순간',colorlessDream:'색 잃은 꿈',weak:'공격력↓',defdown:'방어력↓',defup:'방어력↑',buff:'공격력↑',dark:'명중↓',burn:'화상',bleed:'출혈',spotlight:'스포트라이트',songAtk:'불안정한 노래',songDef:'불안정한 노래',counter:'반격 준비',riposte:'다음 공격 피해 +20%',followup:'추격 준비'}).filter(([k])=>C.active(u,k,round)).map(([,v])=>v)].filter(Boolean).join(' · ');}
 function packageSave(){return {version:3,songCatalogVersion:3,difficultySchemaVersion:2,configStorageVersion:2,configOverrides:collectConfigOverrides(),kind:'hope-battle-save',config:clone(activeConfig),editorConfig:clone(config),options:clone(options),startOptions:clone(startOptions),battle:clone(battle),events:clone(events),cursor,page,presentationVersion:5,campaign:clone(campaign),rawDrafts:clone(rawDrafts),journey:clone(journey),titleScreen:atTitle};}
 function checkpoint(){try{localStorage.setItem('hope-player-campaign-v1-progress',JSON.stringify(packageSave()));}catch{/* 자동 저장을 사용할 수 없는 브라우저에서는 진행 데이터를 유지할 수 없습니다. */}}
 function persistConfig(){try{localStorage.setItem('hope-player-campaign-v1-config',JSON.stringify({version:3,difficultySchemaVersion:2,configStorageVersion:2,configOverrides:collectConfigOverrides(),options}));}catch{tell('이 브라우저에서는 자동 저장이 제한됩니다. 브라우저의 저장소 설정을 확인해 주세요.');}}
@@ -9383,7 +9435,7 @@ function launch(c,o){
  cursor=0;page=0;autoRound=null;retreatOpen=false;$('retreat-confirm').hidden=true;
  actor=C.actions(battle)[0]||'user';menu='attack';if(o.series){journey.currentKnockouts=0;journey.currentStartItems=clone(next.battle.items);}checkpoint();render();updateAudio();
 }
-function start(skipVacielWarning=false){
+function start(skipVacielWarning=false,skipSkillWarning=false){
  if(battle&&!battle.committed&&startOptions?.series&&campaign.campaign.encounter)throw Error('전투를 마쳐야 다음 구역으로 이동할 수 있습니다.');
  if(options.series&&journey.started&&options.difficulty!==campaign.battleDifficulty)throw Error('연전 도중에는 난이도를 바꿀 수 없습니다.');
  if(options.series&&journey.pendingSupply)throw Error('전리품을 먼저 선택해 주세요.');
@@ -9394,6 +9446,16 @@ function start(skipVacielWarning=false){
  if(options.series&&options.bossId==='vaciel'&&options.team.length<5&&!skipVacielWarning){
    $('vaciel-team-message').textContent=`현재 ${options.team.length}명 / 최대 5명 출전 선택 상태입니다. 보스 러시 최종전에서 인원이 부족하면 전투가 더 어려워질 수 있습니다.`;
    $('vaciel-team-warning').hidden=false;$('revise-vaciel-team').focus();return;
+ }
+ if(!skipSkillWarning){
+   const equippedBasics=options.playerSkills.filter(id=>!C.isSpecial(id)).length;
+   const equippedSpecials=options.playerSkills.filter(id=>C.isSpecial(id)).length;
+   if(equippedBasics<3||equippedSpecials<1){
+     $('skill-loadout-message').textContent=`현재 일반 기술 ${equippedBasics}/3개 · 특수 기술 ${equippedSpecials}/1개를 장착했습니다.`;
+     $('skill-loadout-warning').hidden=false;
+     $('revise-skill-loadout').focus();
+     return;
+   }
  }
  applyDrafts();atTitle=false;document.body.classList.remove('hr-at-title');launch(config,options);dirty=false;persistConfig();$('dirty-message').textContent='진행 상황이 자동 저장됩니다.';closeSettings();
 }
@@ -9590,7 +9652,7 @@ function bossStateLabels(v){
     ` ${positive.has(key)?'+':'−'}${Math.round(effect.value*1000)/10}%`;
   out.push(`${labels[key]||key}${detail}`);
  }
- if(v.reflection?.until>=v.round)out.push(`피해 반사`);
+ if(v.reflection?.until>=v.round)out.push(v.reflection.recordOnly?'피해 기록 중':'피해 반사');
  if(v.exposedUntil>=v.round&&battle.domain==='marionel')out.push(`본체 노출`);
  return out;
 }
@@ -9640,16 +9702,17 @@ function render(){if(!playing()&&battle?.outcome&&!battle.committed)finalizeBatt
    else if(dreamStage.dataset.dreamEver==='true')dreamStage.classList.add('dream-restoring');
    if(dreamActive)dreamStage.dataset.dreamEver='true';
  }
- $('enemy-status').innerHTML=twin?'<b>마리오넬 / 마리오넬</b> · 진짜를 구별할 수 없습니다.':`<b>${esc(v.boss.name)}</b> HP ${v.boss.hp} / ${v.boss.maxHp}${bar(v.boss.hp,v.boss.maxHp)}${bossStateLabels(v).length?`<div class="hr-boss-effects" aria-label="보스 상태 효과">${bossStateLabels(v).map(t=>`<span class="hr-boss-effect">${esc(t)}</span>`).join('')}</div>`:''}`;
- $('summons').innerHTML=twin?'<span class="hr-echo">꼭두각시 대역 · 진짜 마리오넬을 선택하세요.</span>':v.summons.filter(C.living).sort((a,z)=>(a.slot==='right'?1:0)-(z.slot==='right'?1:0)).map(u=>`<span class="hr-echo">${esc(u.name)} ${u.hp}/${u.maxHp}</span>`).join('');
+ $('enemy-status').innerHTML=twin?'<b>마리오넬 · 마리오넬</b>':`<b>${esc(v.boss.name)}</b> HP ${v.boss.hp} / ${v.boss.maxHp}${bar(v.boss.hp,v.boss.maxHp)}${bossStateLabels(v).length?`<div class="hr-boss-effects" aria-label="보스 상태 효과">${bossStateLabels(v).map(t=>`<span class="hr-boss-effect">${esc(t)}</span>`).join('')}</div>`:''}`;
+ $('summons').innerHTML=twin?'':v.summons.filter(C.living).sort((a,z)=>(a.slot==='right'?1:0)-(z.slot==='right'?1:0)).map(u=>`<span class="hr-echo">${esc(u.name)} ${u.hp}/${u.maxHp}</span>`).join('');
  const hints=[];
  if(v.intent?.effect==='duel'&&v.party[v.intent.targetId])hints.push(`코르가 ${v.party[v.intent.targetId].name}에게 검을 겨눕니다. 일대일 승부를 강요합니다.`);
- if(v.dissonance?.phase==='choose')hints.push('불협화음 · '+v.dissonance.targets.map(id=>v.party[id]?.name||'?').join(' · ')+'의 행동 종류를 다르게 선택하세요.');
+ if(v.dissonance?.phase==='choose')hints.push('불협화음 · '+v.dissonance.targets.map(id=>v.party[id]?.name||'?').join(' · ')+'에게 서로 다른 음표가 맴돌고 있습니다.');
  if(v.swordTrace?.ready)hints.push('예검의 궤적 · '+v.swordTrace.order.map((id,i)=>`${i+1}번 ${v.party[id]?.name||'?'}`).join(' · '));
- if(v.starCopy?.phase==='watch')hints.push('별의 복기 · 이번 차례의 마지막 행동을 관측 중입니다.');
- if(v.starCopy?.phase==='ready')hints.push('별의 복기 · '+({'attack':'공격','heal':'회복','defend':'방어','support':'지원'}[v.starCopy.record?.kind]||'지원')+' 행동을 재현할 예정입니다.');
- if(twin)hints.push('꼭두각시 대역 · 왼쪽과 오른쪽 중 단일 공격으로 한 번 선택하세요. 전체 공격은 두 대상 모두 맞지만 위장은 유지됩니다.');
- if(v.corFury>0)hints.push(v.corFury>=5?'코르 분노 5/5 · 다음 공격 후 0.6배 추가 타격':`코르 분노 축적 ${v.corFury}/5`);
+ if(v.starCopy?.phase==='watch')hints.push('별의 복기 · 천문관의 별빛이 일행의 마지막 움직임을 따라 흐릅니다.');
+ if(v.starCopy?.phase==='ready')hints.push('별의 복기 · 천구의에 새겨진 별빛이 되돌아오려 합니다.');
+ if(twin)hints.push('꼭두각시 대역 · 두 형체가 서로의 모습을 비추고 있습니다.');
+ if(v.corFury>0)hints.push(v.corFury>=5?'코르의 분노가 한계에 다다랐습니다.':`코르 분노 축적 ${v.corFury}/5`);
+ $('battle-special-alert').dataset.boss=battle.domain;
  $('battle-special-alert').textContent=hints.join('\n');$('battle-special-alert').hidden=!hints.length;
  
  $('speaker-name').textContent=e?(e.manual?label(e.speaker)||'장면':'행동 결과'):v.outcome?'전투 결과':'';
@@ -9743,8 +9806,8 @@ function displayDifficulty(){return DIFFICULTY_LABELS[startOptions?.difficulty]|
 /* 2026 ending book: sequential 후일담 cards in the large reading window. */
 const ENDING_NORMAL=["인간에게 절망한 옛 존재는, 역설적이게도 자신이 선물한 희망을 끝까지 놓지 않은 여섯 사람의 손에 의해 마침표를 찍었다.", "소멸해 가는 마지막 순간, 바시엘의 잿빛 눈동자에 비친 것은 탐욕이나 전쟁이 아닌, 서로의 상처를 부축하며 일어서는 수호대 라이저의 모습이었다. 바시엘이 희미한 한숨을 남긴 채 사라지자, 성역을 뒤덮었던 그림자도 마침내 걷혔다. 도시에는 다시 아침이 찾아왔다.", "신은 사라졌고 그가 남긴 희망이라는 이름의 숙제는 이제 온전히 살아남은 인간들의 몫이 되었다."];
 const ENDING_TRUE=["오래된 절망이 물러간 자리에는 다시 소란스럽고도 다정한 인간의 시간이 찾아왔다. 창백한 옛 주인은 하얀 양산을 접고 긴 잠으로 돌아갔으며 그가 마지막 순간에 보았던 작은 빛은 이제 여섯 사람의 평범한 하루하루 속에서 조용히 숨을 쉬고 있었다.", "그저 오늘 저녁의 메뉴를 고민하고 내일의 날씨를 걱정하는 사소한 바람들이 도시의 거리를 다시 채워 나갔다. 변신은 풀렸고, 상처는 아물었으며 여섯 사람은 언제나 그랬듯 같은 지붕 아래로 돌아와 저마다의 방식으로 내일을 맞이할 것이다."];
-const ENDING_LETTERS=[{"name": "쥰", "color": "#cb5550", "text": "자자, 이제 무거운 표정은 그만! 세상을 지켰든 어쨌든 밥은 든든히 먹어야지. 거창한 싸움이 끝났다고 해서 우리 일상이 변하는 건 아니니까, 오늘 저녁은 특제 오므라이스다! 다 같이 마주 보고 앉아서 밥 한 끼 먹는 거, 우리가 그토록 지키고 싶었던 게 바로 이런 시간이잖아?"}, {"name": "릿카", "color": "#55946b", "text": "한동안 주먹을 쥐어야 하는 날이 이어져 조금 피로했는데, 다시 줄기를 다듬고 꽃을 피워내는 평범한 시간으로 돌아올 수 있어서 다행이에요. 오늘 퇴근길에는 다 같이 나눠 먹을 케이크라도 사 갈까요."}, {"name": "시온", "color": "#d984ac", "text": "착각하지 마, 다 끝났다고 해서 이제 와서 감상에 젖을 생각은 전혀 없으니까. 우사뿅도, 내 노래도 이제부터가 진짜 시작이야. 저 녀석이 남겨두고 간 내일이 어떤 모습이든, 내 목소리가 닿는 곳까지는 전부 시끄럽고 눈부시게 채워줄 생각이라고. 그러니까 앞으로도 내가 어떻게 하는지 똑똑히 지켜봐."}, {"name": "린네", "color": "#65accc", "text": "있지있지, 오늘 유치원 가는 길에 하늘이 엄청 예뻤어! 너도 봤어? 언젠가 우리가 멀리 떨어져 지내게 되더라도 이렇게 같은 하늘을 보면서 서로를 떠올릴 수 있겠지? 그래도 지금은 다 같이 있으니까 실컷 웃고 놀아야지! 오늘 저녁에도 거실에 모여서 뒹굴뒹굴하자, 응?"}, {"name": "타쿠미", "color": "#d4ab45", "text": "저기…… 아직도 제가 무언가를 해냈다는 게 잘 믿기지 않아요. 혼자였다면 분명 시작조차 못 하고 도망쳤을 텐데 다들 제 곁에 있어 줬기 때문에 끝까지 버틸 수 있었어요. 앞으로도 대단한 일은 못 할지 모르지만…… 그래도 이제는 이 집에서 다 같이 내일을 맞이하는 게 조금도 두렵지 않아요."}];
-const ENDING_NIGHTMARE_EXTRA=["인간들의 희망을 더는 빼앗지 않기로 한 뒤, 바시엘과 다섯 간부가 머무는 고요한 회랑에는 사뭇 낯선 평화가 찾아왔다.", "바시엘은 여전히 온전히 서기 힘들었지만 오스테오스의 품에 안긴 그의 표정만큼은 오랜 짐을 내려놓은 듯 평온했다.", "문제는 당장 인간들을 심판하러 갈 일이 사라진 다섯 간부들의 넘치는 충성심이었다.", "\"아아, 바시엘 님께서 방금 작게 숨을 내쉬셨도다♭ 이는 곧 '긴 잠에 들기 전에 따뜻한 차라도 한 잔 마시고 싶구나'라는 숭고한 뜻이 분명하노라♬\"", "벨라톤이 보랏빛 눈을 반짝이며 망토 자락을 화려하게 휘날렸다. 그러자 구석에서 대검을 닦던 코르가 인상을 팍 찌푸리며 으르렁거렸다.", "\"시끄러워! 그냥 하품하신 거잖아! ……차 끓일 물은 내가 당장 끓여 오지. 땔감이고 뭐고 내 심장 불꽃으로 단숨에 태워버리면 그만이니까!\"", "\"코르, 진정하시지요. 주전자까지 녹여버릴 셈입니까.\"", "바시엘을 조심스럽게 안아 올린 오스테오스가 뼈 날개를 달그락거리며 한심하다는 듯 고개를 저었다. 그는 곧장 바시엘이 흔들리지 않도록 자세를 고쳐 잡으며 정중하게 덧붙였다.", "\"바시엘 님, 소란을 피워 송구합니다. 이 뼈가 조금 더 푹신한 의자가 되어드려야 하는데 재질이 재질인지라 늘 마음이 무겁군요.\"", "\"푹신한 게 필요하면 내가 만들면 돼.\"", "빈 왼쪽 소매를 나부끼며 다가온 마리오넬이 오른손 손가락을 꼼지락거렸다. 그의 손끝에서 뻗어 나온 가느다란 실이 허공에서 얽히더니 순식간에 인형 솜을 잔뜩 채운 거대한 쿠션 하나가 뚝딱 만들어졌다. 마리오넬은 무표정한 얼굴로 고개를 갸웃했다.", "\"오스테오스의 갈비뼈 사이에 이 솜을 전부 채워 넣으면…… 바시엘이 훨씬 편하지 않을까? 자, 가만히 있어 봐. 금방 꿰매 줄게.\"", "\"정중히 사양하겠습니다, 마리오넬. 뼈 사이에 솜이 낀 집사라니, 품위가 떨어지는군요.\"", "그 모습을 지켜보던 라크리엔의 머리 위에서 푸른 촛불이 잔잔하게 흔들렸다.", "\"아아…… 다들 바시엘 님을 생각하는 마음이 이토록 깊다니, 참으로 눈물겨운 광경입니다…… 코르가 주전자를 태워 먹을 미래도, 오스테오스가 솜인형이 될 뻔한 참사도 이 눈에는 전부 보입니다. 이토록 어수선하면서도 지극한 충성심이라니…… 감탄을 금할 수 없군요.\"", "\"야! 주전자 아직 멀쩡하거든!\"", "코르가 버럭 소리를 지르자, 벨라톤은 그 고함마저 장엄한 합창의 일부인 양 비장한 아리아를 뽑아내기 시작했다.", "한순간에 소란스러워진 회랑 한가운데서 바시엘은 무릎 위에 놓인 하얀 레이스 양산을 가만히 만지작거렸다. 자신이 떼어낸 감정과 감각들이 저마다의 모양으로 살아 움직이며 아웅다웅하는 모습은 꽤나 시끄러웠지만 결코 싫지 않았다.", "\"……조금만 더, 깨어 있어도 괜찮겠군.\"", "바시엘의 입가에서 흘러나온 희미한 속삭임은 코르의 고함과 벨라톤의 노랫소리에 묻혀 아무에게도 닿지 않았다. 하지만 그의 잿빛 눈동자에는 그날 인간들에게서 보았던 것과 닮은 온기가 아주 옅게 어려 있었다."];
+const ENDING_LETTERS=[{"name": "쥰", "color": "#cb5550", "text": "자자, 이제 무거운 표정은 그만! 세상을 지켰든 어쨌든 밥은 든든히 먹어야지. 거창한 싸움이 끝났다고 해서 우리 일상이 변하는 건 아니니까, 오늘 저녁은 특제 오므라이스다! 다 같이 마주 보고 앉아서 밥 한 끼 먹는 거, 우리가 그토록 지키고 싶었던 게 바로 이런 시간이잖아?"}, {"name": "릿카", "color": "#55946b", "text": "한동안 주먹을 쥐어야 하는 날이 이어져 조금 피로했는데 다시 줄기를 다듬고 꽃을 피워내는 평범한 시간으로 돌아올 수 있어서 다행이에요. 오늘 퇴근길에는 다 같이 나눠 먹을 케이크라도 사 갈까요."}, {"name": "시온", "color": "#d984ac", "text": "착각하지 마, 다 끝났다고 해서 이제 와서 감상에 젖을 생각은 전혀 없으니까. 우사뿅도, 내 노래도 이제부터가 진짜 시작이야. 저 녀석이 남겨두고 간 내일이 어떤 모습이든, 내 목소리가 닿는 곳까지는 전부 시끄럽고 눈부시게 채워줄 생각이라고. 그러니까 앞으로도 내가 어떻게 하는지 똑똑히 지켜봐."}, {"name": "린네", "color": "#65accc", "text": "있지있지, 오늘 유치원 가는 길에 하늘이 엄청 예뻤어! 너도 봤어? 언젠가 우리가 멀리 떨어져 지내게 되더라도 이렇게 같은 하늘을 보면서 서로를 떠올릴 수 있겠지? 그래도 지금은 다 같이 있으니까 실컷 웃고 놀아야지! 오늘 저녁에도 거실에 모여서 뒹굴뒹굴하자, 응?"}, {"name": "타쿠미", "color": "#d4ab45", "text": "저기…… 아직도 제가 무언가를 해냈다는 게 잘 믿기지 않아요. 혼자였다면 분명 시작조차 못 하고 도망쳤을 텐데 다들 제 곁에 있어 줬기 때문에 끝까지 버틸 수 있었어요. 앞으로도 대단한 일은 못 할지 모르지만…… 그래도 이제는 이 집에서 다 같이 내일을 맞이하는 게 조금도 두렵지 않아요."}];
+const ENDING_NIGHTMARE_EXTRA=["인간들의 희망을 더는 빼앗지 않기로 한 뒤, 바시엘과 다섯 간부가 머무는 고요한 회랑에는 사뭇 낯선 평화가 찾아왔다.", "바시엘은 여전히 온전히 서기 힘들었지만 오스테오스의 품에 안긴 그의 표정만큼은 오랜 짐을 내려놓은 듯 평온했다.", "문제는 당장 인간들을 심판하러 갈 일이 사라진 다섯 간부들의 넘치는 충성심이었다.", "\"아아, 바시엘 님께서 방금 작게 숨을 내쉬셨도다♭ 이는 곧 '긴 잠에 들기 전에 따뜻한 차라도 한 잔 마시고 싶구나'라는 숭고한 뜻이 분명하노라♬\"", "벨라톤이 보랏빛 눈을 반짝이며 망토 자락을 화려하게 휘날렸다. 그러자 구석에서 대검을 닦던 코르가 인상을 팍 찌푸리며 으르렁거렸다.", "\"시끄러워! 그냥 하품하신 거잖아! ……차 끓일 물은 내가 당장 끓여 오지. 땔감이고 뭐고 내 불꽃으로 단숨에 태워버리면 그만이니까!\"", "\"코르, 진정하시지요. 주전자까지 녹여버릴 셈입니까.\"", "바시엘을 조심스럽게 안아 올린 오스테오스가 뼈 날개를 달그락거리며 한심하다는 듯 고개를 저었다. 그는 곧장 바시엘이 흔들리지 않도록 자세를 고쳐 잡으며 정중하게 덧붙였다.", "\"바시엘 님, 소란을 피워 송구합니다. 이 뼈가 조금 더 푹신한 의자가 되어드려야 하는데 재질이 재질인지라 늘 마음이 무겁군요.\"", "\"푹신한 게 필요하면 내가 만들면 돼.\"", "빈 왼쪽 소매를 나부끼며 다가온 마리오넬이 오른손 손가락을 꼼지락거렸다. 그의 손끝에서 뻗어 나온 가느다란 실이 허공에서 얽히더니 순식간에 인형 솜을 잔뜩 채운 거대한 쿠션 하나가 뚝딱 만들어졌다. 마리오넬은 무표정한 얼굴로 고개를 갸웃했다.", "\"오스테오스의 갈비뼈 사이에 이 솜을 전부 채워 넣으면…… 바시엘이 훨씬 편하지 않을까? 자, 가만히 있어 봐. 금방 꿰매 줄게.\"", "\"정중히 사양하겠습니다, 마리오넬. 뼈 사이에 솜이 낀 집사라니, 품위가 떨어지는군요.\"", "그 모습을 지켜보던 라크리엔의 머리 위에서 푸른 촛불이 잔잔하게 흔들렸다.", "\"아아…… 다들 바시엘 님을 생각하는 마음이 이토록 깊다니, 참으로 눈물겨운 광경입니다…… 코르가 주전자를 태워 먹을 미래도, 오스테오스가 솜인형이 될 뻔한 참사도 이 눈에는 전부 보입니다. 이토록 어수선하면서도 지극한 충성심이라니…… 감탄을 금할 수 없군요.\"", "\"야! 주전자 아직 멀쩡하거든!\"", "코르가 버럭 소리를 지르자, 벨라톤은 그 고함마저 장엄한 합창의 일부인 양 비장한 아리아를 뽑아내기 시작했다.", "한순간에 소란스러워진 회랑 한가운데서 바시엘은 무릎 위에 놓인 하얀 레이스 양산을 가만히 만지작거렸다. 자신이 떼어낸 감정과 감각들이 저마다의 모양으로 살아 움직이며 아웅다웅하는 모습은 꽤나 시끄러웠지만 결코 싫지 않았다.", "\"……조금만 더, 깨어 있어도 괜찮겠군.\"", "바시엘의 입가에서 흘러나온 희미한 속삭임은 코르의 고함과 벨라톤의 노랫소리에 묻혀 아무에게도 닿지 않았다. 하지만 그의 잿빛 눈동자에는 그날 인간들에게서 보았던 것과 닮은 온기가 아주 옅게 어려 있었다."];
 function endingPages(){
  const alternate=trueEnding();
  const nightmareExtra=alternate&&startOptions.difficulty==='hard';
@@ -9869,7 +9932,7 @@ function renderPanel(){
  <div class="start-event-grid">${Object.entries(config.heroes).filter(([id])=>id!=='user').map(([id,h])=>{const condition=isRunning?(journey.roster[id]||options.conditions[id]):options.conditions[id];const completed=!!condition?.eventCompleted;return `<div class="start-event-row"><strong>${esc(h.name)}</strong><div class="start-event-choice"><button type="button" data-event-pick="${id}:done" aria-pressed="${completed}" class="game-choice ${completed?'is-selected':''}" ${isRunning?'disabled':''}>완료</button><button type="button" data-event-pick="${id}:pending" aria-pressed="${!completed}" class="game-choice ${!completed?'is-selected':''}" ${isRunning?'disabled':''}>미완료</button></div></div>`;}).join('')}</div></div>
  <div class="start-section"><div class="start-heading"><span>04</span><h3>주인공 스킬 <small>기본 기술 3개 + 특수 기술 1개</small></h3></div><p class="start-caption">스킬 이름과 효과를 보고 장착할 수 있어요. SP는 전투 중 소모됩니다.</p>
  <div class="start-skill-grid">${config.skills.filter(s=>!C.isSpecial(s.id)).map(s=>`<button type="button" data-equip-pick="${s.id}" aria-pressed="${options.playerSkills.includes(s.id)}" class="start-skill game-pick ${options.playerSkills.includes(s.id)?'selected is-selected':''}"><span class="start-skill-info"><b>${esc(s.name)}</b><small>${esc(skillDescription(s)||s.detail)}</small></span><span class="start-cost">SP ${s.cost}</span></button>`).join('')}</div>
- <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 속박, 출혈, 화상, 꼭두각시 실, 수선하는 손, 「색을 잃은 꿈」을 해제합니다.</p></details></div>
+ <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 속박, 출혈, 화상, 꼭두각시 실, 수선하는 손, 색 잃은 꿈을 해제합니다.</p></details></div>
 `;
  $('apply-restart').disabled=journey.pendingSupply||(options.series&&(journey.failed||!open.length));
  $('apply-restart').textContent=options.series?(journey.started?'다음 전투 시작 ▶':'보스 러시 시작 ▶'):'전투 시작 ▶';
@@ -10058,6 +10121,8 @@ bind('cancel-new-game',cancelNewGame);
 bind('confirm-new-game',()=>{ $('new-game-confirm').hidden=true;newGame(); });
 bind('revise-vaciel-team',()=>{ $('vaciel-team-warning').hidden=true;const first=$('[data-team-pick]');first?.focus(); });
 bind('confirm-vaciel-team',()=>{ $('vaciel-team-warning').hidden=true;start(true); });
+bind('revise-skill-loadout',()=>{ $('skill-loadout-warning').hidden=true;const first=$('[data-equip-pick]');first?.focus(); });
+bind('confirm-skill-loadout',()=>{ $('skill-loadout-warning').hidden=true;start(true,true); });
 bind('open-settings',()=>openSettings());bind('close-settings',closeSettings);bind('apply-restart',start);bind('restart',openNewGame);bind('prep-new-game',openNewGame);bind('next-event',step);bind('skip-narration',skipNarration);bind('execute',run);
 bind('auto-attack',()=>{if(autoRound!==null){autoRound=null;render();return;}if(playing()||battle.outcome||retreatOpen)return;if(C.rescueTargets(battle).length){tell('사용자의 대화 또는 행동을 먼저 골라 주세요.');return;}else autoRound=battle.round;render();});
 bind('retreat',()=>{if(playing()||battle.outcome)return;clearTimeout(playTimer);autoRound=null;retreatOpen=true;$('retreat-confirm').hidden=false;$('retreat-message').textContent='전투에서 후퇴할까요?'+(Object.values(battle.party).some(u=>C.living(u)&&u.distorted&&!u.permanentUnavailable)?' 미구출 동료는 영구 이탈합니다.':'')+(startOptions.series?' 보스 러시를 종료합니다.':'');render();$('cancel-retreat').focus();});
@@ -10129,7 +10194,7 @@ document.addEventListener('change',async e=>{const t=e.target;try{if(t.dataset.h
  if(t.dataset.equip){if(t.checked){if(options.playerSkills.filter(id=>!C.isSpecial(id)).length>=3){t.checked=false;throw Error('일반 기술은 최대 세 개입니다.');}options.playerSkills.push(t.dataset.equip);}else options.playerSkills=options.playerSkills.filter(id=>id!==t.dataset.equip);marked();renderPanel();}if(t.dataset.returned){const a=options.storyFlags.returnedCommanders;options.storyFlags.returnedCommanders=t.checked?[...new Set([...a,t.dataset.returned])]:a.filter(id=>id!==t.dataset.returned);marked();}if(t.id==='skill-choice'){chosenSkill=t.value;chosenTarget='';renderCommand();}if(t.id==='item-choice'){chosenItem=t.value;chosenTarget='';renderCommand();}if(t.id==='target-choice'){chosenTarget=t.value;renderCommand();}if(t.id==='media-slot'){mediaKey=t.value;renderPanel();}if(t.id==='media-upload'&&t.files[0])await storeMedia(mediaKey,t.files[0]);if(t.id==='file-input'&&t.files[0]){if(t.files[0].size>55*1024*1024)throw Error('파일이 너무 큽니다.');const parsed=JSON.parse(await t.files[0].text());await fileHandler(parsed);}}catch(err){tell(err.message);}});
 document.addEventListener('input',e=>{if(e.target.dataset.option==='playerName')liveName(e.target.value);if(e.target.dataset.json){rawDrafts[e.target.dataset.json]=e.target.value;marked();}if(e.target.id==='volume'){volume=Number(e.target.value)/100;if(audio)rampBgm(audio,volume,100);}});
 document.addEventListener('keydown',e=>{
-  const confirmDialog=!$('new-game-confirm').hidden?['new-game-confirm','cancel-new-game','confirm-new-game']:!$('vaciel-team-warning').hidden?['vaciel-team-warning','revise-vaciel-team','confirm-vaciel-team']:null;
+  const confirmDialog=!$('new-game-confirm').hidden?['new-game-confirm','cancel-new-game','confirm-new-game']:!$('vaciel-team-warning').hidden?['vaciel-team-warning','revise-vaciel-team','confirm-vaciel-team']:!$('skill-loadout-warning').hidden?['skill-loadout-warning','revise-skill-loadout','confirm-skill-loadout']:null;
   if(confirmDialog){
     if(e.key==='Escape'){e.preventDefault();$(confirmDialog[1]).click();return;}
     if(e.key==='Tab'){const first=$(confirmDialog[1]),last=$(confirmDialog[2]);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}
