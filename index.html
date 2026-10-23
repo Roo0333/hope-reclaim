@@ -7569,6 +7569,9 @@ function validateConfig(c) {
 const living=u=>!!u&&u.alive&&u.hp>0;
 const active=(u,k,r)=>u?.buffs?.[k]&&u.buffs[k].until>=r&&(u.buffs[k].from??0)<=r;
 const buff=(u,k,b)=>active(u,k,b.round)?u.buffs[k].value:0;
+// 방어력 감소는 원래 방어력 계산에도 적용된다. 추가 피해량 역시 실제 감소율에 따라 변한다.
+// 방어력 −15%: 추가 피해 +15%, −25%: +18%, −50%: +25% (상한).
+const defenseBreakBonus=rate=>rate>0?Math.min(.25,.105+.30*rate):0;
 const ready=(u,r=Infinity)=>living(u)&&!u.distorted&&!u.permanentUnavailable&&u.hasHope!==false&&!u.captured&&!u.away&&(u.recoveredAt==null||u.recoveredAt<r)&&!active(u,'bind',r);
 const canTalk=(b,id='user')=>id==='user'&&!!b.party.user&&b.party.user.alive&&!b.party.user.permanentUnavailable;
 const rescueTargets=b=>canTalk(b)&&!active(b.party.user,'puppet',b.round)&&!b.acted.user&&b.talkRound!==b.round?Object.values(b.party).filter(u=>living(u)&&u.distorted&&u.rescue==='pending'&&!u.permanentUnavailable):[];
@@ -7585,7 +7588,7 @@ const actorName=(b,id)=>id==='system'?'전투 기록':id==='scene'?'':b.party[id
 const rand=b=>{b.rng=(Math.imul(1664525,b.rng)+1013904223)>>>0;return b.rng/4294967296;};
 const pick=(b,a)=>a.length?a[Math.floor(rand(b)*a.length)]:null;
 const pct=(n,p)=>Math.max(0,Math.round(n*p));
-function snapshot(b) {return copy({round:b.round,party:b.party,boss:b.boss,summons:b.summons,phase:b.phase,intent:b.intent,mark:b.mark,story:b.story,items:b.items,outcome:b.outcome,committed:b.committed,talkRound:b.talkRound,acted:b.acted,invitation:b.invitation,reflection:b.reflection,recordedDamage:b.recordedDamage,exposedUntil:b.exposedUntil,doppel:b.doppel,starCopy:b.starCopy,dissonance:b.dissonance,swordTrace:b.swordTrace,corFury:b.corFury,dreamMonochrome:!!b.dreamMonochrome,playerName:b.playerName});}
+function snapshot(b) {return copy({round:b.round,party:b.party,boss:b.boss,summons:b.summons,phase:b.phase,intent:b.intent,mark:b.mark,story:b.story,items:b.items,outcome:b.outcome,committed:b.committed,talkRound:b.talkRound,acted:b.acted,invitation:b.invitation,reflection:b.reflection,recordedDamage:b.recordedDamage,exposedUntil:b.exposedUntil,doppel:b.doppel,starCopy:b.starCopy,dissonance:b.dissonance,swordTrace:b.swordTrace,lacrienStep:b.lacrienStep,corFury:b.corFury,dreamMonochrome:!!b.dreamMonochrome,playerName:b.playerName});}
 function emit(x,type,speaker,message,extra={}) {
   const b=x.b,e={id:++b.eventSerial,type,speaker,template:String(message),text:String(message).replaceAll('{{user}}',b.playerName),...extra};
   if(b.record) {b.log.push(copy(e));if(b.log.length>600)b.log.shift();x.events.push({...e,view:snapshot(b)});}return e;
@@ -7604,8 +7607,26 @@ function choose(x,preferred=null,forced=false) {
   let n=rand(b)*(sum||1),t=valid[0];for(let i=0;i<valid.length;i++){n-=weights[i];if(n<0){t=valid[i];break;}}
   if(t)b.lastRandomTarget=t.id;return t;
 }
+// 보통·어려움 라크리엔만 행동 기준 5단계 순환. 별의 복기는 회귀 뒤 별도 차례를 쓴다.
+// 라운드 번호에 빈 슬롯을 끼우지 않아 봉쇄돼도 '견제'가 생기지 않는다.
+const lacrienSequence=['light','record','judgment','echo','ray'];
+function lacrienStage(b){
+  if(Number.isInteger(b.lacrienStep))return b.lacrienStep;
+  // 이전 저장 파일의 진행 위치도 보존한다. 5번째 어려움 차례는 복기 예약 슬롯이었다.
+  const old=(b.round-1)%(b.difficulty==='hard'?6:5);
+  b.lacrienStep=b.difficulty==='hard'&&old===5?4:Math.min(old,4);
+  if(b.lacrienRecording===undefined)b.lacrienRecording=!!b.reflection||b.recordedDamage>0||b.lacrienStep===3;
+  return b.lacrienStep;
+}
 function pattern(b,c) {
   const hp=b.boss.hp/b.boss.maxHp*100,list=c.bosses[b.domain].patterns[b.difficulty];
+  if(b.domain==='lacrien'&&['normal','hard'].includes(b.difficulty)){
+    let step=lacrienStage(b);
+    // 기록 자체를 봉쇄했다면 비어 있는 회귀 차례는 만들지 않는다.
+    if(step===3&&!b.lacrienRecording){b.lacrienStep=step=4;}
+    const planned=list.find(p=>p.id===lacrienSequence[step]);
+    if(planned)return copy(planned);
+  }
   return copy(list.filter(p=>(p.effect!=='motif'||b.motifCount<(b.difficulty==='hard'?5:3))&&p.fromRound<=b.round&&(b.round-1)%p.cycle===p.offset-1&&hp>=p.hpMin&&hp<=p.hpMax&&(p.phase==='any'||p.phase===b.phase)&&(!p.once||b.patternUsed[p.id]==null)&&(b.patternUsed[p.id]==null||b.round-b.patternUsed[p.id]>p.cooldown)).sort((a,z)=>z.priority-a.priority)[0]||{id:'fallback',name:b.domain==='vaciel'&&b.difficulty!=='hard'?'그림자의 물결':'견제',effect:b.phase==='calm'?'wait':'strike',power:b.difficulty==='practice'?.6:1,target:'one',tell:'움직임을 가다듬고 있습니다.'});
 }
 // 예고와 실제 판정이 같은 상태·설정을 읽는다. 스토리 정답이나 구출 횟수는 표시하지 않는다.
@@ -7751,7 +7772,7 @@ function initial(c,opts={}) {
   const boss=unit(id,{...bc,hp:pct(bc.hp+bc.hpPerCompanion*team.length+extra,d.hp*hpScale)+vacielNightmareTeamHp,atk:bc.atk*d.atk*attackScale,def:bc.def*d.def,speed:bc.speed*d.speed,crit:d.enemyCrit});
   num(opts.bossHpPercent??100,1,100,'보스 체력');boss.hp=Math.max(1,pct(boss.maxHp,(opts.bossHpPercent??100)/100));
   const gate=opts.storyFlags||{},returned=Array.isArray(gate.returnedCommanders)?bossIds.filter(k=>k!=='vaciel'&&gate.returnedCommanders.includes(k)):[],empty=id==='vaciel'&&returned.length===5&&gate.composureRestored===true;
-  const b={version:3,forceDefeat:!!opts.forceDefeat,id:opts.id||id+'-'+seed,mode:opts.mode==='campaign'?'campaign':'workbench',domain:id,playerName:name,difficulty:mode,seed,rng:seed,round,startedAt:round,revision:0,meaningful:false,eventSerial:0,record:opts.record!==false,team:[...team],playerSkills:[...ps],party,boss,summons:[],summonSerial:0,summonCount:0,repairCount:0,motifCount:0,phase:id==='osteos'?'calm':'base',specialFinal:empty,rageTriggered:false,patternUsed:{},intent:null,mark:null,story:{occurred:!!opts.eventOccurred,pressured:!!opts.eventOccurred,hero:null,branch:'none',resolved:false,focus:null},storyFlags:{returnedCommanders:returned,composureRestored:gate.composureRestored===true},talkRound:0,smallTalkUsed:{},bossTalkCount:0,bossTalkLimit:(bc.chat?.length||3)+((bc.bossTalkEntry?.ordinary?.length||bc.bossTalkEntry?.solo?.length)?1:0),pairTalkUsed:false,midDialogueShown:false,acted:{},items:copy(c.itemLoadouts?.[mode==='hard'?'hard':id==='vaciel'?'final':mode]||c.items),log:[],outcome:null,committed:false,deathAllowed:false,lastTrack:null,lastCompanionSkill:null,lastRandomTarget:null,invitation:null,reflection:null,recordedDamage:0,exposedUntil:0,corFury:0,corFuryAction:null,corFeastUsed:0,corFeastSpoke:false,dissonance:null,dissonanceLast:-99,starCopy:null,doppel:null,swordTrace:null,swordTraceLast:-99,dreamMonochrome:false};
+  const b={version:3,forceDefeat:!!opts.forceDefeat,id:opts.id||id+'-'+seed,mode:opts.mode==='campaign'?'campaign':'workbench',domain:id,playerName:name,difficulty:mode,seed,rng:seed,round,startedAt:round,revision:0,meaningful:false,eventSerial:0,record:opts.record!==false,team:[...team],playerSkills:[...ps],party,boss,summons:[],summonSerial:0,summonCount:0,repairCount:0,motifCount:0,phase:id==='osteos'?'calm':'base',specialFinal:empty,rageTriggered:false,patternUsed:{},intent:null,mark:null,story:{occurred:!!opts.eventOccurred,pressured:!!opts.eventOccurred,hero:null,branch:'none',resolved:false,focus:null},storyFlags:{returnedCommanders:returned,composureRestored:gate.composureRestored===true},talkRound:0,smallTalkUsed:{},bossTalkCount:0,bossTalkLimit:(bc.chat?.length||3)+((bc.bossTalkEntry?.ordinary?.length||bc.bossTalkEntry?.solo?.length)?1:0),pairTalkUsed:false,midDialogueShown:false,acted:{},items:copy(c.itemLoadouts?.[mode==='hard'?'hard':id==='vaciel'?'final':mode]||c.items),log:[],outcome:null,committed:false,deathAllowed:false,lastTrack:null,lastCompanionSkill:null,lastRandomTarget:null,invitation:null,reflection:null,recordedDamage:0,exposedUntil:0,corFury:0,corFuryAction:null,corFeastUsed:0,corFeastSpoke:false,dissonance:null,dissonanceLast:-99,starCopy:null,doppel:null,swordTrace:null,swordTraceLast:-99,dreamMonochrome:false,lacrienStep:0,lacrienRecording:false};
   const existing=party[bc.story.hero];if(existing?.distorted&&existing.rescue==='pending'){b.story={occurred:true,hero:existing.id,branch:'distorted',resolved:false,focus:bc.story.focus?existing.id:null};}
   const x=ctx(b,c);
   scene(x,id==='vaciel'?(empty?bc.emptyIntro:returned.length?bc.mixedIntro||bc.intro:bc.intro):bc.intro);
@@ -7881,10 +7902,8 @@ function damage(x,a,t,power,opts={}) {
   if(t===b.boss&&b.domain==='marionel'&&b.difficulty!=='practice'&&b.exposedUntil>=b.round)n*=1+(bc.params.exposedDamageBonus||0)+(['normal','hard'].includes(b.difficulty)&&b.domain==='marionel'?.1:0);
 if(t===b.boss&&b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&b.team.length===0)n*=1.25;
   if(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&b.team.length===0&&!b.party[a.id])n*=.72;
-  // 방어력 감소 상태의 적은 방어력 수치 감소 외에 공격 피해가 20% 증가한다.
-  // 중첩 방깎(최대 50%)이라도 추가 피해 증가율은 중첩되지 않는다.
-  // 보스 고유의 보호·노출 기믹은 기존 판정을 유지한다.
-  if((t===b.boss||b.summons.includes(t))&&active(t,'defdown',b.round))n*=1.2;
+  // 실제 방어력 감소량(중첩 포함)에 비례한 추가 피해. 보스 고유 보호·노출은 유지.
+  if(t===b.boss||b.summons.includes(t))n*=1+defenseBreakBonus(buff(t,'defdown',b));
   // 수호 후 다음 주인공 공격 1회. 3연격이라면 같은 행동의 3타 모두 적용.
   if(x.riposteBonus&&a===b.party.user&&!opts.reaction&&(t===b.boss||b.summons.includes(t)))n*=1+x.riposteBonus;
   if(t.guard)n*=c.rules.guardFactor;if(t.protect)n*=1-t.protect;
@@ -8179,23 +8198,58 @@ function bossActionText(bc,p) {
   if(desc){const code=owner.charCodeAt(owner.length-1);const hasFinal=code>=0xAC00&&code<=0xD7A3&&(code-0xAC00)%28!==0;return owner+(hasFinal?'이 ':'가 ')+desc;}
   return owner+' · '+p.name+' 발동!';
 }
+// 린네 봉쇄의 공통 후처리: 일반 행동은 소모, 예약된 후속 동작은 정리한다.
+// 바시엘의 색 잃은 꿈/공명만 예외적으로 다음 보스 차례에 같은 단계를 재시도한다.
+function blockedBossAction(x,p){
+  const {b,bc}=x;
+  if(b.domain==='vaciel'&&b.difficulty==='hard'&&['dreammark','dreamresonance'].includes(p.effect)){
+    if(p.effect==='dreammark'){
+      emit(x,'blocked','scene','바시엘이 눈을 감자, 양산 아래로 번지던 빛이 그 자리에서 멎습니다. 성역은 아직 색을 잃지 않았습니다.');
+    }else{
+      // 공명이 연기돼도 해제하지 않은 꿈 표식의 유효 시간이 사라지지 않도록 연장.
+      for(const u of Object.values(b.party)){
+        const mark=u.buffs.colorlessDream;
+        if(mark&&mark.until>=b.round)mark.until=b.round+1;
+      }
+      emit(x,'blocked','scene','눈을 뜨려던 바시엘의 움직임이 멎습니다. 성역의 색은 돌아오지 않고, 고요는 다음 순간을 기다립니다.');
+      emit(x,'dialogue','vaciel','……그대들이 이 찰나를 붙들었구나.');
+    }
+    // finalChain은 변경하지 않는다. 다음 라운드에도 정확히 같은 기술을 예고한다.
+    return;
+  }
+  switch(b.domain){
+    case 'lacrien':
+      if(b.starCopy?.phase==='ready'){
+        b.starCopy=null; // 복기가 봉쇄되면 관측 기록 소모, 이어서 별빛
+      }else{
+        if(p.effect==='reflect'){
+          b.reflection=null;b.recordedDamage=0;b.lacrienRecording=false;
+        }else if(p.effect==='recordecho'){
+          b.reflection=null;b.recordedDamage=0;b.lacrienRecording=false;b.starCopy=null;
+        }
+        const i=lacrienSequence.indexOf(p.id);
+        if(i>=0)b.lacrienStep=(i+1)%lacrienSequence.length;
+      }
+      emit(x,'blocked','scene','라크리엔의 움직임이 멎습니다. 천구의에 맺힌 연계가 끊어집니다.');
+      return;
+    case 'osteos':
+      if(p.effect==='blade-trace')b.swordTrace=null;
+      break;
+    case 'bellaton':
+      if(p.effect==='ribbon')b.invitation=null;
+      // 공연 중 끊긴 악장으로 인해 유효 기간이 지난 초대가 남지 않게 한다.
+      break;
+    case 'cor':
+      if(p.effect==='duel')b.mark=null;
+      break;
+  }
+  emit(x,'blocked','scene',bc.name+'의 움직임이 잠시 멎습니다. 예정되었던 공격이 끊어집니다.');
+}
 function bossAct(x) {
   const {b,bc,d}=x,p=b.intent,hard=['normal','hard'].includes(b.difficulty),nightmare=b.difficulty==='hard',easy=b.difficulty==='practice';
   if(b.domain==='cor')b.corFeastUsed=0;
-  // 봉쇄로 후반 연계가 취소되지 않도록 현재 단계 그대로 다음 라운드에 재시도한다.
   if(active(b.boss,'stun',b.round)){
-    if(b.domain==='vaciel'&&b.difficulty==='hard'&&p.effect==='dreamresonance'){
-      b.finalChain='aftershock';
-      for(const u of Object.values(b.party))delete u.buffs.colorlessDream;
-      b.dreamMonochrome=false;
-      emit(x,'blocked','scene','린네가 붙잡은 찰나, 공명을 이루던 고요가 깨집니다. 성역을 덮은 힘이 흩어지고 바시엘의 손끝이 떨립니다.');
-      emit(x,'dialogue','vaciel','……그대들이 이 찰나를 붙들었구나.');
-      emit(x,'notice','system','「공명」을 저지했습니다!');
-      return;
-    }
-    if(b.domain==='vaciel'&&b.difficulty==='hard'&&p.effect==='dreammark')
-      emit(x,'blocked','scene','바시엘이 눈을 감자, 양산 아래로 번지던 빛이 그 자리에서 멎습니다. 성역은 아직 색을 잃지 않았습니다.');
-    else emit(x,'blocked','scene',bc.name+'의 움직임이 잠시 멎습니다. 후반 연계는 잠시 늦춰집니다.');
+    blockedBossAction(x,p);
     return;
   }
 
@@ -8291,12 +8345,13 @@ function bossAct(x) {
       // 쉬움에는 만상회귀가 없어 기존 피해 반사 성질을 유지합니다.
       b.reflection={until:b.round+1,recordOnly:hard&&b.domain==='lacrien'};
       b.recordedDamage=0;
+      if(b.domain==='lacrien'&&hard)b.lacrienRecording=true;
       emit(x,'notice','scene','라크리엔 주위의 빛이 거울처럼 맑아집니다.');
       if(hard&&b.domain==='lacrien')hit(one(),p.power||1.05);
       else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.54);
       break;
     }
-    case 'recordecho':if(hard){const amount=b.recordedDamage;emit(x,'echo','scene',amount>0?`만상회귀 · 만상기록에 쌓인 ${amount} 피해를 바탕으로 빛이 아군 전체에 되돌아옵니다.`:'만상회귀 · 기록이 비어 있어도 약한 잔광이 전원에게 되돌아옵니다.');for(const original of all()){const t=redirectArea(original);if(!living(t))continue;const echo=Math.max(b.domain==='lacrien'?original.maxHp*.07:0,Math.min(amount*p.power,original.maxHp*.25)); /* 기록 피해는 인당 최대 HP 25% 상한 */if(echo>0){let n=echo;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;if(t.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,t,n);} }b.recordedDamage=0;
+    case 'recordecho':if(hard){const amount=b.recordedDamage;emit(x,'echo','scene',amount>0?`만상회귀 · 만상기록에 쌓인 ${amount} 피해를 바탕으로 빛이 아군 전체에 되돌아옵니다.`:'만상회귀 · 기록이 비어 있어도 약한 잔광이 전원에게 되돌아옵니다.');for(const original of all()){const t=redirectArea(original);if(!living(t))continue;const echo=Math.max(b.domain==='lacrien'?original.maxHp*.07:0,Math.min(amount*p.power,original.maxHp*.25)); /* 기록 피해는 인당 최대 HP 25% 상한 */if(echo>0){let n=echo;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;if(t.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,t,n);} }b.recordedDamage=0;b.lacrienRecording=false;b.reflection=null;
       if(nightmare&&!b.starCopy){b.starCopy={phase:'watch',record:null};
         emit(x,'story','scene','되돌아온 별빛이 사라지지 않고 천구의의 고리를 따라 흐릅니다.');
         emit(x,'dialogue','lacrien','……이번에는 여러분이 어떤 선택을 남기시는지 지켜보겠습니다.');
@@ -8469,6 +8524,10 @@ function bossAct(x) {
     case 'empty':sweep();for(const t of all())status(x,t,'weak',easy?.1:.2,2);break;
     case 'sweep':sweep();break;
     default:if(p.target==='all')sweep();else hit(one());
+  }
+  if(b.domain==='lacrien'&&hard){
+    const i=lacrienSequence.indexOf(p.id);
+    if(i>=0)b.lacrienStep=(i+1)%lacrienSequence.length;
   }
 }
 function distortionTick(x) {
@@ -9754,16 +9813,16 @@ function skillDescription(s){
   stun:`행동 봉쇄 · ${d}라운드 (보스는 1라운드만 봉쇄, 이후 일정 기간 재봉쇄 면역)`,
   spotlight:`공격력 +${p}% 및 동료당 +${Math.round((s.secondary??.05)*100)}% · 최대 ${Math.round((s.limit??.35)*100)}% · ${d}라운드`,
   climax:`공격 · 위력 ${p}% (스포트라이트 중 강화)`,
-  track:'공격력 강화 / HP 회복 / 적 공격력 약화 중 무작위 1개',
+  track:'아군 전체 공격력 강화 / HP 회복 / 적 공격력 약화 중 무작위 1개',
   encore:'직전에 부른 지원곡의 효과를 다시 발동',
   cleanse:'일반 약화 해제',
   mimic:'동료가 마지막으로 쓴 기술을 복사 (대상은 복사한 기술에 따름)',
   shield:`다음 적 차례 공격을 모두 대신 받음 · 피해 ${p}% 감소 / 동료 보호 성공 시 다음 공격 피해 +20% (1회)`,
   purify:`일반 약화 해제 + 최대 HP ${p}% 회복 (일그러짐 제외)`
  };
- const prefix=s.effect==='mimic'?'상황에 따라 대상 변경':(['track','encore'].includes(s.effect)?'곡에 따라 아군 전체 / 적 전체':who);
+ const prefix=s.effect==='mimic'?'상황에 따라 대상 변경':(s.effect==='encore'?'곡에 따라 아군 전체 / 적 전체':who);
  const suffix=s.cooldown?` · 재사용 대기 ${s.cooldown}라운드`:'';
- return `${prefix} · ${effects[s.effect]||s.detail||''}${suffix}`;
+ return `${s.effect==='track'?'':prefix+' · '}${effects[s.effect]||s.detail||''}${suffix}`;
 }
 function encoreEffect(){
  if(battle.lastTrack===null)return '직전 효과: 없음 (먼저 TRACK #????를 사용하세요)';
