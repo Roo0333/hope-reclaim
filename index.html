@@ -7947,7 +7947,7 @@ function initial(c,opts={}) {
   const hardplus=['normal','hard'].includes(mode);
   const hpScale=(id==='cor'&&hardplus?(bc.params.hardHpScale??1):1)*(mode==='easy'?(bc.params.easyHpScale??1):mode==='normal'?(bc.params.normalHpScale??1):mode==='hard'?(bc.params.nightmareHpScale??1):1);
   const attackScale=hardplus?(bc.params.hardAttackScale??1)*(mode==='hard'?(bc.params.nightmareAttackScale??1):1):mode==='easy'?(bc.params.normalAttackScale??1):1;
-  // 바시엘 어려움: 동료 1명당 최대 HP 101 추가. 6인 구성 기준 2,400 HP.
+  // 바시엘 어려움: 동료 1명당 최대 HP 101 추가. 6인 구성 기준 2,600 HP.
   // 기존 보스 HP 배율은 건드리지 않아 보통/쉬움 및 다른 보스에는 영향 없음.
   const vacielNightmareTeamHp=id==='vaciel'&&mode==='hard'?101*team.length:0;
   const boss=unit(id,{...bc,hp:pct(bc.hp+bc.hpPerCompanion*team.length+extra,d.hp*hpScale)+vacielNightmareTeamHp,atk:bc.atk*d.atk*attackScale,def:bc.def*d.def,speed:bc.speed*d.speed,crit:d.enemyCrit});
@@ -9503,7 +9503,7 @@ function refreshBattleDefaults(c){
   lacrien:{easy:370,normal:460,hard:540},
   marionel:{easy:390,normal:480,hard:600},
   osteos:{easy:380,normal:450,hard:515},
-  vaciel:{easy:960,normal:1350,hard:1895}
+  vaciel:{easy:960,normal:1350,hard:2095}
  };
  for(const [id,target] of Object.entries(tunedBossHp)){
   const boss=c.bosses?.[id];if(!boss)continue;
