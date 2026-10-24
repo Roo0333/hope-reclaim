@@ -1246,7 +1246,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "cost": 2,
       "effect": "cleanse",
       "target": "ally",
-      "detail": "일반 약화·속박을 해제합니다. 일그러짐은 해제하지 않습니다.",
+      "detail": "다양한 약화 효과를 해제합니다.",
       "power": 1,
       "duration": 1,
       "cooldown": 0
@@ -9991,7 +9991,7 @@ function skillDescription(s){
   cleanse:'일반 약화 해제',
   mimic:'동료가 마지막으로 쓴 기술을 복사 (대상은 복사한 기술에 따름)',
   shield:`다음 적 차례 공격을 모두 대신 받음 · 피해 ${p}% 감소 / 동료 보호 성공 시 다음 공격 피해 +20% (1회)`,
-  purify:`일반 약화 해제 + 최대 HP ${p}% 회복 (일그러짐 제외)`
+  purify:`일반 약화 해제 + 최대 HP ${p}% 회복`
  };
  const prefix=s.effect==='mimic'?'상황에 따라 대상 변경':(s.effect==='encore'?'곡에 따라 아군 전체 / 적 전체':who);
  const suffix=s.cooldown?` · 재사용 대기 ${s.cooldown}라운드`:'';
@@ -10164,7 +10164,7 @@ function renderPanel(){
  <div class="start-event-grid">${Object.entries(config.heroes).filter(([id])=>id!=='user').map(([id,h])=>{const condition=isRunning?(journey.roster[id]||options.conditions[id]):options.conditions[id];const completed=!!condition?.eventCompleted;return `<div class="start-event-row"><strong>${esc(h.name)}</strong><div class="start-event-choice"><button type="button" data-event-pick="${id}:done" aria-pressed="${completed}" class="game-choice ${completed?'is-selected':''}" ${isRunning?'disabled':''}>완료</button><button type="button" data-event-pick="${id}:pending" aria-pressed="${!completed}" class="game-choice ${!completed?'is-selected':''}" ${isRunning?'disabled':''}>미완료</button></div></div>`;}).join('')}</div></div>
  <div class="start-section"><div class="start-heading"><span>04</span><h3>주인공 스킬 <small>기본 기술 3개 + 특수 기술 1개</small></h3></div><p class="start-caption">스킬 이름과 효과를 보고 장착할 수 있어요. SP는 전투 중 소모됩니다.</p>
  <div class="start-skill-grid">${config.skills.filter(s=>!C.isSpecial(s.id)).map(s=>`<button type="button" data-equip-pick="${s.id}" aria-pressed="${options.playerSkills.includes(s.id)}" class="start-skill game-pick ${options.playerSkills.includes(s.id)?'selected is-selected':''}"><span class="start-skill-info"><b>${esc(s.name)}</b><small>${esc(skillDescription(s)||s.detail)}</small></span><span class="start-cost">SP ${s.cost}</span></button>`).join('')}</div>
- <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 속박, 출혈, 화상, 꼭두각시 실, 수선하는 손, 색 잃은 꿈을 해제합니다.</p></details></div>
+ <div class="start-special"><div class="game-field-caption">특수 기술 · 1개 선택</div><div class="game-special-grid">${config.skills.filter(s=>C.isSpecial(s.id)).map(s=>`<button type="button" class="game-special-choice game-pick ${options.playerSkills.includes(s.id)?'is-selected':''}" aria-pressed="${options.playerSkills.includes(s.id)}" data-special-pick="${s.id}"><b>${esc(s.name)} <span>SP ${s.cost}</span></b><small>${esc(skillDescription(s)||s.detail)}</small></button>`).join('')}</div></div><details class="start-extra"><summary>약화 해제 상세</summary><p class="start-caption">공격력·방어력·명중 감소, 출혈·화상·속박 등 다양한 약화 효과를 해제합니다. 보스가 부여한 특수한 상태 중에도 해제할 수 있는 것이 있습니다.</p></details></div>
 `;
  $('apply-restart').disabled=journey.pendingSupply||(options.series&&(journey.failed||!open.length));
  $('apply-restart').textContent=options.series?(journey.started?'다음 전투 시작 ▶':'보스 러시 시작 ▶'):'전투 시작 ▶';
