@@ -7647,7 +7647,7 @@ const H = g.HopeBattle, copy = x => JSON.parse(JSON.stringify(x));
 const bossIds = ['osteos','bellaton','cor','lacrien','marionel','vaciel'];
 const effects = ['strike','sweep','wait','opening','wing','blade','pillars','aria','ribbon','curtain','charge','smash','duel','light','reflect','recordecho','judgment','summon','thread','repair','drain','parasol','motif','empty','dreammark','dreamresonance','dreamrest','blade-trace'];
 const skillTargets = {single:'enemy',area:'enemies',buff:'ally',debuff:'enemy',defdown:'enemy',heal:'ally',allheal:'allies',spheal:'ally',guardall:'allies',counter:'self',track:'allies',encore:'allies',cleanse:'ally',protect:'ally',defall:'allies',mitigateall:'allies',followup:'self',burnarea:'enemies',pierce:'enemy',breakhit:'enemy',triplehit:'enemy',lifesteal:'enemy',stun:'enemy',breakarea:'enemies',misdirection:'enemies',spotlight:'self',climax:'enemy',mimic:'self',shield:'self',purify:'allies'};
-const skillLabels = {single:'단일 공격',area:'전체 공격',buff:'공격력 상승',debuff:'공격력 감소',defdown:'방어력 감소',heal:'체력 회복',allheal:'전체 체력 회복',spheal:'기력 회복',guardall:'전체 방어',counter:'방어·반격',track:'랜덤 지원곡',encore:'직전 노래 재연',cleanse:'일반 약화 해제',protect:'피해 감소',defall:'전체 방어력 상승',mitigateall:'전체 받는 피해 감소',followup:'아군 공격 추격',burnarea:'전체 공격·화상',pierce:'방어력 무시',breakhit:'공격·방어력 감소',triplehit:'3연격',lifesteal:'흡혈 공격',stun:'행동 봉쇄',breakarea:'전체 공격·방어력 감소',misdirection:'전체 공격·명중률 감소',spotlight:'관객에 따른 자기 강화',climax:'강화 연계 단일 공격',mimic:'직전 동료 기술 복사',shield:'전체 공격 대신 받기',purify:'전체 약화 해제'};
+const skillLabels = {single:'단일 공격',area:'전체 공격',buff:'공격력 상승',debuff:'공격력 감소',defdown:'방어력 감소',heal:'체력 회복',allheal:'전체 체력 회복',spheal:'기력 회복',guardall:'전체 방어',counter:'방어·반격',track:'랜덤 지원곡',encore:'직전 노래 재연',cleanse:'약화 해제',protect:'피해 감소',defall:'전체 방어력 상승',mitigateall:'전체 받는 피해 감소',followup:'아군 공격 추격',burnarea:'전체 공격·화상',pierce:'방어력 무시',breakhit:'공격·방어력 감소',triplehit:'3연격',lifesteal:'흡혈 공격',stun:'행동 봉쇄',breakarea:'전체 공격·방어력 감소',misdirection:'전체 공격·명중률 감소',spotlight:'관객에 따른 자기 강화',climax:'강화 연계 단일 공격',mimic:'직전 동료 기술 복사',shield:'전체 공격 대신 받기',purify:'전체 약화 해제'};
 const need = (v,msg) => { if (!v) throw Error(msg); };
 const num = (v,min,max,label,int=false) => need(typeof v==='number' && Number.isFinite(v) && v>=min && v<=max && (!int||Number.isInteger(v)), label+' 값을 확인해 주세요.');
 const korean = v => typeof v==='string' && /[가-힣]/.test(v) && !/[A-Za-z\u3040-\u30ff\u3400-\u9fff<>]/.test(v);
@@ -8320,7 +8320,7 @@ function cleanse(x,t,{silent=false,deferDreamRestore=false}={}) {
   for(const k of ['weak','defdown','dark','bind','bleed','burn','puppet','stitch','skillseal','healdown','colorlessDream'])delete t.buffs[k];
   // 일반 해제는 즉시 색을 복원한다. 바시엘 특수 치유에서는 희망의 지문이 나올 때까지 복원을 미룬다.
   if(!deferDreamRestore&&hadDream&&x.b.domain==='vaciel'&&!Object.values(x.b.party).some(u=>living(u)&&u.buffs.colorlessDream))x.b.dreamMonochrome=false;
-  if(!silent)emit(x,'cleanse','system',t.name+(puppet?' · 꼭두각시 실 해제. 행동을 되찾았습니다.':' · 일반 약화를 해제했습니다.'));
+  if(!silent)emit(x,'cleanse','system',t.name+(puppet?' · 꼭두각시 실 해제. 행동을 되찾았습니다.':' · 약화 효과를 해제했습니다.'));
 }
 function followups(x,actor,target) {
   const {b}=x;if(!living(target)||b.outcome||!living(actor))return;
@@ -9988,10 +9988,10 @@ function skillDescription(s){
   climax:`공격 · 위력 ${p}% (스포트라이트 중 강화)`,
   track:'아군 전체 공격력 강화 / HP 회복 / 적 공격력 약화 중 무작위 1개',
   encore:'직전에 부른 지원곡의 효과를 다시 발동',
-  cleanse:'일반 약화 해제',
+  cleanse:'약화 해제',
   mimic:'동료가 마지막으로 쓴 기술을 복사 (대상은 복사한 기술에 따름)',
   shield:`다음 적 차례 공격을 모두 대신 받음 · 피해 ${p}% 감소 / 동료 보호 성공 시 다음 공격 피해 +20% (1회)`,
-  purify:`일반 약화 해제 + 최대 HP ${p}% 회복`
+  purify:`약화 해제 + 최대 HP ${p}% 회복`
  };
  const prefix=s.effect==='mimic'?'상황에 따라 대상 변경':(s.effect==='encore'?'곡에 따라 아군 전체 / 적 전체':who);
  const suffix=s.cooldown?` · 재사용 대기 ${s.cooldown}라운드`:'';
