@@ -1170,7 +1170,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "target": "ally",
       "detail": "아군 하나의 공격력 +25% · 2라운드",
       "power": 0.25,
-      "duration": 2,
+      "duration": 3,
       "cooldown": 0
     },
     {
@@ -1182,7 +1182,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "target": "enemy",
       "detail": "적 하나의 공격력 -25% · 2라운드",
       "power": 0.25,
-      "duration": 2,
+      "duration": 3,
       "cooldown": 0
     },
     {
@@ -1230,7 +1230,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "target": "enemy",
       "detail": "적 하나의 방어력 감소 · 공격력 감소와 별개",
       "power": 0.35,
-      "duration": 2,
+      "duration": 3,
       "cooldown": 0
     },
     {
@@ -1276,7 +1276,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "cost": 4,
       "effect": "shield",
       "target": "self",
-      "detail": "다음 적 차례 아군의 공격을 대신 받고 피해 75% 감소. 동료를 지켰다면 다음 주인공 공격 피해 20% 증가 (1회).",
+      "detail": "다음 적 차례의 공격을 모두 대신 맞고 피해를 75% 줄입니다. 동료를 지키면 다음 공격 피해 20% 증가.",
       "power": 0.75,
       "secondary": 0,
       "duration": 1,
@@ -1304,7 +1304,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "target": "allies",
         "power": 0.2,
         "cost": 2,
-        "duration": 2,
+        "duration": 3,
         "cooldown": 0,
         "detail": ""
       },
@@ -1340,7 +1340,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "target": "self",
         "power": 0.4,
         "cost": 3,
-        "duration": 3,
+        "duration": 4,
         "cooldown": 1,
         "detail": "",
         "secondary": 0.8,
@@ -1355,7 +1355,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "cost": 4,
         "duration": 1,
         "cooldown": 0,
-        "detail": ""
+        "detail": "3연격 · 공격력 70%씩 3타 (각 타격 방어력 1/3 적용)"
       },
       {
         "id": "flower",
@@ -1366,7 +1366,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "cost": 3,
         "duration": 1,
         "cooldown": 0,
-        "detail": "입힌 피해의 50% 회복 (최대 HP의 10%까지)",
+        "detail": "위력 130% 공격 · 실제 피해의 50%를 HP 회복 (자신의 최대 HP 10% 상한)",
         "secondary": 0.5
       }
     ],
@@ -1413,7 +1413,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "target": "enemies",
         "power": 0.9,
         "cost": 3,
-        "duration": 2,
+        "duration": 3,
         "cooldown": 1,
         "detail": "",
         "secondary": 0.2
@@ -1438,7 +1438,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "target": "self",
         "power": 0.15,
         "cost": 3,
-        "duration": 3,
+        "duration": 4,
         "cooldown": 1,
         "detail": "",
         "secondary": 0.05,
@@ -1496,7 +1496,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "distortionEffect": 0.45
     },
     "easy": {
-      "name": "보통",
+      "name": "쉬움",
       "hp": 1,
       "atk": 1,
       "def": 1,
@@ -1508,7 +1508,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "distortionEffect": 1
     },
     "normal": {
-      "name": "어려움",
+      "name": "보통",
       "hp": 1.15,
       "atk": 1.1,
       "def": 1,
@@ -1518,6 +1518,18 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "distortedDamage": 0.9,
       "distortedRegen": 0,
       "distortionEffect": 1
+    },
+    "hard": {
+      "name": "어려움",
+      "hp": 1.33,
+      "atk": 1.16,
+      "def": 1.03,
+      "hpRegen": 0,
+      "spRegen": 1,
+      "enemyCrit": 0.07,
+      "distortedDamage": 0.9,
+      "distortedRegen": 0,
+      "distortionEffect": 1.06
     }
   },
   "media": {},
@@ -1526,13 +1538,10 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "id": "bellaton",
       "name": "벨라톤",
       "arena": "영원극장",
-      "hp": 200,
-      "hpPerCompanion": 100,
       "atk": 27,
       "def": 11,
       "critMult": 1.5,
       "params": {
-        "normalAttackScale": 1.2,
         "guardReduction": 0.6,
         "counterLimit": 1,
         "counterPower": 0.65,
@@ -1571,8 +1580,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "bindTurns": 2,
         "exposeRounds": 2,
         "curtainDamage": 14,
-        "finaleWeakMultiplier": 1.4,
-        "hardAttackScale": 1.24
+        "finaleWeakMultiplier": 1.4
       },
       "story": {
         "enabled": true,
@@ -2006,6 +2014,76 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "target": "one",
             "tell": "흩어진 리본이 하나의 조명 아래로 모입니다."
           }
+        ],
+        "hard": [
+          {
+            "id": "aria",
+            "name": "절망의 아리아",
+            "effect": "aria",
+            "power": 0.25,
+            "cycle": 4,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "all",
+            "tell": "무대에 낮은 선율이 깔립니다. 객석의 공기가 무겁게 가라앉습니다."
+          },
+          {
+            "id": "ribbon",
+            "name": "레가토 리본",
+            "effect": "ribbon",
+            "power": 1.28,
+            "cycle": 4,
+            "offset": 2,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "붉은 리본 하나가 무대에서 길게 뻗어 나옵니다."
+          },
+          {
+            "id": "curtain",
+            "name": "커튼콜",
+            "effect": "curtain",
+            "power": 0,
+            "cycle": 4,
+            "offset": 3,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "조명이 객석의 한 자리를 비춥니다."
+          },
+          {
+            "id": "finale",
+            "name": "레가토 리본의 피날레",
+            "effect": "ribbon",
+            "power": 1.72,
+            "cycle": 4,
+            "offset": 4,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "흩어진 리본이 하나의 조명 아래로 모입니다."
+          }
         ]
       },
       "chat": [
@@ -2323,19 +2401,44 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "text": "단 한 명의 관객, 단 한 명의 상대역! 아아, 이보다 호화로운 독무대가 또 어디 있겠느냐♬"
           }
         ]
+      },
+      "hpByDifficulty": {
+        "practice": [
+          150,
+          225,
+          300
+        ],
+        "easy": [
+          180,
+          270,
+          360
+        ],
+        "normal": [
+          195,
+          293,
+          390
+        ],
+        "hard": [
+          213,
+          319,
+          425
+        ]
+      },
+      "attackByDifficulty": {
+        "practice": 0.7,
+        "easy": 1.2,
+        "normal": 1.364,
+        "hard": 1.611008
       }
     },
     "osteos": {
       "id": "osteos",
       "name": "오스테오스",
       "arena": "백골회랑",
-      "hp": 220,
-      "hpPerCompanion": 100,
       "atk": 27,
       "def": 18,
       "critMult": 1.5,
       "params": {
-        "normalAttackScale": 1.18,
         "guardReduction": 0.6,
         "counterLimit": 1,
         "counterPower": 0.65,
@@ -2373,7 +2476,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "recordCap": 0.22,
         "bindTurns": 2,
         "exposeRounds": 2,
-        "hardAttackScale": 1.18
+        "nightmareBladeMinRound": 4
       },
       "story": {
         "enabled": true,
@@ -2869,7 +2972,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "id": "wing-calm",
             "name": "날개 감옥",
             "effect": "wing",
-            "power": 0.4,
+            "power": 0.6,
             "cycle": 2,
             "offset": 2,
             "fromRound": 1,
@@ -2886,7 +2989,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "id": "wing",
             "name": "날개 감옥",
             "effect": "wing",
-            "power": 0.48,
+            "power": 0.68,
             "cycle": 3,
             "offset": 1,
             "fromRound": 1,
@@ -3042,6 +3145,144 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "name": "뼈 찌르기",
             "effect": "strike",
             "power": 1.3,
+            "cycle": 3,
+            "offset": 3,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "base",
+            "target": "one",
+            "tell": "가느다란 뼈 끝이 전방을 겨눕니다."
+          },
+          {
+            "id": "blade-one",
+            "name": "백골예검",
+            "effect": "blade",
+            "power": 2,
+            "cycle": 2,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "rage",
+            "target": "one",
+            "tell": "날개가 열리며 검 끝에 힘이 모입니다."
+          },
+          {
+            "id": "blade-all",
+            "name": "백골예검의 파편",
+            "effect": "blade",
+            "power": 1,
+            "cycle": 2,
+            "offset": 2,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "rage",
+            "target": "all",
+            "tell": "검을 두른 파편들이 사방으로 퍼집니다."
+          },
+          {
+            "id": "pillars",
+            "name": "백골 기둥",
+            "effect": "pillars",
+            "power": 0,
+            "cycle": 1,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 80,
+            "cooldown": 0,
+            "once": true,
+            "phase": "rage",
+            "target": "one",
+            "tell": "바닥 아래서 하얀 윤곽이 솟아오릅니다."
+          }
+        ],
+        "hard": [
+          {
+            "id": "warning",
+            "name": "정중한 경고",
+            "effect": "wait",
+            "power": 0,
+            "cycle": 2,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "calm",
+            "target": "one",
+            "tell": "오스테오스가 마지막으로 물러나라는 손짓을 보냅니다."
+          },
+          {
+            "id": "wing-calm",
+            "name": "날개 감옥",
+            "effect": "wing",
+            "power": 0.85,
+            "cycle": 2,
+            "offset": 2,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "calm",
+            "target": "one",
+            "tell": "날개 사이로 뼛조각들이 일어나기 시작합니다."
+          },
+          {
+            "id": "wing",
+            "name": "날개 감옥",
+            "effect": "wing",
+            "power": 1,
+            "cycle": 3,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "base",
+            "target": "one",
+            "tell": "겹친 날개 틈에서 뼛조각들이 떨립니다."
+          },
+          {
+            "id": "bones",
+            "name": "뼈 부수기",
+            "effect": "sweep",
+            "power": 1.1,
+            "cycle": 3,
+            "offset": 2,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "base",
+            "target": "all",
+            "tell": "잘게 부서진 뼈가 바닥에서 일어납니다."
+          },
+          {
+            "id": "thrust",
+            "name": "뼈 찌르기",
+            "effect": "strike",
+            "power": 1.4,
             "cycle": 3,
             "offset": 3,
             "fromRound": 1,
@@ -3574,19 +3815,44 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "ordinary": [],
         "solo": [],
         "pairs": {}
+      },
+      "hpByDifficulty": {
+        "practice": [
+          165,
+          240,
+          315
+        ],
+        "easy": [
+          199,
+          290,
+          380
+        ],
+        "normal": [
+          236,
+          343,
+          450
+        ],
+        "hard": [
+          314,
+          457,
+          600
+        ]
+      },
+      "attackByDifficulty": {
+        "practice": 0.7,
+        "easy": 1.18,
+        "normal": 1.298,
+        "hard": 1.4766614399999998
       }
     },
     "cor": {
       "id": "cor",
       "name": "코르",
       "arena": "진홍투기장",
-      "hp": 220,
-      "hpPerCompanion": 100,
       "atk": 30,
       "def": 12,
       "critMult": 1.5,
       "params": {
-        "normalAttackScale": 1.15,
         "guardReduction": 0.6,
         "counterLimit": 1,
         "counterPower": 0.65,
@@ -3624,9 +3890,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "reflectCap": 0.18,
         "recordCap": 0.22,
         "bindTurns": 2,
-        "exposeRounds": 2,
-        "hardAttackScale": 1.15,
-        "hardHpScale": 1.12
+        "exposeRounds": 2
       },
       "story": {
         "enabled": true,
@@ -4056,12 +4320,65 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "phase": "any",
             "target": "all",
             "tell": "코르가 검을 높이 듭니다. 발아래 땅이 울립니다."
+          }
+        ],
+        "hard": [
+          {
+            "id": "slash",
+            "name": "검격",
+            "effect": "strike",
+            "power": 0.9,
+            "cycle": 3,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "코르가 검을 고쳐 쥐고 거리를 좁힙니다."
+          },
+          {
+            "id": "charge",
+            "name": "홍련돌진",
+            "effect": "charge",
+            "power": 1.05,
+            "cycle": 3,
+            "offset": 2,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "코르가 몸을 낮추며 바닥을 박찹니다."
+          },
+          {
+            "id": "smash",
+            "name": "대지분쇄",
+            "effect": "smash",
+            "power": 0.945,
+            "cycle": 3,
+            "offset": 3,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "all",
+            "tell": "코르가 검을 높이 듭니다. 발아래 땅이 울립니다."
           },
           {
             "id": "duel",
             "name": "투기장의 결투",
             "effect": "duel",
-            "power": 1.25,
+            "power": 1.3,
             "cycle": 1,
             "offset": 1,
             "fromRound": 1,
@@ -4457,19 +4774,44 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "text": "상관 없어. 네 놈 하나라도……이 심장을 달굴 만큼은 날뛰어라!"
           }
         ]
+      },
+      "hpByDifficulty": {
+        "practice": [
+          165,
+          240,
+          315
+        ],
+        "easy": [
+          220,
+          320,
+          420
+        ],
+        "normal": [
+          283,
+          411,
+          540
+        ],
+        "hard": [
+          367,
+          533,
+          700
+        ]
+      },
+      "attackByDifficulty": {
+        "practice": 0.7,
+        "easy": 1.15,
+        "normal": 1.265,
+        "hard": 1.7008499999999998
       }
     },
     "lacrien": {
       "id": "lacrien",
       "name": "라크리엔",
       "arena": "유성천문관",
-      "hp": 220,
-      "hpPerCompanion": 100,
       "atk": 27,
       "def": 11,
       "critMult": 1.5,
       "params": {
-        "normalAttackScale": 1.2,
         "guardReduction": 0.6,
         "counterLimit": 1,
         "counterPower": 0.65,
@@ -4506,8 +4848,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "reflectCap": 0.18,
         "recordCap": 0.22,
         "bindTurns": 2,
-        "exposeRounds": 2,
-        "hardAttackScale": 1.25
+        "exposeRounds": 2
       },
       "story": {
         "enabled": true,
@@ -4982,7 +5323,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "name": "빛의 안식",
             "effect": "light",
             "power": 0.22,
-            "cycle": 4,
+            "cycle": 5,
             "offset": 1,
             "fromRound": 1,
             "hpMin": 0,
@@ -4998,8 +5339,8 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "id": "record",
             "name": "만상기록",
             "effect": "reflect",
-            "power": 0,
-            "cycle": 4,
+            "power": 1.05,
+            "cycle": 5,
             "offset": 2,
             "fromRound": 1,
             "hpMin": 0,
@@ -5016,7 +5357,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "name": "자정 심판",
             "effect": "judgment",
             "power": 1.12,
-            "cycle": 4,
+            "cycle": 5,
             "offset": 3,
             "fromRound": 1,
             "hpMin": 0,
@@ -5033,8 +5374,8 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "name": "별빛",
             "effect": "strike",
             "power": 1,
-            "cycle": 4,
-            "offset": 4,
+            "cycle": 5,
+            "offset": 5,
             "fromRound": 1,
             "hpMin": 0,
             "hpMax": 100,
@@ -5049,8 +5390,8 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "id": "echo",
             "name": "만상회귀",
             "effect": "recordecho",
-            "power": 0.55,
-            "cycle": 4,
+            "power": 0.4,
+            "cycle": 5,
             "offset": 4,
             "fromRound": 1,
             "hpMin": 0,
@@ -5061,6 +5402,110 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "phase": "any",
             "target": "all",
             "tell": "거울 속에 남은 빛이 다시 들끓습니다."
+          }
+        ],
+        "hard": [
+          {
+            "id": "light",
+            "name": "빛의 안식",
+            "effect": "light",
+            "power": 0.27,
+            "cycle": 6,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "all",
+            "tell": "환한 빛이 시야에 스며들기 시작합니다."
+          },
+          {
+            "id": "record",
+            "name": "만상기록",
+            "effect": "reflect",
+            "power": 1.05,
+            "cycle": 6,
+            "offset": 2,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "라크리엔 주위의 빛이 거울처럼 맑아집니다."
+          },
+          {
+            "id": "judgment",
+            "name": "자정 심판",
+            "effect": "judgment",
+            "power": 1.15,
+            "cycle": 6,
+            "offset": 3,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "all",
+            "tell": "모인 별빛이 전장 위로 떠오릅니다."
+          },
+          {
+            "id": "ray",
+            "name": "별빛",
+            "effect": "strike",
+            "power": 1,
+            "cycle": 6,
+            "offset": 6,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "한 줄기 별빛이 궤도를 그립니다."
+          },
+          {
+            "id": "echo",
+            "name": "만상회귀",
+            "effect": "recordecho",
+            "power": 0.5,
+            "cycle": 6,
+            "offset": 4,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 50,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "all",
+            "tell": "거울 속에 남은 빛이 다시 들끓습니다."
+          },
+          {
+            "id": "starcopy",
+            "name": "별의 복기",
+            "effect": "starcopy",
+            "power": 0.95,
+            "cycle": 1,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "all",
+            "tell": "천구의에 별빛이 모여듭니다."
           }
         ]
       },
@@ -5481,19 +5926,44 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "ordinary": [],
         "solo": [],
         "pairs": {}
+      },
+      "hpByDifficulty": {
+        "practice": [
+          165,
+          240,
+          315
+        ],
+        "easy": [
+          194,
+          282,
+          370
+        ],
+        "normal": [
+          241,
+          350,
+          460
+        ],
+        "hard": [
+          283,
+          411,
+          540
+        ]
+      },
+      "attackByDifficulty": {
+        "practice": 0.7,
+        "easy": 1.2,
+        "normal": 1.375,
+        "hard": 1.5915199999999998
       }
     },
     "marionel": {
       "id": "marionel",
       "name": "마리오넬",
       "arena": "인형공방",
-      "hp": 220,
-      "hpPerCompanion": 100,
       "atk": 24,
       "def": 12,
       "critMult": 1.5,
       "params": {
-        "normalAttackScale": 1.22,
         "guardReduction": 0.6,
         "counterLimit": 1,
         "counterPower": 0.65,
@@ -5536,12 +6006,13 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "dollShieldRatio": 0.65,
         "puppetAttackRatio": 1.4,
         "stitchShareRatio": 0.3,
-        "hardAttackScale": 1.27,
         "hardPuppetAttackRatio": 1.65,
         "hardDollStrikePower": 1.05,
         "hardThreadInitialPower": 0.85,
         "stitchShareEasy": 0.1,
-        "stitchShareNormal": 0.2
+        "stitchShareNormal": 0.2,
+        "nightmareStitchShareRatio": 0.38,
+        "nightmarePuppetAttackRatio": 1.85
       },
       "story": {
         "enabled": true,
@@ -5554,7 +6025,6 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "speaker": "scene",
             "text": "마리오넬이 작업대 위를 덮고 있던 검은 벨벳 천을 걷어냈다."
           },
-
           {
             "speaker": "scene",
             "text": "후드를 눈가까지 깊숙이 끌어 내리고 소매 끝을 쥐어짜듯 쥔 작은 인형이 그곳에 앉아 있었다."
@@ -5906,7 +6376,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "id": "repair",
             "name": "수선하는 손",
             "effect": "repair",
-            "power": 0.15,
+            "power": 0,
             "cycle": 4,
             "offset": 3,
             "fromRound": 1,
@@ -5917,7 +6387,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "once": false,
             "phase": "any",
             "target": "one",
-            "tell": "서로 다른 두 사람의 움직임이 실로 이어지려 합니다."
+            "tell": "마리오넬의 실이 한 사람의 손끝을 향합니다. 다음 차례에 스킬을 사용할 수 없습니다."
           },
           {
             "id": "wave-two",
@@ -5976,7 +6446,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "id": "repair",
             "name": "수선하는 손",
             "effect": "repair",
-            "power": 0.3,
+            "power": 0,
             "cycle": 4,
             "offset": 3,
             "fromRound": 1,
@@ -5987,7 +6457,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "once": false,
             "phase": "any",
             "target": "one",
-            "tell": "서로 다른 두 사람의 움직임이 실로 이어지려 합니다."
+            "tell": "마리오넬의 실이 한 사람의 손끝을 향합니다. 다음 차례에 스킬을 사용할 수 없습니다."
           },
           {
             "id": "wave-two",
@@ -6029,7 +6499,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "id": "repair",
             "name": "수선하는 손",
             "effect": "repair",
-            "power": 0.55,
+            "power": 0,
             "cycle": 4,
             "offset": 2,
             "fromRound": 1,
@@ -6040,7 +6510,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "once": false,
             "phase": "any",
             "target": "one",
-            "tell": "서로 다른 두 사람의 움직임이 실로 이어지려 합니다."
+            "tell": "마리오넬의 실이 한 사람의 손끝을 향합니다. 다음 차례에 스킬을 사용할 수 없습니다."
           },
           {
             "id": "wave-two",
@@ -6064,6 +6534,76 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "name": "꼭두각시 실",
             "effect": "thread",
             "power": 0.85,
+            "cycle": 4,
+            "offset": 3,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 50,
+            "cooldown": 3,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "마리오넬의 손끝에서 실이 살아 있는 몸을 찾아 뻗습니다."
+          }
+        ],
+        "hard": [
+          {
+            "id": "summon",
+            "name": "인형 소환",
+            "effect": "summon",
+            "power": 0,
+            "cycle": 4,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "작업대 위의 실들이 일제히 팽팽해집니다."
+          },
+          {
+            "id": "repair",
+            "name": "수선하는 손",
+            "effect": "repair",
+            "power": 0,
+            "cycle": 4,
+            "offset": 2,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "마리오넬의 실이 두 사람의 손끝을 향합니다. 다음 차례에 스킬을 사용할 수 없습니다."
+          },
+          {
+            "id": "wave-two",
+            "name": "실의 파동",
+            "effect": "strike",
+            "power": 1.45,
+            "cycle": 4,
+            "offset": 4,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "팽팽해진 실들이 전장을 가로지릅니다."
+          },
+          {
+            "id": "thread",
+            "name": "꼭두각시 실",
+            "effect": "thread",
+            "power": 1.02,
             "cycle": 4,
             "offset": 3,
             "fromRound": 1,
@@ -6238,11 +6778,11 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "repair": [
           {
             "speaker": "scene",
-            "text": "마리오넬이 서로 다른 두 사람에게 가느다란 실을 뻗는다. 한쪽의 실이 당겨지자 다른 쪽도 함께 떨린다."
+            "text": "마리오넬이 가느다란 실을 뻗어 일행의 손끝을 한 땀씩 꿰맵니다. 움직일 수는 있지만 기술을 쓰려는 손이 뜻대로 움직이지 않습니다."
           },
           {
             "speaker": "marionel",
-            "text": "……상처도 나눠 가져. 둘은 이어졌으니까."
+            "text": "……잠깐, 네 손부터 고쳐 줄게."
           }
         ],
         "thread": [
@@ -6487,6 +7027,34 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "text": "괜찮아. 조금 더 정성을 기울일 수 있으니까."
           }
         ]
+      },
+      "hpByDifficulty": {
+        "practice": [
+          165,
+          240,
+          315
+        ],
+        "easy": [
+          204,
+          297,
+          390
+        ],
+        "normal": [
+          251,
+          366,
+          480
+        ],
+        "hard": [
+          314,
+          457,
+          600
+        ]
+      },
+      "attackByDifficulty": {
+        "practice": 0.7,
+        "easy": 1.22,
+        "normal": 1.3970000000000002,
+        "hard": 1.8031967999999998
       }
     },
     "vaciel": {
@@ -6499,13 +7067,10 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "dialogue": "……잊어버리거라. 그토록 간절히 바라는 마음을."
       },
       "arena": "성역",
-      "hp": 260,
-      "hpPerCompanion": 140,
       "atk": 26,
       "def": 13,
       "critMult": 1.5,
       "params": {
-        "normalAttackScale": 1.18,
         "guardReduction": 0.6,
         "counterLimit": 1,
         "counterPower": 0.65,
@@ -6544,13 +7109,14 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "bindTurns": 2,
         "exposeRounds": 2,
         "lateChainHp": 0.58,
-        "hardHpPerCompanionBonus": 20,
         "normalLateChainHp": 0.72,
         "finalExposureBonus": 0.2,
         "motifFirstPower": 0.98,
         "motifSecondPower": 1.75,
         "motifThirdPower": 1.28,
-        "hardAttackScale": 1.13
+        "nightmareMotifFirstPower": 1.1,
+        "nightmareMotifSecondPower": 1.9,
+        "nightmareMotifThirdPower": 1.4
       },
       "story": {
         "enabled": false,
@@ -6869,6 +7435,93 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
           {
             "id": "silent",
             "name": "그림자의 물결",
+            "effect": "strike",
+            "power": 1.3,
+            "cycle": 4,
+            "offset": 4,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "그림자가 바닥을 타고 빠르게 움직입니다."
+          },
+          {
+            "id": "empty",
+            "name": "공명",
+            "effect": "empty",
+            "power": 1.15,
+            "cycle": 4,
+            "offset": 3,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 30,
+            "cooldown": 0,
+            "once": false,
+            "phase": "empty",
+            "target": "all",
+            "tell": "주변의 색채가 하나씩 사라집니다."
+          }
+        ],
+        "hard": [
+          {
+            "id": "drain",
+            "name": "소망의 침식",
+            "effect": "drain",
+            "power": 1.25,
+            "cycle": 4,
+            "offset": 1,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "all",
+            "tell": "양산 아래에서 짙은 그림자가 크게 부풀어 오릅니다."
+          },
+          {
+            "id": "shadow",
+            "name": "주종의 인연",
+            "effect": "motif",
+            "power": 1,
+            "cycle": 1,
+            "offset": 1,
+            "fromRound": 2,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 80,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "one",
+            "tell": "등 뒤로 낯선 그림자 하나가 드러납니다."
+          },
+          {
+            "id": "parasol",
+            "name": "종언의 장막",
+            "effect": "parasol",
+            "power": 1.68,
+            "cycle": 4,
+            "offset": 3,
+            "fromRound": 1,
+            "hpMin": 0,
+            "hpMax": 100,
+            "priority": 10,
+            "cooldown": 0,
+            "once": false,
+            "phase": "any",
+            "target": "all",
+            "tell": "양산에서 뻗은 그림자가 전장 위로 넓게 드리웁니다."
+          },
+          {
+            "id": "silent",
+            "name": "잔영의 일격",
             "effect": "strike",
             "power": 1.3,
             "cycle": 4,
@@ -7411,7 +8064,67 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             "speaker": "vaciel",
             "text": "그대들은…… 이곳에서도 내일을 바랄 수 있겠는가."
           }
+        ],
+        "motif-4": [
+          {
+            "speaker": "scene",
+            "text": "바시엘의 그림자에서 가느다란 실들이 흘러나왔다. 한 사람의 손목이 제멋대로 꺾이고, 다른 두 사람은 실에 꿰매진 손끝을 움직이지 못한다."
+          },
+          {
+            "speaker": "vaciel",
+            "text": "……감정 표현이 적은 아이였지만 무언가를 만질 때면 아주 조금 기뻐 보였지."
+          }
+        ],
+        "motif-5": [
+          {
+            "speaker": "scene",
+            "text": "실들이 끊어지며 성역의 바닥에 붉은 선이 그어졌다. 바시엘의 뒤에 선 그림자가 검을 고쳐 쥐자, 어디로 떨어질지 모를 참격들이 겹쳐 보였다."
+          },
+          {
+            "speaker": "vaciel",
+            "text": "……멀리서도 그 아이의 심장 소리만큼은 알아들을 수 있었지."
+          }
         ]
+      },
+      "hpByDifficulty": {
+        "practice": [
+          195,
+          300,
+          405,
+          510,
+          615,
+          720
+        ],
+        "easy": [
+          260,
+          400,
+          540,
+          680,
+          820,
+          960
+        ],
+        "normal": [
+          331,
+          535,
+          739,
+          942,
+          1146,
+          1350
+        ],
+        "hard": [
+          465,
+          892,
+          1319,
+          1746,
+          2173,
+          2600
+        ]
+      },
+      "attackByDifficulty": {
+        "practice": 0.7,
+        "easy": 1.18,
+        "normal": 1.2429999999999999,
+        "hard": 1.5526425999999998
       }
     }
   },
@@ -7469,8 +8182,8 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "id": "brave",
       "name": "하이파이브",
       "effect": "buffall",
-      "power": 0.2,
-      "duration": 2,
+      "power": 0.24,
+      "duration": 3,
       "detail": "아군 전체 공격력 24% 상승 · 3라운드"
     },
     {
@@ -7485,8 +8198,8 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "id": "hush",
       "name": "나이트 온 뮤트",
       "effect": "weakall",
-      "power": 0.18,
-      "duration": 2,
+      "power": 0.22,
+      "duration": 3,
       "detail": "적 전체 공격력 22% 감소 · 3라운드"
     }
   ],
@@ -7605,8 +8318,15 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
       "revive": 2,
       "ether": 3,
       "remedy": 3
+    },
+    "hard": {
+      "medicine": 3,
+      "revive": 2,
+      "ether": 2,
+      "remedy": 2
     }
-  }
+  },
+  "difficultySchemaVersion": 2
 };
 })(globalThis);</script>
 <script>
@@ -7618,10 +8338,6 @@ function extend(c){
   if(!c.difficulties.hard)c.difficulties.hard={name:'악몽',hp:1.33,atk:1.16,def:1.03,hpRegen:0,spRegen:1,enemyCrit:.07,distortedDamage:.9,distortedRegen:0,distortionEffect:1.06};
   c.itemLoadouts??={};
   if(!c.itemLoadouts.hard)c.itemLoadouts.hard={medicine:3,revive:2,ether:2,remedy:2};
-  const hps={bellaton:.73,cor:1.196,lacrien:1.008,marionel:1.12,osteos:.92,vaciel:1.344};
-  const atks={bellaton:1.12,cor:1.275,lacrien:1.0976,marionel:1.224,osteos:1.0788,vaciel:1.1845};
-  const oldHps={bellaton:.73,cor:1.04,lacrien:.96,marionel:1,osteos:.92,vaciel:1.12};
-  const oldAtks={bellaton:1,cor:1.02,lacrien:.98,marionel:1.02,osteos:.93,vaciel:1.03};
   for(const [id,b]of Object.entries(c.bosses||{})){
     if(!b.patterns?.normal)continue;
     if(!b.patterns.hard){
@@ -7640,12 +8356,6 @@ function extend(c){
     }
     if(id==='lacrien'&&!b.patterns.hard.some(p=>p.id==='starcopy'))
       b.patterns.hard.push({id:'starcopy',name:'별의 복기',effect:'starcopy',power:.95,cycle:1,offset:1,fromRound:1,hpMin:0,hpMax:100,priority:10,cooldown:0,once:false,phase:'any',target:'all',tell:'천구의에 별빛이 모여듭니다.'});
-    if(id==='osteos'){
-      b.params.nightmareBladeHp??=.60;
-      b.params.nightmareBladeMinRound??=4;
-    }
-    if(b.params.nightmareHpScale===undefined||b.params.nightmareHpScale===oldHps[id])b.params.nightmareHpScale=hps[id];
-    if(b.params.nightmareAttackScale===undefined||b.params.nightmareAttackScale===oldAtks[id])b.params.nightmareAttackScale=atks[id];
     if(id==='marionel'){
       b.params.nightmareStitchShareRatio??=.38;
       b.params.nightmarePuppetAttackRatio??=1.85;
@@ -7671,7 +8381,7 @@ function extend(c){
   }
   return c;
 }
-H.hardDifficulty={extend};extend(H.defaults);H.defaults.difficultySchemaVersion=2;
+H.hardDifficulty={extend}; // 구버전 설정 가져올 때만 보완합니다.
 })(globalThis);
 </script>
 <script>/* 희망탈환 공용 엔진 0.5. DOM·AI·시계에 의존하지 않는 순수 상태 전이.
@@ -7739,7 +8449,17 @@ function validateConfig(c) {
   need(c.storyRules?.talkRequired===3&&c.storyRules.talkPerRound===1&&c.storyRules.rpRecovery===false,'구출 규칙 오류');
   for(const id of bossIds) {
     const b=c.bosses?.[id];need(b&&b.id===id&&korean(b.name),'보스 자료 오류');
-    for(const k of ['hp','hpPerCompanion','atk','def']) num(b[k],k==='hp'?1:0,100000,k);num(b.critMult,1,5,'보스 치명 배율');
+    for(const k of ['atk','def'])num(b[k],0,100000,k);
+    if(b.hpByDifficulty){
+      const expected=id==='vaciel'?6:3;
+      for(const mode of ['practice','easy','normal','hard']){
+        const values=b.hpByDifficulty[mode];
+        need(Array.isArray(values)&&values.length===expected,'보스 '+mode+' 체력 표 형식 오류');
+        for(const hp of values)num(hp,1,100000,'보스 '+mode+' 체력',true);
+      }
+    }else for(const k of ['hp','hpPerCompanion'])num(b[k],k==='hp'?1:0,100000,k);
+    if(b.attackByDifficulty)for(const mode of ['practice','easy','normal','hard'])num(b.attackByDifficulty[mode],0,100,'보스 '+mode+' 공격 배율');
+    num(b.critMult,1,5,'보스 치명 배율');
     for(const [k,v] of Object.entries(b.params||{})) num(v,0,10000,k);
     if(b.params.exposedDamageBonus!==undefined)num(b.params.exposedDamageBonus,0,1,'본체 노출 추가 피해');
     if(b.params.finalExposureBonus!==undefined)num(b.params.finalExposureBonus,0,1,'후반 연계 노출 추가 피해');
@@ -7979,7 +8699,7 @@ function prepare(x) {
     b.midDialogueShown=true;scene(x,b.specialFinal?bc.midDialogue?.hidden:bc.midDialogue?.ordinary);
   }
   if(b.domain==='osteos') {
-    const bladeHp=b.difficulty==='hard'?(bc.params.nightmareBladeHp??bc.params.bladeHp):bc.params.bladeHp;
+    const bladeHp=bc.params.bladeHp;
     const bladeRound=b.difficulty==='hard'?(bc.params.nightmareBladeMinRound??1):1;
     if(hp<=bladeHp&&b.round>=bladeRound&&!b.rageTriggered) {b.rageTriggered=true;b.phase='rage';delete b.boss.buffs.defup;emit(x,'phase','scene','오스테오스가 날개를 펼칩니다. 방어를 버린 검 끝이 날카롭게 빛납니다.');}
     else if(!b.rageTriggered) {const phase=hp>bc.params.attackHp&&b.round<=bc.params.calmMaxRounds?'calm':'base';if(b.phase==='calm'&&phase==='base')emit(x,'dialogue',b.domain,'……어리석군요.');b.phase=phase;}
@@ -8024,14 +8744,15 @@ function initial(c,opts={}) {
     if(u.eventCompleted&&h.eventFeeling){need(korean(h.eventFeeling)&&text(h.eventFeeling,160),'감정 요약은 한국어 160자 이내입니다.');u.eventFeeling=h.eventFeeling;}
     if(!u.hp)u.downAt=round-1;if(u.distorted){u.rescue='pending';u.distortedAt=round;u.nextDistortionRound=round;}party[key]=u;
   }
-  const extra=id==='vaciel'&&['normal','hard'].includes(mode)?(bc.params.hardHpPerCompanionBonus||0)*team.length:0;
-  const hardplus=['normal','hard'].includes(mode);
-  const hpScale=(id==='cor'&&hardplus?(bc.params.hardHpScale??1):1)*(mode==='easy'?(bc.params.easyHpScale??1):mode==='normal'?(bc.params.normalHpScale??1):mode==='hard'?(bc.params.nightmareHpScale??1):1);
-  const attackScale=hardplus?(bc.params.hardAttackScale??1)*(mode==='hard'?(bc.params.nightmareAttackScale??1):1):mode==='easy'?(bc.params.normalAttackScale??1):1;
-  // 바시엘 어려움: 동료 1명당 최대 HP 141 추가. 6인 구성 기준 2,600 HP.
-  // 기존 보스 HP 배율은 건드리지 않아 보통/쉬움 및 다른 보스에는 영향 없음.
-  const vacielNightmareTeamHp=id==='vaciel'&&mode==='hard'?141*team.length:0;
-  const boss=unit(id,{...bc,hp:pct(bc.hp+bc.hpPerCompanion*team.length+extra,d.hp*hpScale)+vacielNightmareTeamHp,atk:bc.atk*d.atk*attackScale,def:bc.def*d.def,crit:d.enemyCrit});
+  // 보스 수치의 단일 기준: 각 보스 hpByDifficulty / attackByDifficulty.
+  // HP 표의 배열 인덱스는 출전 동료 수(0~2명 / 바시엘 0~5명)입니다.
+  // 별도 HP 난이도 배율이나 후처리 보정은 적용하지 않습니다.
+  const configuredHp=bc.hpByDifficulty?.[mode]?.[team.length];
+  const maxBossHp=configuredHp===undefined
+    ? pct(bc.hp+bc.hpPerCompanion*team.length,d.hp) // 과거 형식의 안전한 기본값
+    : configuredHp;
+  const bossAttack=bc.atk*(bc.attackByDifficulty?.[mode]??d.atk);
+  const boss=unit(id,{...bc,hp:maxBossHp,atk:bossAttack,def:bc.def*d.def,crit:d.enemyCrit});
   num(opts.bossHpPercent??100,1,100,'보스 체력');boss.hp=Math.max(1,pct(boss.maxHp,(opts.bossHpPercent??100)/100));
   const gate=opts.storyFlags||{},returned=Array.isArray(gate.returnedCommanders)?bossIds.filter(k=>k!=='vaciel'&&gate.returnedCommanders.includes(k)):[],empty=id==='vaciel'&&returned.length===5&&gate.composureRestored===true;
   const b={version:3,forceDefeat:!!opts.forceDefeat,id:opts.id||id+'-'+seed,mode:opts.mode==='campaign'?'campaign':'workbench',domain:id,playerName:name,difficulty:mode,seed,rng:seed,round,startedAt:round,revision:0,meaningful:false,eventSerial:0,record:opts.record!==false,team:[...team],playerSkills:[...ps],party,boss,summons:[],summonSerial:0,summonCount:0,repairCount:0,motifCount:0,phase:id==='osteos'?'calm':'base',specialFinal:empty,rageTriggered:false,patternUsed:{},intent:null,mark:null,story:{occurred:!!opts.eventOccurred,pressured:!!opts.eventOccurred,hero:null,branch:'none',resolved:false,focus:null},storyFlags:{returnedCommanders:returned,composureRestored:gate.composureRestored===true},talkRound:0,smallTalkUsed:{},bossTalkCount:0,bossTalkLimit:(bc.chat?.length||3)+((bc.bossTalkEntry?.ordinary?.length||bc.bossTalkEntry?.solo?.length)?1:0),pairTalkUsed:false,midDialogueShown:false,acted:{},items:copy(c.itemLoadouts?.[mode==='hard'?'hard':id==='vaciel'?'final':mode]||c.items),log:[],outcome:null,committed:false,deathAllowed:false,lastTrack:null,lastCompanionSkill:null,lastRandomTarget:null,invitation:null,reflection:null,recordedDamage:0,exposedUntil:0,corFury:0,corFuryAction:null,corFeastUsed:0,corFeastSpoke:false,dissonance:null,dissonanceLast:-99,starCopy:null,doppel:null,swordTrace:null,swordTraceLast:-99,dreamMonochrome:false,lacrienStep:0,lacrienRecording:false,lacrienSequenceVersion:2};
@@ -9113,7 +9834,7 @@ function config(input){const c=migrateLegacyDifficultyConfig(C.copy(input));
  change(sk('takumi','spotlight'),'duration',2,3);change(sk('takumi','illusion'),'secondary',.25,.35);
  c.songWeights??=C.copy(H.defaults.songWeights);
  const vb=c.bosses?.vaciel;
- change(vb?.params,'lateChainHp',.45,.58);vb.params.hardHpPerCompanionBonus??=20;vb.params.normalLateChainHp??=.72;vb.params.finalExposureBonus??=.2;
+ change(vb?.params,'lateChainHp',.45,.58);vb.params.normalLateChainHp??=.72;vb.params.finalExposureBonus??=.2;
  vb.params.motifFirstPower??=.38;vb.params.motifSecondPower??=1.2;vb.params.motifThirdPower??=.8;
  upgradeVaciel();c.release='0.6.6';return upgradeMarionelAndSongs(upgradeHardBalance(c));
 }
@@ -9163,11 +9884,6 @@ H.compat.config=function(input){
    if(input?.release==='0.6.14')return H.core.copy(input);
    const c=previous(input);
    if(c.release==='0.6.14')return c;
-   const scales={osteos:1.18,bellaton:1.2,cor:1.15,lacrien:1.2,marionel:1.22,vaciel:1.18};
-   for(const [id,value] of Object.entries(scales)){
-     const p=c.bosses?.[id]?.params;
-     if(p&&p.normalAttackScale===undefined)p.normalAttackScale=value;
-   }
    const changes={osteos:[['wing-calm',0,.4],['wing',0,.48],['bones',.7,.85],['thrust',1,1.13]],bellaton:[['ribbon',1.15,1.25],['finale',1.4,1.5]],cor:[['smash',.9,1]],lacrien:[['judgment',1,1.1]],marionel:[['wave',.9,1.05],['wave-two',1,1.15]],vaciel:[['drain',.6,.72],['parasol',1.05,1.17]]};
    for(const [id,changeList]of Object.entries(changes)){
      const patterns=c.bosses?.[id]?.patterns?.easy||[];
@@ -9244,7 +9960,6 @@ H.adapter={newCampaign,openBosses,available,beginCampaign,fieldCare,result,optio
    if(r?.detail==='매 라운드 릿카를 포함한 아군 전체에 최대 HP의 2.5% 피해(어려움은 3.75%). 행동은 제한하지 않습니다.')r.detail=H.defaults.distortions.rikka.detail;
    const m=c.bosses?.marionel?.params;
    if(m?.puppetAttackRatio===.75)m.puppetAttackRatio=1.4;
-   if(c.bosses?.cor?.params)c.bosses.cor.params.hardHpScale??=1.12;
    if(m){m.hardPuppetAttackRatio??=1.65;m.hardDollStrikePower??=1.05;m.hardThreadInitialPower??=.85;}
    const duel=find(c,'cor','normal','duel');
    if(duel?.cycle===4&&duel.offset===1)duel.cycle=1;
@@ -9462,8 +10177,16 @@ H.auto={choose};
    for(const entry of Object.values(c.bosses||{}))delete entry.speed;
    return c;
  }
- normalize(H.defaults);
- H.compat.config=function(input){return normalize(previous(input));};
+ H.compat.config=function(input){
+   const c=normalize(previous(input));
+   // 저장된 이전 버전은 현재의 명시적인 보스 체력/공격 표를 사용합니다.
+   for(const [id,official] of Object.entries(H.defaults.bosses)){
+     const boss=c.bosses?.[id];if(!boss)continue;
+     if(!boss.hpByDifficulty)boss.hpByDifficulty=H.core.copy(official.hpByDifficulty);
+     if(!boss.attackByDifficulty)boss.attackByDifficulty=H.core.copy(official.attackByDifficulty);
+   }
+   return c;
+ };
 })(globalThis);</script><script>
 /* 새 보스 기믹 공인 설정. 기존 저장의 개인 설정과 다른 콘텐츠는 유지합니다. */
 (function(g){'use strict';
@@ -9505,111 +10228,6 @@ function enforceSupportSkillBalance(c){
  }
  return c;
 }
-function refreshBattleDefaults(c){
- const tune=(obj,k,before,after)=>{if(obj&&obj[k]===before)obj[k]=after;};
- const skill=(owner,id)=>owner==='user'?c.skills?.find(v=>v.id===id):c.heroSkills?.[owner]?.find(v=>v.id===id);
- enforceSupportSkillBalance(c);
- // 레드라인은 구버전 저장 데이터의 총 2회 제한 및 3라운드 연장을 해제합니다.
- const redline=skill('jun','redline');
- if(redline){redline.duration=2;delete redline.limit;redline.detail='2라운드 동안 동료의 공격 성공 시 횟수 제한 없이 추격합니다.';}
- // 원래 설정: TRACK #????와 앙코르는 각각 SP 3을 소모합니다.
- // 이전 수정판에서 SP 0으로 저장된 설정도 새 전투부터 원래 비용으로 복구합니다.
- tune(skill('shion','track'),'cost',0,3);
- tune(skill('shion','encore'),'cost',0,3);
- // 기본 난이도별 패턴 보정: 저장된 이전 기본값과 일치할 때만 새 수치로 바꿉니다.
- const cor=c.bosses?.cor;
- tune(cor?.patterns?.normal?.find(p=>p.id==='duel'),'power',1.30,1.25);
- for(const oldPower of [1.25,1.20])tune(cor?.patterns?.hard?.find(p=>p.id==='duel'),'power',oldPower,1.30);
- const hardWings=c.bosses?.osteos?.patterns?.hard||[];
- tune(hardWings.find(p=>p.id==='wing-calm'),'power',.73,.85);
- tune(hardWings.find(p=>p.id==='wing'),'power',.80,1.00);
- const vaciel=c.bosses?.vaciel;
- if(vaciel){
-   vaciel.params.nightmareMotifFirstPower??=1.10;
-   vaciel.params.nightmareMotifSecondPower??=1.90;
-   vaciel.params.nightmareMotifThirdPower??=1.40;
- }
- // 쉬움에서 방어력에 막혀 1~3 피해만 나던 오스테오스 「날개 감옥」만 조정.
- // 사용자가 편집한 계수나 보통·어려움 패턴은 그대로 둡니다.
- const easyWings=c.bosses?.osteos?.patterns?.easy||[];
- for(const p of easyWings){
-   if(p.effect!=='wing')continue;
-   tune(p,'power',.4,.6);
-   tune(p,'power',.48,.68);
- }
- // 양측 밸런스를 무너뜨리지 않도록 지원 기술과 약화 기술만 기본 1R 연장합니다.
- for(const [owner,id,oldDur] of [
-  ['jun','firebreak',2],['rikka','mirror',3],
-  ['takumi','spotlight',3],['user','buff',2],['user','debuff',2],
-  ['user','defdown',2],['rikka','flower',2],['rinne','seek',2]
- ]) tune(skill(owner,id),'duration',oldDur,oldDur+1);
- const songs=c.songs||[],findSong=id=>songs.find(v=>v.id===id);
- const brave=findSong('brave'),rest=findSong('rest'),hush=findSong('hush');
- tune(brave,'power',.2,.24);tune(brave,'duration',2,3);
- tune(rest,'power',.2,.35);tune(rest,'power',.34,.35);
- tune(hush,'power',.18,.22);tune(hush,'duration',2,3);
- // 수치와 다른 오래된 랜덤곡 설명만 현재 효과에 맞게 교체합니다.
- const displaySong=(song,possible,build)=>{
-  if(song&&possible.some(t=>song.detail===t))song.detail=build(song);
- };
- displaySong(brave,['아군 전체 공격력 상승','아군 전체 공격력 24% 상승 · 3라운드'],song=>`아군 전체 공격력 ${Math.round(song.power*100)}% 상승 · ${song.duration}라운드`);
- displaySong(rest,['아군 전체 체력 회복','아군 전체 최대 HP 34% 회복','아군 전체 최대 HP 35% 회복'],song=>`아군 전체 최대 HP ${Math.round(song.power*100)}% 회복`);
- displaySong(hush,['적 전체 공격력 감소','적 전체 공격력 22% 감소 · 3라운드'],song=>`적 전체 공격력 ${Math.round(song.power*100)}% 감소 · ${song.duration}라운드`);
-  // 마지막 연계의 그림자의 물결은 공명으로 교체. 종료 후 일반 단일 공격 이름만 변경.
-  const lastStrike=c.bosses?.vaciel?.patterns?.hard?.find(v=>v.id==='silent');
-  if(lastStrike&&lastStrike.name==='그림자의 물결')lastStrike.name='잔영의 일격';
-  // 실제 전투에 사용할 세 지원곡의 가중치입니다. 체력 부족 시 회복곡 비중이 올라갑니다.
- const adjustedWeights={healthy:[33,34,33],hp:[29,44,27],sp:[33,34,33],normal: [33,34,33]};
- c.songWeights=H.core.copy(adjustedWeights);
- // 라크리엔: 기록 뒤 심판을 거쳐 바로 회귀합니다. 별빛은 보통·어려움 모두 실제 발동합니다.
- // 어려움에서는 회귀 다음의 복기가 행동 한 번을 대신하므로 별빛을 6번째 차례에 둡니다.
- const lac=c.bosses?.lacrien;
- for(const [mode,cycle] of [['normal',5],['hard',6]]){
-   const patterns=lac?.patterns?.[mode];if(!patterns)continue;
-   for(const [id,offset] of [['light',1],['record',2],['judgment',3],['echo',4],['ray',cycle]]){
-     const p=patterns.find(v=>v.id===id);if(!p)continue;
-     // 기존 기본 패턴에만 순서를 갱신하며, 편집창의 개별 위력 설정은 보존합니다.
-     p.cycle=cycle;p.offset=offset;
-     if(id==='record'){
-       p.target='one';if(p.power===0)p.power=1.05;
-       p.tell='라크리엔 주위의 빛이 거울처럼 맑아집니다.';
-     }
-     if(id==='echo'){
-       if(p.power===.55&&mode==='normal')p.power=.40;
-       if(p.power===.68&&mode==='hard')p.power=.50;
-       p.tell='거울 속에 남은 빛이 다시 들끓습니다.';
-     }
-   }
- }
- // 새로 시작한 전투의 기본 정보만 보정하고, 이미 진행 중인 전투는 손대지 않습니다.
- // 화면 기준 쉬움/보통/어려움 보스별 목표 HP.
- // 간부는 동료 2명, 바시엘은 동료 5명 출전 시 목표 HP와 일치한다.
- // 기존 보통/어려움 및 동료 인원별 HP 증가량은 유지하고, 쉬움 HP만 보스별 차등 조정한다.
- const tunedBossHp={
-  bellaton:{easy:360,normal:390,hard:425},
-  cor:{easy:420,normal:540,hard:700},
-  lacrien:{easy:370,normal:460,hard:540},
-  marionel:{easy:390,normal:480,hard:600},
-  osteos:{easy:380,normal:450,hard:600},
-  vaciel:{easy:960,normal:1350,hard:1895}
- };
- for(const [id,target] of Object.entries(tunedBossHp)){
-  const boss=c.bosses?.[id];if(!boss)continue;
-  const teamCount=id==='vaciel'?5:2;
-  const extra=id==='vaciel'?(boss.params.hardHpPerCompanionBonus||0)*teamCount:0;
-  const baseHp=boss.hp+boss.hpPerCompanion*teamCount+extra;
-  const corScale=id==='cor'?(boss.params.hardHpScale||1):1;
-  const easyBaseHp=boss.hp+boss.hpPerCompanion*teamCount;
-  if(easyBaseHp>0&&c.difficulties?.easy?.hp>0)
-    boss.params.easyHpScale=target.easy/(easyBaseHp*c.difficulties.easy.hp);
-  if(baseHp>0&&c.difficulties?.normal?.hp>0)
-    boss.params.normalHpScale=target.normal/(baseHp*c.difficulties.normal.hp*corScale);
-  if(baseHp>0&&c.difficulties?.hard?.hp>0)
-    boss.params.nightmareHpScale=target.hard/(baseHp*c.difficulties.hard.hp*corScale);
- }
- return c;
-}
-refreshBattleDefaults(H.defaults);
 const DIFFICULTY_LABELS={easy:'쉬움',normal:'보통',hard:'어려움'};
 const defaults=()=>({series:false,bossId:'bellaton',playerName:'당신',team:[],difficulty:'easy',plusMode:false,seed:47291,round:1,bossHpPercent:100,playerSkills:['mimic'],deathAllowed:false,eventOccurred:false,storyFlags:{returnedCommanders:[],composureRestored:false},conditions:Object.fromEntries(Object.keys(H.defaults.heroes).map(id=>[id,{alive:true,injured:false,distorted:false,hasHope:true,eventCompleted:false,eventFeeling:'',hpPercent:100,spPercent:100}]))});
 function normalizeOptions(v){const o=defaults();for(const key of Object.keys(o))if(v?.[key]!==undefined)o[key]=clone(v[key]);
@@ -9727,7 +10345,7 @@ function randomSeed(){
 }
 /* 과거 JSON을 불러올 때 스킬/패턴 호환성만 유지합니다.
    인물 기본 능력치는 위의 H.defaults.heroes에서만 설정합니다. */
-function migrateFutureBalance(c){return refreshBattleDefaults(c);}
+function migrateFutureBalance(c){return c;}
 
 function inflectClearName(name){const code=name.charCodeAt(name.length-1),hasFinal=code>=0xac00&&code<=0xd7a3&&(code-0xac00)%28!==0;return name+(hasFinal?'과':'와');}
 function launch(c,o){
@@ -10414,7 +11032,11 @@ function offerResume(){
   const bossName=activeConfig.bosses[battle.domain]?.name||'보스';
   const modeName=startOptions?.series?'보스 러시':'자유 대전';
   $('resume-summary').textContent=modeName+' · '+bossName+' · '+battle.round+'라운드'+(inBattle?' 진행 중':' · 다음 지역 준비');
-  $('resume-desc').textContent='이전에 진행하던 '+modeName+' 기록이 있습니다. 이어서 플레이하시겠어요?';
+  const expectedHp=activeConfig?.bosses?.[battle.domain]?.hpByDifficulty?.[battle.difficulty]?.[battle.team.length];
+  const oldHp=inBattle&&Number.isFinite(expectedHp)&&battle.boss.maxHp!==expectedHp;
+  $('resume-desc').textContent=oldHp
+    ? '이 전투는 이전 버전의 HP('+battle.boss.maxHp+')로 저장되었습니다. 계속하기는 기존 수치로 진행합니다. 최신 HP('+expectedHp+')를 적용하려면 새로 시작을 선택하세요.'
+    : '이전에 진행하던 '+modeName+' 기록이 있습니다. 이어서 플레이하시겠어요?';
   $('resume-overlay').hidden=false;
   clearTimeout(playTimer);autoRound=null;
   $('resume-continue').focus();
