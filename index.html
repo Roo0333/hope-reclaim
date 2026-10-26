@@ -2680,7 +2680,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
             }
           ]
         },
-        "triggerRound": 2
+        "triggerRound": 3
       },
       "intro": [
         {
@@ -7639,7 +7639,7 @@ function extend(c){
       const list=copy(b.patterns.normal);
       const tuning={
         bellaton:{aria:{power:.25},ribbon:{power:1.28},finale:{power:1.72}},
-        cor:{slash:{power:.9},charge:{power:1.05},smash:{power:.945},duel:{power:1.20,cooldown:3}},
+        cor:{slash:{power:.9},charge:{power:1.05},smash:{power:.945},duel:{power:1.30,cooldown:3}},
         lacrien:{light:{power:.27},judgment:{power:1.15},echo:{power:.68}},
         marionel:{repair:{power:.70},thread:{power:1.02},'wave-two':{power:1.45}},
         osteos:{'wing-calm':{power:.85},wing:{power:1.00},bones:{power:1.10},thrust:{power:1.40}},
@@ -7648,6 +7648,12 @@ function extend(c){
       for(const p of list)Object.assign(p,tuning[id]?.[p.id]||{});
       if(id==='vaciel'){const m=list.find(p=>p.effect==='motif');if(m)m.priority=80;}
       b.patterns.hard=list;
+    }
+    if(id==='lacrien'&&!b.patterns.hard.some(p=>p.id==='starcopy'))
+      b.patterns.hard.push({id:'starcopy',name:'별의 복기',effect:'starcopy',power:.95,cycle:1,offset:1,fromRound:1,hpMin:0,hpMax:100,priority:10,cooldown:0,once:false,phase:'any',target:'all',tell:'천구의에 별빛이 모여듭니다.'});
+    if(id==='osteos'){
+      b.params.nightmareBladeHp??=.60;
+      b.params.nightmareBladeMinRound??=4;
     }
     if(b.params.nightmareHpScale===undefined||b.params.nightmareHpScale===oldHps[id])b.params.nightmareHpScale=hps[id];
     if(b.params.nightmareAttackScale===undefined||b.params.nightmareAttackScale===oldAtks[id])b.params.nightmareAttackScale=atks[id];
@@ -7687,7 +7693,7 @@ H.hardDifficulty={extend};extend(H.defaults);H.defaults.difficultySchemaVersion=
 'use strict';
 const H = g.HopeBattle, copy = x => JSON.parse(JSON.stringify(x));
 const bossIds = ['osteos','bellaton','cor','lacrien','marionel','vaciel'];
-const effects = ['strike','sweep','wait','opening','wing','blade','pillars','aria','ribbon','curtain','charge','smash','duel','light','reflect','recordecho','judgment','summon','thread','repair','drain','parasol','motif','empty','dreammark','dreamresonance','dreamrest','blade-trace'];
+const effects = ['strike','sweep','wait','opening','wing','blade','pillars','aria','ribbon','curtain','charge','smash','duel','light','reflect','recordecho','judgment','summon','thread','repair','drain','parasol','motif','empty','dreammark','dreamresonance','dreamrest','blade-trace','starcopy'];
 const skillTargets = {single:'enemy',area:'enemies',buff:'ally',debuff:'enemy',defdown:'enemy',heal:'ally',allheal:'allies',spheal:'ally',guardall:'allies',counter:'self',track:'allies',encore:'allies',cleanse:'ally',protect:'ally',defall:'allies',mitigateall:'allies',followup:'self',burnarea:'enemies',pierce:'enemy',breakhit:'enemy',triplehit:'enemy',lifesteal:'enemy',stun:'enemy',breakarea:'enemies',misdirection:'enemies',spotlight:'self',climax:'enemy',mimic:'self',shield:'self',purify:'allies'};
 const skillLabels = {single:'단일 공격',area:'전체 공격',buff:'공격력 상승',debuff:'공격력 감소',defdown:'방어력 감소',heal:'체력 회복',allheal:'전체 체력 회복',spheal:'기력 회복',guardall:'전체 방어',counter:'방어·반격',track:'랜덤 지원곡',encore:'직전 노래 재연',cleanse:'약화 해제',protect:'피해 감소',defall:'전체 방어력 상승',mitigateall:'전체 받는 피해 감소',followup:'아군 공격 추격',burnarea:'전체 공격·화상',pierce:'방어력 무시',breakhit:'공격·방어력 감소',triplehit:'3연격',lifesteal:'흡혈 공격',stun:'행동 봉쇄',breakarea:'전체 공격·방어력 감소',misdirection:'전체 공격·명중률 감소',spotlight:'관객에 따른 자기 강화',climax:'강화 연계 단일 공격',mimic:'직전 동료 기술 복사',shield:'전체 공격 대신 받기',purify:'전체 약화 해제'};
 const need = (v,msg) => { if (!v) throw Error(msg); };
@@ -7756,6 +7762,8 @@ function validateConfig(c) {
     }
     if(b.params.lateChainHp!==undefined)num(b.params.lateChainHp,0,.99,'후반 연계 체력 비율');
     for(const k of ['guardReduction','rageHp','rageAtk','rageDef','openingDef','repairRatio','wingDef','attackHp','bladeHp','bladeDef','bladeCrit','pillarHeal','rageDot','bleedRatio','duelCap','reflectRatio','reflectCap','recordCap']) num(b.params[k],0,.99,k);
+    if(b.params.nightmareBladeHp!==undefined)num(b.params.nightmareBladeHp,0,.99,'어려움 분노 진입 체력');
+    if(b.params.nightmareBladeMinRound!==undefined)num(b.params.nightmareBladeMinRound,1,1000,'어려움 분노 최소 라운드',true);
     if(b.params.hardBleedRatio!==undefined)num(b.params.hardBleedRatio,0,.99,'hardBleedRatio');
     for(const k of ['summonLimit','repairLimit','pillarCount']) num(b.params[k],0,10,k,true);
     for(const k of ['wingTurns','calmMaxRounds','pillarTicks','duelHits','bindTurns','exposeRounds','bleedTurns','summonAliveLimit']) num(b.params[k],1,20,k,true);
@@ -7839,16 +7847,26 @@ function choose(x,preferred=null,forced=false) {
   let n=rand(b)*(sum||1),t=valid[0];for(let i=0;i<valid.length;i++){n-=weights[i];if(n<0){t=valid[i];break;}}
   if(t)b.lastRandomTarget=t.id;return t;
 }
-// 보통·어려움 라크리엔만 행동 기준 5단계 순환. 별의 복기는 회귀 뒤 별도 차례를 쓴다.
-// 라운드 번호에 빈 슬롯을 끼우지 않아 봉쇄돼도 '견제'가 생기지 않는다.
+// 행동 기준 순환. 어려움의 복기는 회귀 성공 여부와 무관한 독립 단계다.
 const lacrienSequence=['light','record','judgment','echo','ray'];
+const lacrienHardSequence=['light','record','judgment','echo','starcopy','ray'];
+const lacrienOrder=b=>b.difficulty==='hard'?lacrienHardSequence:lacrienSequence;
 function lacrienStage(b){
-  if(Number.isInteger(b.lacrienStep))return b.lacrienStep;
-  // 이전 저장 파일의 진행 위치도 보존한다. 5번째 어려움 차례는 복기 예약 슬롯이었다.
-  const old=(b.round-1)%(b.difficulty==='hard'?6:5);
-  b.lacrienStep=b.difficulty==='hard'&&old===5?4:Math.min(old,4);
+  if(!Number.isInteger(b.lacrienStep)){
+    const old=(b.round-1)%(b.difficulty==='hard'?6:5);
+    b.lacrienStep=b.difficulty==='hard'&&old===5?4:Math.min(old,4);
+  }
   if(b.lacrienRecording===undefined)b.lacrienRecording=!!b.reflection||b.recordedDamage>0||b.lacrienStep===3;
+  // 구 저장의 4번은 별빛이었다. 예약된 복기가 있다면 새 복기 단계로 이어간다.
+  if(b.lacrienSequenceVersion!==2){
+    if(b.difficulty==='hard'&&b.lacrienStep===4&&!b.starCopy)b.lacrienStep=5;
+    b.lacrienSequenceVersion=2;
+  }
   return b.lacrienStep;
+}
+function advanceLacrien(b,p){
+  const sequence=lacrienOrder(b),i=sequence.indexOf(p.id);
+  if(i>=0)b.lacrienStep=(i+1)%sequence.length;
 }
 // 어려움 바시엘은 후반 연계에 진입하기 전까지 주종의 인연을 5절씩 반복한다.
 // motifCount는 실제 발동한 누적 횟수로 유지해 첫 5절 완료 여부와 저장 호환성을 보존한다.
@@ -7869,7 +7887,8 @@ function pattern(b,c) {
     let step=lacrienStage(b);
     // 기록 자체를 봉쇄했다면 비어 있는 회귀 차례는 만들지 않는다.
     if(step===3&&!b.lacrienRecording){b.lacrienStep=step=4;}
-    const planned=list.find(p=>p.id===lacrienSequence[step]);
+    const id=lacrienOrder(b)[step];
+    const planned=list.find(p=>p.id===id)||(id==='starcopy'?H.defaults.bosses.lacrien.patterns.hard.find(p=>p.id===id):null);
     if(planned)return copy(planned);
   }
   return copy(list.filter(p=>(p.effect!=='motif'||b.motifCount<(b.difficulty==='hard'?5:3)||canRepeatVacielMotif(b))&&p.fromRound<=b.round&&(b.round-1)%p.cycle===p.offset-1&&hp>=p.hpMin&&hp<=p.hpMax&&(p.phase==='any'||p.phase===b.phase)&&(!p.once||b.patternUsed[p.id]==null)&&(b.patternUsed[p.id]==null||b.round-b.patternUsed[p.id]>p.cooldown)).sort((a,z)=>z.priority-a.priority)[0]||{id:'fallback',name:b.domain==='vaciel'&&b.difficulty!=='hard'?'그림자의 물결':'견제',effect:b.phase==='calm'?'wait':'strike',power:b.difficulty==='practice'?.6:1,target:'one',tell:'움직임을 가다듬고 있습니다.'});
@@ -7888,7 +7907,6 @@ function forecast(b,c) {
 function adaptiveIntent(b,c,p) {
   const bc=c.bosses[b.domain];
   if(b.domain==='cor'&&b.difficulty!=='hard'&&p.effect==='duel')return {...p,id:p.id+'-strike',effect:'strike',name:'검격',power:1,tell:'코르가 대검을 겨눕니다.'};
-  if(b.domain==='lacrien'&&b.starCopy?.phase==='ready')return {...p,id:'starcopy-ready',name:'별의 복기',effect:'wait',tell:'천구의에 새겨진 별빛이 되돌아오려 합니다.'};
   if(b.domain==='osteos'&&b.difficulty==='hard'&&b.swordTrace?.ready)return {...p,id:'sword-trace',name:'예검의 궤적',effect:'blade-trace',power:1,phase:'rage',tell:'오스테오스의 세 검흔이 정해진 순서대로 빛납니다.'};
 
   if(b.domain==='marionel'&&p.effect==='repair')
@@ -7898,8 +7916,6 @@ function adaptiveIntent(b,c,p) {
     const canNextWave=b.summonCount===0||(b.team.length>0&&b.summonCount===1&&b.boss.hp/b.boss.maxHp<=.7);
     if(b.summonCount===1&&canNextWave&&b.summonCount<bc.params.summonLimit&&!dolls.length&&b.round>b.exposedUntil)
       return {...p,id:'final-summon',name:'미완성의 역작',effect:'summon',power:.6,tell:'마리오넬의 손끝에서 끊어진 실들이 한곳으로 모입니다.'};
-    if(p.effect==='summon'&&b.summonCount>0)
-      return {...p,name:'실의 파동',effect:'strike',power:1.1,tell:'실이 갑자기 한 사람을 향해 날아듭니다.'};
     if(p.effect==='thread'){
       if(Object.values(b.party).filter(living).length<2)
         return {...p,effect:'strike',power:1.1,tell:'마리오넬이 짧은 실을 빠르게 튕깁니다.'};
@@ -7908,6 +7924,9 @@ function adaptiveIntent(b,c,p) {
     if(p.effect==='strike'&&b.boss.hp/b.boss.maxHp<=.5)
       return {...p,power:Math.max(p.power,1.4),tell:'마리오넬이 수많은 실을 한곳으로 끌어당깁니다.'};
   }
+  // 첫 인형 소환 뒤의 정규 순환 자리만 교체한다. 미완성의 역작은 위에서 별도 예약한다.
+  if(b.domain==='marionel'&&p.effect==='summon'&&b.summonCount>0)
+    return {...p,id:'scattered-threads',sourcePatternId:p.id,name:'흩어진 실',effect:'sweep',target:'all',power:.5,tell:'풀린 실들이 낮게 퍼져 일행 전체를 향합니다.'};
   // 수선하는 손은 모든 난이도에서 1회 스킬 봉인, 어려움에서는 2명에게 적용합니다.
   if(b.domain==='vaciel'&&b.difficulty==='hard'&&b.finalChain==='done')return vacielAftermath(b);
   if(b.domain!=='vaciel'||b.difficulty==='practice'||!(bc.params.lateChainHp>0)||b.finalChain==='done')return p;
@@ -7946,7 +7965,7 @@ function josa(n,consonant,vowel){
 function storyEvent(x) {
   const {b,bc}=x,s=bc.story,u=b.party[s.hero];
   if(!s.enabled||!living(u)||u.permanentUnavailable||b.story.occurred||b.round<s.triggerRound)return;
-  // 정신 압박은 2라운드, 견뎌 냄/일그러짐 분기는 그 다음 3라운드에 재생합니다.
+  // 설정된 시작 라운드에 정신 압박, 다음 라운드에 견뎌 냄/일그러짐을 재생한다.
   if(!b.story.pressured){
     b.story.pressured=true;b.story.hero=u.id;scene(x,s.pressure);
     if(!s.pressure.length)emit(x,'story','scene',`${bc.name}의 말에 ${u.name}${josa(u.name,'이','가')} 잠시 움직임을 멈춥니다. (전용 대사 미등록)`);
@@ -7971,13 +7990,16 @@ function prepare(x) {
     b.midDialogueShown=true;scene(x,b.specialFinal?bc.midDialogue?.hidden:bc.midDialogue?.ordinary);
   }
   if(b.domain==='osteos') {
-    if(hp<=bc.params.bladeHp&&!b.rageTriggered) {b.rageTriggered=true;b.phase='rage';delete b.boss.buffs.defup;emit(x,'phase','scene','오스테오스가 날개를 펼칩니다. 방어를 버린 검 끝이 날카롭게 빛납니다.');}
+    const bladeHp=b.difficulty==='hard'?(bc.params.nightmareBladeHp??bc.params.bladeHp):bc.params.bladeHp;
+    const bladeRound=b.difficulty==='hard'?(bc.params.nightmareBladeMinRound??1):1;
+    if(hp<=bladeHp&&b.round>=bladeRound&&!b.rageTriggered) {b.rageTriggered=true;b.phase='rage';delete b.boss.buffs.defup;emit(x,'phase','scene','오스테오스가 날개를 펼칩니다. 방어를 버린 검 끝이 날카롭게 빛납니다.');}
     else if(!b.rageTriggered) {const phase=hp>bc.params.attackHp&&b.round<=bc.params.calmMaxRounds?'calm':'base';if(b.phase==='calm'&&phase==='base')emit(x,'dialogue',b.domain,'……어리석군요.');b.phase=phase;}
   }
   if(b.domain==='cor'&&!b.rageTriggered&&hp<=bc.params.rageHp) {b.rageTriggered=true;b.phase='rage';if(bc.battleCues?.rage?.length)scene(x,bc.battleCues.rage);else emit(x,'phase','scene','코르의 기세가 거칠어집니다. 타오르는 힘이 자신의 몸도 상하게 합니다.');}
   if(b.domain==='vaciel'&&['normal','hard'].includes(b.difficulty)&&hp<=.65&&!b.vacielCracked){b.vacielCracked=true;emit(x,'phase','scene','바시엘의 양산 아래로 그림자가 짙게 번집니다. 간부들의 잔영이 서로 얽히며 압박이 거세집니다.');}
   storyEvent(x);ensureAgency(x);
   const p=adaptiveIntent(b,x.c,pattern(b,x.c));b.intent={...p,targetId:null};
+  if(b.domain==='lacrien'&&p.effect==='starcopy')b.starCopy={phase:'watch',record:null};
   if(p.effect==='duel') {
     b.intent.targetId=choose(x)?.id||null;b.mark={target:b.intent.targetId,due:b.round};
     // 결투 지목은 보스 아래 고정 안내창에서만 알립니다.
@@ -8017,13 +8039,13 @@ function initial(c,opts={}) {
   const hardplus=['normal','hard'].includes(mode);
   const hpScale=(id==='cor'&&hardplus?(bc.params.hardHpScale??1):1)*(mode==='easy'?(bc.params.easyHpScale??1):mode==='normal'?(bc.params.normalHpScale??1):mode==='hard'?(bc.params.nightmareHpScale??1):1);
   const attackScale=hardplus?(bc.params.hardAttackScale??1)*(mode==='hard'?(bc.params.nightmareAttackScale??1):1):mode==='easy'?(bc.params.normalAttackScale??1):1;
-  // 바시엘 어려움: 동료 1명당 최대 HP 121 추가. 6인 구성 기준 2,500 HP.
+  // 바시엘 어려움: 동료 1명당 최대 HP 141 추가. 6인 구성 기준 2,600 HP.
   // 기존 보스 HP 배율은 건드리지 않아 보통/쉬움 및 다른 보스에는 영향 없음.
-  const vacielNightmareTeamHp=id==='vaciel'&&mode==='hard'?121*team.length:0;
+  const vacielNightmareTeamHp=id==='vaciel'&&mode==='hard'?141*team.length:0;
   const boss=unit(id,{...bc,hp:pct(bc.hp+bc.hpPerCompanion*team.length+extra,d.hp*hpScale)+vacielNightmareTeamHp,atk:bc.atk*d.atk*attackScale,def:bc.def*d.def,speed:bc.speed*d.speed,crit:d.enemyCrit});
   num(opts.bossHpPercent??100,1,100,'보스 체력');boss.hp=Math.max(1,pct(boss.maxHp,(opts.bossHpPercent??100)/100));
   const gate=opts.storyFlags||{},returned=Array.isArray(gate.returnedCommanders)?bossIds.filter(k=>k!=='vaciel'&&gate.returnedCommanders.includes(k)):[],empty=id==='vaciel'&&returned.length===5&&gate.composureRestored===true;
-  const b={version:3,forceDefeat:!!opts.forceDefeat,id:opts.id||id+'-'+seed,mode:opts.mode==='campaign'?'campaign':'workbench',domain:id,playerName:name,difficulty:mode,seed,rng:seed,round,startedAt:round,revision:0,meaningful:false,eventSerial:0,record:opts.record!==false,team:[...team],playerSkills:[...ps],party,boss,summons:[],summonSerial:0,summonCount:0,repairCount:0,motifCount:0,phase:id==='osteos'?'calm':'base',specialFinal:empty,rageTriggered:false,patternUsed:{},intent:null,mark:null,story:{occurred:!!opts.eventOccurred,pressured:!!opts.eventOccurred,hero:null,branch:'none',resolved:false,focus:null},storyFlags:{returnedCommanders:returned,composureRestored:gate.composureRestored===true},talkRound:0,smallTalkUsed:{},bossTalkCount:0,bossTalkLimit:(bc.chat?.length||3)+((bc.bossTalkEntry?.ordinary?.length||bc.bossTalkEntry?.solo?.length)?1:0),pairTalkUsed:false,midDialogueShown:false,acted:{},items:copy(c.itemLoadouts?.[mode==='hard'?'hard':id==='vaciel'?'final':mode]||c.items),log:[],outcome:null,committed:false,deathAllowed:false,lastTrack:null,lastCompanionSkill:null,lastRandomTarget:null,invitation:null,reflection:null,recordedDamage:0,exposedUntil:0,corFury:0,corFuryAction:null,corFeastUsed:0,corFeastSpoke:false,dissonance:null,dissonanceLast:-99,starCopy:null,doppel:null,swordTrace:null,swordTraceLast:-99,dreamMonochrome:false,lacrienStep:0,lacrienRecording:false};
+  const b={version:3,forceDefeat:!!opts.forceDefeat,id:opts.id||id+'-'+seed,mode:opts.mode==='campaign'?'campaign':'workbench',domain:id,playerName:name,difficulty:mode,seed,rng:seed,round,startedAt:round,revision:0,meaningful:false,eventSerial:0,record:opts.record!==false,team:[...team],playerSkills:[...ps],party,boss,summons:[],summonSerial:0,summonCount:0,repairCount:0,motifCount:0,phase:id==='osteos'?'calm':'base',specialFinal:empty,rageTriggered:false,patternUsed:{},intent:null,mark:null,story:{occurred:!!opts.eventOccurred,pressured:!!opts.eventOccurred,hero:null,branch:'none',resolved:false,focus:null},storyFlags:{returnedCommanders:returned,composureRestored:gate.composureRestored===true},talkRound:0,smallTalkUsed:{},bossTalkCount:0,bossTalkLimit:(bc.chat?.length||3)+((bc.bossTalkEntry?.ordinary?.length||bc.bossTalkEntry?.solo?.length)?1:0),pairTalkUsed:false,midDialogueShown:false,acted:{},items:copy(c.itemLoadouts?.[mode==='hard'?'hard':id==='vaciel'?'final':mode]||c.items),log:[],outcome:null,committed:false,deathAllowed:false,lastTrack:null,lastCompanionSkill:null,lastRandomTarget:null,invitation:null,reflection:null,recordedDamage:0,exposedUntil:0,corFury:0,corFuryAction:null,corFeastUsed:0,corFeastSpoke:false,dissonance:null,dissonanceLast:-99,starCopy:null,doppel:null,swordTrace:null,swordTraceLast:-99,dreamMonochrome:false,lacrienStep:0,lacrienRecording:false,lacrienSequenceVersion:2};
   const existing=party[bc.story.hero];if(existing?.distorted&&existing.rescue==='pending'){b.story={occurred:true,hero:existing.id,branch:'distorted',resolved:false,focus:bc.story.focus?existing.id:null};}
   const x=ctx(b,c);
   scene(x,id==='vaciel'?(empty?bc.emptyIntro:returned.length?bc.mixedIntro||bc.intro:bc.intro):bc.intro);
@@ -8479,16 +8501,14 @@ function blockedBossAction(x,p){
   }
   switch(b.domain){
     case 'lacrien':
-      if(b.starCopy?.phase==='ready'){
-        b.starCopy=null; // 복기가 봉쇄되면 관측 기록 소모, 이어서 별빛
+      if(p.effect!=='starcopy'&&b.starCopy?.phase==='ready'){
+        b.starCopy=null;b.lacrienStep=lacrienOrder(b).indexOf('ray');
       }else{
-        if(p.effect==='reflect'){
+        if(['reflect','recordecho'].includes(p.effect)){
           b.reflection=null;b.recordedDamage=0;b.lacrienRecording=false;
-        }else if(p.effect==='recordecho'){
-          b.reflection=null;b.recordedDamage=0;b.lacrienRecording=false;b.starCopy=null;
         }
-        const i=lacrienSequence.indexOf(p.id);
-        if(i>=0)b.lacrienStep=(i+1)%lacrienSequence.length;
+        if(p.effect==='starcopy')b.starCopy=null;
+        advanceLacrien(b,p);
       }
       emit(x,'blocked','scene','라크리엔의 움직임이 멎습니다. 천구의에 맺힌 연계가 끊어집니다.');
       return;
@@ -8505,23 +8525,14 @@ function blockedBossAction(x,p){
   }
   emit(x,'blocked','scene',bc.name+'의 움직임이 잠시 멎습니다. 예정되었던 공격이 끊어집니다.');
 }
-function bossAct(x) {
-  const {b,bc,c,d}=x,p=b.intent,hard=['normal','hard'].includes(b.difficulty),nightmare=b.difficulty==='hard',easy=b.difficulty==='practice';
-  if(b.domain==='cor')b.corFeastUsed=0;
-  if(active(b.boss,'stun',b.round)){
-    blockedBossAction(x,p);
-    return;
-  }
-
-  // 별의 복기: 관측은 만상회귀에 무료로 붙지만 재현은 보스 행동 한 차례를 대체.
-  if(b.domain==='lacrien'&&b.starCopy?.phase==='ready'){
-    const rec=b.starCopy.record||{kind:'support',healed:0};b.starCopy=null;
+function performStarCopy(x){
+  const {b}=x;
+    const rec=b.starCopy?.record||{kind:'support',healed:0};b.starCopy=null;
     emit(x,'dialogue','lacrien','……조금 전의 선택을 다시 비춰 드리겠습니다.');
-    emit(x,'skill','lacrien','라크리엔 · 별의 복기',{skillName:'별의 복기'});
-    const all=Object.values(b.party).filter(living);
+    const recipients=Object.values(b.party).filter(living);
     if(rec.kind==='attack'){
       emit(x,'story','scene','천구의에 남은 공격의 궤적이 빛으로 번져 일행을 향해 쏟아집니다.');
-      for(const t of all)damage(x,b.boss,t,.95,{noCrit:true});
+      for(const t of recipients)damage(x,b.boss,t,.95,{noCrit:true});
     }else if(rec.kind==='heal'){
       emit(x,'story','scene','아군에게 닿았던 치유의 빛이 천구의에 비칩니다. 같은 빛이 라크리엔의 상처를 감쌉니다.');
       const amount=Math.min(60,rec.healed||0,b.boss.maxHp-b.boss.hp);
@@ -8532,7 +8543,21 @@ function bossAct(x) {
       b.boss.shieldMax=Math.round(b.boss.maxHp*.10);b.boss.shieldHp=b.boss.shieldMax;b.boss.shieldUntil=b.round+1;
       emit(x,'guard','system',`별의 복기 · 라크리엔 보호막 ${b.boss.shieldHp}`);
     }
+}
+function bossAct(x) {
+  const {b,bc,c,d}=x,p=b.intent,hard=['normal','hard'].includes(b.difficulty),nightmare=b.difficulty==='hard',easy=b.difficulty==='practice';
+  if(b.domain==='cor')b.corFeastUsed=0;
+  if(b.domain==='lacrien')lacrienStage(b);
+  if(active(b.boss,'stun',b.round)){
+    blockedBossAction(x,p);
     return;
+  }
+
+  // 이미 관측 중이던 구 저장은 예약된 복기를 한 번 마친 뒤 새 순환에 합류한다.
+  if(b.domain==='lacrien'&&p.effect!=='starcopy'&&b.starCopy?.phase==='ready'){
+    emit(x,'skill','lacrien','라크리엔 · 별의 복기',{skillName:'별의 복기'});
+    performStarCopy(x);b.patternUsed.starcopy=b.round;
+    b.lacrienStep=lacrienOrder(b).indexOf('ray');return;
   }
   // 기술 연출은 예고하지 않고 적의 실제 차례에만 보여 줍니다.
   const cueKey=p.id==='repair'&&p.effect!=='repair'?null:bc.battleCues?.[p.id]?p.id:bc.battleCues?.[p.effect]?p.effect:null;
@@ -8615,11 +8640,8 @@ function bossAct(x) {
       break;
     }
     case 'recordecho':if(hard){const amount=b.recordedDamage;emit(x,'echo','scene',amount>0?`만상회귀 · 만상기록에 쌓인 ${amount} 피해를 바탕으로 빛이 아군 전체에 되돌아옵니다.`:'만상회귀 · 기록이 비어 있어도 약한 잔광이 전원에게 되돌아옵니다.');for(const original of all()){const t=redirectArea(original);if(!living(t))continue;const echo=Math.max(b.domain==='lacrien'?original.maxHp*.07:0,Math.min(amount*p.power,original.maxHp*.25)); /* 기록 피해는 인당 최대 HP 25% 상한 */if(echo>0){let n=echo;if(t.guard)n*=x.c.rules.guardFactor;if(t.protect)n*=1-t.protect;if(t.distorted)n*=d.distortedDamage;takeDamage(x,b.boss,t,n);} }b.recordedDamage=0;b.lacrienRecording=false;b.reflection=null;
-      if(nightmare&&!b.starCopy){b.starCopy={phase:'watch',record:null};
-        emit(x,'story','scene','되돌아온 별빛이 사라지지 않고 천구의의 고리를 따라 흐릅니다.');
-        emit(x,'dialogue','lacrien','……이번에는 여러분이 어떤 선택을 남기시는지 지켜보겠습니다.');
-        emit(x,'notice','system','라크리엔이 당신들의 선택을 관측합니다.');}
       }break;
+    case 'starcopy':performStarCopy(x);break;
     case 'judgment':sweep();break;
     case 'summon':{
       const maxWaves=easy?1:bc.params.summonLimit;
@@ -8789,10 +8811,7 @@ function bossAct(x) {
     case 'sweep':sweep();break;
     default:if(p.target==='all')sweep();else hit(one(),p.power,{noCrit:!!p.noCrit});
   }
-  if(b.domain==='lacrien'&&hard){
-    const i=lacrienSequence.indexOf(p.id);
-    if(i>=0)b.lacrienStep=(i+1)%lacrienSequence.length;
-  }
+  if(b.domain==='lacrien'&&hard)advanceLacrien(b,p);
 }
 function distortionTick(x) {
   const {b,c,d}=x;
@@ -8930,9 +8949,7 @@ function endRound(input,c,expectedRevision=input.revision) {
   const b=copy(input),x=ctx(b,c);b.meaningful=true;
   for(const u of Object.values(b.party))if(!b.acted[u.id]&&living(u)&&active(u,'puppet',b.round)){b.acted[u.id]=true;playerAct(x,u.id,{kind:'puppet'});if(checkEnd(x))break;}
   if(b.starCopy?.phase==='watch'){
-    const rec=b.starCopy.record||{kind:'support',healed:0};b.starCopy={phase:'ready',record:rec};
-    emit(x,'story','scene','천문관의 별빛이 마지막 움직임을 따라 흐르기 시작합니다.');
-    // 기록 종류를 미리 공개하지 않고 별빛의 변화만 전합니다.
+    const rec=b.starCopy?.record||{kind:'support',healed:0};b.starCopy={phase:'ready',record:rec};
   }
   if(b.dissonance?.phase==='choose'){
     emit(x,'notice','scene','불협화음 · 두 사람의 행동이 모두 기록되지 않아 음표가 사라집니다.');b.dissonance=null;
@@ -9214,7 +9231,10 @@ H.adapter={newCampaign,openBosses,available,beginCampaign,fieldCare,result,optio
        }
      }
    }
-   for(const b of Object.values(c.bosses||{}))if(b.story?.triggerRound===3)b.story.triggerRound=2;
+   for(const [id,b]of Object.entries(c.bosses||{})){
+     if(id==='osteos'){if(b.story?.triggerRound===2)b.story.triggerRound=3;}
+     else if(b.story?.triggerRound===3)b.story.triggerRound=2;
+   }
    if(c.storyRules?.triggerRound===3)c.storyRules.triggerRound=2;
  }
  function restoreLegacyBalance(c){
@@ -9508,7 +9528,7 @@ function refreshBattleDefaults(c){
  // 기본 난이도별 패턴 보정: 저장된 이전 기본값과 일치할 때만 새 수치로 바꿉니다.
  const cor=c.bosses?.cor;
  tune(cor?.patterns?.normal?.find(p=>p.id==='duel'),'power',1.30,1.25);
- for(const oldPower of [1.25,1.30])tune(cor?.patterns?.hard?.find(p=>p.id==='duel'),'power',oldPower,1.20);
+ for(const oldPower of [1.25,1.20])tune(cor?.patterns?.hard?.find(p=>p.id==='duel'),'power',oldPower,1.30);
  const hardWings=c.bosses?.osteos?.patterns?.hard||[];
  tune(hardWings.find(p=>p.id==='wing-calm'),'power',.73,.85);
  tune(hardWings.find(p=>p.id==='wing'),'power',.80,1.00);
@@ -9579,7 +9599,7 @@ function refreshBattleDefaults(c){
   cor:{easy:420,normal:540,hard:700},
   lacrien:{easy:370,normal:460,hard:540},
   marionel:{easy:390,normal:480,hard:600},
-  osteos:{easy:380,normal:450,hard:515},
+  osteos:{easy:380,normal:450,hard:600},
   vaciel:{easy:960,normal:1350,hard:1895}
  };
  for(const [id,target] of Object.entries(tunedBossHp)){
@@ -9642,7 +9662,7 @@ function applyDrafts(){const next=clone(config);for(const [path,raw]of Object.en
 /* 공식 데이터(H.defaults)를 우선하고, 화면 편집기에서 수정한 경로만 덧씌웁니다.
    구 저장에는 수정 경로가 없어서 모든 값이 사용자 편집인지 구분할 수 없습니다.
    이 경우 과거 공식 값은 무시하고, 식별 가능한 숫자 커스텀만 가져옵니다. */
-const PREVIOUS_OFFICIAL_NUMBERS={"difficulties.easy.hp":[0.75],"difficulties.easy.atk":[0.7],"difficulties.easy.def":[0.9],"difficulties.easy.speed":[0.9],"difficulties.easy.hpRegen":[0.04],"difficulties.easy.spRegen":[2],"difficulties.easy.enemyCrit":[0],"difficulties.easy.distortedDamage":[0.45],"difficulties.easy.distortedRegen":[0.08],"difficulties.easy.distortionEffect":[0.45],"difficulties.normal.hp":[1],"difficulties.normal.atk":[1],"difficulties.normal.speed":[1],"difficulties.normal.distortedDamage":[0.8],"difficulties.hard.hp":[1.15,1.42],"difficulties.hard.atk":[1.1,1.22],"difficulties.hard.def":[1],"difficulties.hard.enemyCrit":[0.05],"difficulties.hard.distortionEffect":[1],"bosses.bellaton.patterns.easy.0.power":[0.08],"bosses.bellaton.patterns.easy.1.power":[0.6],"bosses.bellaton.patterns.easy.3.power":[0.7],"bosses.bellaton.patterns.normal.1.power":[1.25],"bosses.bellaton.patterns.normal.3.power":[1.5],"bosses.bellaton.patterns.hard.0.power":[0.2],"bosses.bellaton.patterns.hard.1.power":[1.15],"bosses.bellaton.patterns.hard.3.power":[1.6],"bosses.osteos.patterns.easy.1.power":[0.4,0],"bosses.osteos.patterns.easy.2.power":[0.48,0],"bosses.osteos.patterns.easy.3.power":[0.4],"bosses.osteos.patterns.easy.4.power":[0.6],"bosses.osteos.patterns.easy.5.power":[0.9],"bosses.osteos.patterns.easy.6.power":[0.5],"bosses.osteos.patterns.normal.1.power":[0.4],"bosses.osteos.patterns.normal.2.power":[0.48],"bosses.osteos.patterns.normal.3.power":[0.85],"bosses.osteos.patterns.normal.4.power":[1.13],"bosses.osteos.patterns.hard.1.power":[0.73,0.75],"bosses.osteos.patterns.hard.2.power":[0.8,0.9],"bosses.osteos.patterns.hard.3.power":[1],"bosses.osteos.patterns.hard.4.power":[1.3],"bosses.cor.patterns.easy.0.power":[0.6],"bosses.cor.patterns.easy.1.power":[0.7],"bosses.cor.patterns.easy.2.power":[0.45],"bosses.cor.patterns.normal.2.power":[1],"bosses.cor.patterns.normal.3.power":[1.3],"bosses.cor.params.hardBleedRatio":[0.06],"bosses.cor.patterns.hard.0.power":[1],"bosses.cor.patterns.hard.1.power":[1.25,1.38,1.242,1.17],"bosses.cor.patterns.hard.2.power":[0.9,1.05],"bosses.cor.patterns.hard.3.power":[1.25,1.30],"bosses.lacrien.patterns.easy.0.power":[0.1],"bosses.lacrien.patterns.easy.2.power":[0.5],"bosses.lacrien.patterns.easy.3.power":[0.6],"bosses.lacrien.patterns.normal.0.power":[0.18],"bosses.lacrien.patterns.normal.2.power":[1.1],"bosses.lacrien.patterns.hard.0.power":[0.22],"bosses.lacrien.patterns.hard.2.power":[1.12],"bosses.lacrien.patterns.hard.4.power":[0.55],"bosses.marionel.patterns.easy.1.power":[0.5],"bosses.marionel.patterns.easy.3.power":[0.6],"bosses.marionel.patterns.normal.1.power":[1.05],"bosses.marionel.patterns.normal.2.power":[0],"bosses.marionel.patterns.normal.2.offset":[3],"bosses.marionel.patterns.normal.3.power":[1.15],"bosses.marionel.patterns.normal.3.offset":[4],"bosses.marionel.patterns.normal.3.priority":[10],"bosses.marionel.patterns.normal.3.cooldown":[0],"bosses.marionel.patterns.hard.2.power":[1.25],"bosses.marionel.patterns.hard.3.power":[0.85],"bosses.vaciel.patterns.easy.0.power":[0.35],"bosses.vaciel.patterns.easy.1.power":[0.6],"bosses.vaciel.patterns.easy.2.power":[0.5],"bosses.vaciel.patterns.easy.3.power":[0.6],"bosses.vaciel.patterns.easy.4.power":[0.55],"bosses.vaciel.patterns.normal.0.power":[0.72],"bosses.vaciel.patterns.normal.1.cycle":[4],"bosses.vaciel.patterns.normal.1.offset":[2],"bosses.vaciel.patterns.normal.1.fromRound":[1],"bosses.vaciel.patterns.normal.1.priority":[10],"bosses.vaciel.patterns.normal.2.power":[1.17],"bosses.vaciel.patterns.normal.3.power":[0.9],"bosses.vaciel.patterns.hard.0.power":[1.22],"bosses.vaciel.patterns.hard.1.priority":[40],"bosses.vaciel.patterns.hard.2.power":[1.6],"songs.2.power":[3],"songs.2.duration":[1],"songWeights.healthy.0":[25],"songWeights.healthy.1":[25],"songWeights.healthy.2":[25],"songWeights.hp.0":[23],"songWeights.hp.1":[35],"songWeights.hp.2":[21],"songWeights.sp.0":[25],"songWeights.sp.1":[25],"songWeights.sp.2":[25],"songWeights.normal.0":[25],"songWeights.normal.1":[25],"songWeights.normal.2":[25],"itemLoadouts.normal.medicine":[5],"itemLoadouts.normal.ether":[3],"itemLoadouts.normal.remedy":[3],"itemLoadouts.hard.medicine":[4],"heroes.user.hp":[150,170],"heroes.user.atk":[24,30],"heroes.user.def":[12]};
+const PREVIOUS_OFFICIAL_NUMBERS={"bosses.osteos.story.triggerRound":[2],"difficulties.easy.hp":[0.75],"difficulties.easy.atk":[0.7],"difficulties.easy.def":[0.9],"difficulties.easy.speed":[0.9],"difficulties.easy.hpRegen":[0.04],"difficulties.easy.spRegen":[2],"difficulties.easy.enemyCrit":[0],"difficulties.easy.distortedDamage":[0.45],"difficulties.easy.distortedRegen":[0.08],"difficulties.easy.distortionEffect":[0.45],"difficulties.normal.hp":[1],"difficulties.normal.atk":[1],"difficulties.normal.speed":[1],"difficulties.normal.distortedDamage":[0.8],"difficulties.hard.hp":[1.15,1.42],"difficulties.hard.atk":[1.1,1.22],"difficulties.hard.def":[1],"difficulties.hard.enemyCrit":[0.05],"difficulties.hard.distortionEffect":[1],"bosses.bellaton.patterns.easy.0.power":[0.08],"bosses.bellaton.patterns.easy.1.power":[0.6],"bosses.bellaton.patterns.easy.3.power":[0.7],"bosses.bellaton.patterns.normal.1.power":[1.25],"bosses.bellaton.patterns.normal.3.power":[1.5],"bosses.bellaton.patterns.hard.0.power":[0.2],"bosses.bellaton.patterns.hard.1.power":[1.15],"bosses.bellaton.patterns.hard.3.power":[1.6],"bosses.osteos.patterns.easy.1.power":[0.4,0],"bosses.osteos.patterns.easy.2.power":[0.48,0],"bosses.osteos.patterns.easy.3.power":[0.4],"bosses.osteos.patterns.easy.4.power":[0.6],"bosses.osteos.patterns.easy.5.power":[0.9],"bosses.osteos.patterns.easy.6.power":[0.5],"bosses.osteos.patterns.normal.1.power":[0.4],"bosses.osteos.patterns.normal.2.power":[0.48],"bosses.osteos.patterns.normal.3.power":[0.85],"bosses.osteos.patterns.normal.4.power":[1.13],"bosses.osteos.patterns.hard.1.power":[0.73,0.75],"bosses.osteos.patterns.hard.2.power":[0.8,0.9],"bosses.osteos.patterns.hard.3.power":[1],"bosses.osteos.patterns.hard.4.power":[1.3],"bosses.cor.patterns.easy.0.power":[0.6],"bosses.cor.patterns.easy.1.power":[0.7],"bosses.cor.patterns.easy.2.power":[0.45],"bosses.cor.patterns.normal.2.power":[1],"bosses.cor.patterns.normal.3.power":[1.3],"bosses.cor.params.hardBleedRatio":[0.06],"bosses.cor.patterns.hard.0.power":[1],"bosses.cor.patterns.hard.1.power":[1.25,1.38,1.242,1.17],"bosses.cor.patterns.hard.2.power":[0.9,1.05],"bosses.cor.patterns.hard.3.power":[1.25,1.30,1.20],"bosses.lacrien.patterns.easy.0.power":[0.1],"bosses.lacrien.patterns.easy.2.power":[0.5],"bosses.lacrien.patterns.easy.3.power":[0.6],"bosses.lacrien.patterns.normal.0.power":[0.18],"bosses.lacrien.patterns.normal.2.power":[1.1],"bosses.lacrien.patterns.hard.0.power":[0.22],"bosses.lacrien.patterns.hard.2.power":[1.12],"bosses.lacrien.patterns.hard.4.power":[0.55],"bosses.marionel.patterns.easy.1.power":[0.5],"bosses.marionel.patterns.easy.3.power":[0.6],"bosses.marionel.patterns.normal.1.power":[1.05],"bosses.marionel.patterns.normal.2.power":[0],"bosses.marionel.patterns.normal.2.offset":[3],"bosses.marionel.patterns.normal.3.power":[1.15],"bosses.marionel.patterns.normal.3.offset":[4],"bosses.marionel.patterns.normal.3.priority":[10],"bosses.marionel.patterns.normal.3.cooldown":[0],"bosses.marionel.patterns.hard.2.power":[1.25],"bosses.marionel.patterns.hard.3.power":[0.85],"bosses.vaciel.patterns.easy.0.power":[0.35],"bosses.vaciel.patterns.easy.1.power":[0.6],"bosses.vaciel.patterns.easy.2.power":[0.5],"bosses.vaciel.patterns.easy.3.power":[0.6],"bosses.vaciel.patterns.easy.4.power":[0.55],"bosses.vaciel.patterns.normal.0.power":[0.72],"bosses.vaciel.patterns.normal.1.cycle":[4],"bosses.vaciel.patterns.normal.1.offset":[2],"bosses.vaciel.patterns.normal.1.fromRound":[1],"bosses.vaciel.patterns.normal.1.priority":[10],"bosses.vaciel.patterns.normal.2.power":[1.17],"bosses.vaciel.patterns.normal.3.power":[0.9],"bosses.vaciel.patterns.hard.0.power":[1.22],"bosses.vaciel.patterns.hard.1.priority":[40],"bosses.vaciel.patterns.hard.2.power":[1.6],"songs.2.power":[3],"songs.2.duration":[1],"songWeights.healthy.0":[25],"songWeights.healthy.1":[25],"songWeights.healthy.2":[25],"songWeights.hp.0":[23],"songWeights.hp.1":[35],"songWeights.hp.2":[21],"songWeights.sp.0":[25],"songWeights.sp.1":[25],"songWeights.sp.2":[25],"songWeights.normal.0":[25],"songWeights.normal.1":[25],"songWeights.normal.2":[25],"itemLoadouts.normal.medicine":[5],"itemLoadouts.normal.ether":[3],"itemLoadouts.normal.remedy":[3],"itemLoadouts.hard.medicine":[4],"heroes.user.hp":[150,170],"heroes.user.atk":[24,30],"heroes.user.def":[12]};
 const CONFIG_EDITOR_ROOTS=new Set(['bosses','heroes','heroSkills','skills','songs','songWeights','difficulties','rules','items','itemLoadouts','distortions','storyRules']);
 function validEditorPath(path){return typeof path==='string'&&path.length<220&&path.split('.').length<14&&path.split('.').every(k=>k&&!['__proto__','prototype','constructor'].includes(k))&&CONFIG_EDITOR_ROOTS.has(path.split('.')[0]);}
 function readConfigPath(obj,path){return path.split('.').reduce((v,k)=>v?.[k],obj);}
@@ -10516,7 +10536,7 @@ if(el.dataset.actor&&!playing()&&!retreatOpen){actor=el.dataset.actor;menu='atta
    journey.endingStep=0;journey.endingDismissed=false;checkpoint();renderEnding();return;
  }
  if(a==='perform')perform();if(a==='result-export')download('희망탈환_확정결과.json',H.adapter.result(battle));if(a==='retry')newGame();if(a==='new-test'){if(options.series){const open=H.adapter.openBosses(campaign);options.bossId=open[0]||options.bossId;options.team=options.team.filter(id=>journey.roster[id]?.alive!==false&&!journey.roster[id]?.permanentUnavailable&&!journey.roster[id]?.severeInjury);}openSettings('setup');}if(a==='field-care')throw Error('일반 부상은 다음 출전에서 쓰러지지 않고 승리하면 회복됩니다.');if(a==='remove-media'){await dbWrite(mediaKey,null);useMedia(mediaKey,null);renderPanel();render();updateAudio();}if(a==='export-media')await exportMedia();if(a==='import-media')chooseFile(importMedia);}catch(err){tell(err.message);}});
-document.addEventListener('change',async e=>{const t=e.target;try{if(t.dataset.heroStatus){const h=options.conditions[t.dataset.heroStatus];const k=t.value;Object.assign(h,{alive:k!=='dead',injured:k==='injured',severeInjury:k==='severe',permanentUnavailable:k==='dead'||k==='severe',hasHope:k!=='dead'});if(k==='dead'||k==='severe')options.team=options.team.filter(id=>id!==t.dataset.heroStatus);checkpoint();renderPanel();return;}if(t.dataset.option==='playerName'){if(!liveName(t.value))tell('전투용 이름은 한국어 20자 이내로 입력해 주세요.');return;}if(t.dataset.config||t.dataset.option){let value=t.type==='checkbox'?t.checked:t.type==='number'?Number(t.value):t.value;if(t.dataset.option==='series')value=value==='true';if(t.hasAttribute('data-boolean'))value=value==='true';if(t.hasAttribute('data-nullable')&&value==='')value=null;if(t.dataset.config?.endsWith('.effect')&&t.dataset.config.includes('.patterns.'))setPath(config,t.dataset.config.replace(/\.effect$/,'.target'),['sweep','aria','smash','light','judgment','recordecho','drain','parasol','empty'].includes(value)?'all':'one');if(t.dataset.config?.endsWith('.effect')&&(t.dataset.config.startsWith('heroSkills.')||t.dataset.config.startsWith('skills.')))setPath(config,t.dataset.config.replace(/\.effect$/,'.target'),C.skillTargets[value]);setPath(t.dataset.config?config:options,t.dataset.config||t.dataset.option,value);if(t.dataset.config)configOverridePaths.add(t.dataset.config);marked();if(t.dataset.option==='series'){options.bossId=options.series?(H.adapter.openBosses(campaign)[0]||'bellaton'):'bellaton';options.team=[];}if(t.dataset.option==='bossId'&&options.series)options.team=options.team.filter(id=>H.adapter.available(campaign,options.bossId).includes(id));if(['bossId','difficulty','series'].includes(t.dataset.option))renderPanel();return;}if(t.dataset.team){if(t.checked){if(options.team.length>=(options.bossId==='vaciel'?5:2)){t.checked=false;throw Error('출전 인원 상한입니다.');}options.team.push(t.dataset.team);}else options.team=options.team.filter(id=>id!==t.dataset.team);marked();renderPanel();}if(t.dataset.special!==undefined){options.playerSkills=[...options.playerSkills.filter(id=>!C.isSpecial(id)),t.value];marked();renderPanel();}
+document.addEventListener('change',async e=>{const t=e.target;try{if(t.dataset.heroStatus){const h=options.conditions[t.dataset.heroStatus];const k=t.value;Object.assign(h,{alive:k!=='dead',injured:k==='injured',severeInjury:k==='severe',permanentUnavailable:k==='dead'||k==='severe',hasHope:k!=='dead'});if(k==='dead'||k==='severe')options.team=options.team.filter(id=>id!==t.dataset.heroStatus);checkpoint();renderPanel();return;}if(t.dataset.option==='playerName'){if(!liveName(t.value))tell('전투용 이름은 한국어 20자 이내로 입력해 주세요.');return;}if(t.dataset.config||t.dataset.option){let value=t.type==='checkbox'?t.checked:t.type==='number'?Number(t.value):t.value;if(t.dataset.option==='series')value=value==='true';if(t.hasAttribute('data-boolean'))value=value==='true';if(t.hasAttribute('data-nullable')&&value==='')value=null;if(t.dataset.config?.endsWith('.effect')&&t.dataset.config.includes('.patterns.'))setPath(config,t.dataset.config.replace(/\.effect$/,'.target'),['sweep','aria','smash','light','judgment','recordecho','starcopy','drain','parasol','empty'].includes(value)?'all':'one');if(t.dataset.config?.endsWith('.effect')&&(t.dataset.config.startsWith('heroSkills.')||t.dataset.config.startsWith('skills.')))setPath(config,t.dataset.config.replace(/\.effect$/,'.target'),C.skillTargets[value]);setPath(t.dataset.config?config:options,t.dataset.config||t.dataset.option,value);if(t.dataset.config)configOverridePaths.add(t.dataset.config);marked();if(t.dataset.option==='series'){options.bossId=options.series?(H.adapter.openBosses(campaign)[0]||'bellaton'):'bellaton';options.team=[];}if(t.dataset.option==='bossId'&&options.series)options.team=options.team.filter(id=>H.adapter.available(campaign,options.bossId).includes(id));if(['bossId','difficulty','series'].includes(t.dataset.option))renderPanel();return;}if(t.dataset.team){if(t.checked){if(options.team.length>=(options.bossId==='vaciel'?5:2)){t.checked=false;throw Error('출전 인원 상한입니다.');}options.team.push(t.dataset.team);}else options.team=options.team.filter(id=>id!==t.dataset.team);marked();renderPanel();}if(t.dataset.special!==undefined){options.playerSkills=[...options.playerSkills.filter(id=>!C.isSpecial(id)),t.value];marked();renderPanel();}
  if(t.dataset.equip){if(t.checked){if(options.playerSkills.filter(id=>!C.isSpecial(id)).length>=3){t.checked=false;throw Error('일반 기술은 최대 세 개입니다.');}options.playerSkills.push(t.dataset.equip);}else options.playerSkills=options.playerSkills.filter(id=>id!==t.dataset.equip);marked();renderPanel();}if(t.dataset.returned){const a=options.storyFlags.returnedCommanders;options.storyFlags.returnedCommanders=t.checked?[...new Set([...a,t.dataset.returned])]:a.filter(id=>id!==t.dataset.returned);marked();}if(t.id==='skill-choice'){chosenSkill=t.value;chosenTarget='';renderCommand();}if(t.id==='item-choice'){chosenItem=t.value;chosenTarget='';renderCommand();}if(t.id==='target-choice'){chosenTarget=t.value;renderCommand();}if(t.id==='media-slot'){mediaKey=t.value;renderPanel();}if(t.id==='media-upload'&&t.files[0])await storeMedia(mediaKey,t.files[0]);if(t.id==='file-input'&&t.files[0]){if(t.files[0].size>55*1024*1024)throw Error('파일이 너무 큽니다.');const parsed=JSON.parse(await t.files[0].text());await fileHandler(parsed);}}catch(err){tell(err.message);}});
 document.addEventListener('input',e=>{if(e.target.dataset.option==='playerName')liveName(e.target.value);if(e.target.dataset.json){rawDrafts[e.target.dataset.json]=e.target.value;marked();}if(e.target.id==='volume'){volume=Number(e.target.value)/100;if(audio)rampBgm(audio,volume,100);}});
 document.addEventListener('keydown',e=>{
