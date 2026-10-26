@@ -7787,6 +7787,8 @@ function validateConfig(c) {
 const living=u=>!!u&&u.alive&&u.hp>0;
 const active=(u,k,r)=>u?.buffs?.[k]&&u.buffs[k].until>=r&&(u.buffs[k].from??0)<=r;
 const buff=(u,k,b)=>active(u,k,b.round)?u.buffs[k].value:0;
+// 코르의 자기 방깎은 아군 방깎과 기한을 따로 보관하고, 둘 중 강한 값만 적용한다.
+const defenseDown=(u,b)=>Math.max(buff(u,'defdown',b),buff(u,'openingDefdown',b));
 // 최종 기술의 이름·피해·대사는 보스 데이터 한곳에서 관리한다. 이전 설정에는 최신 기본값을 사용한다.
 const vacielFinalAttack=c=>c.bosses.vaciel.finalAttack??H.defaults.bosses.vaciel.finalAttack;
 // 방깎 추가 피해는 방증과 상쇄 후 남은 감소율의 30%, 최대 15%다.
@@ -8090,9 +8092,9 @@ function status(x,u,key,value,duration=2,extra={}) {
   }
   const percent=Math.round((extra.stackable?combined:value)*1000)/10;
   const labels={
-    buff:`공격력 +${percent}%`,weak:`공격력 −${percent}%`,defup:`방어력 +${percent}%`,defdown:`방어력 −${percent}%`,
+    buff:`공격력 +${percent}%`,weak:`공격력 −${percent}%`,defup:`방어력 +${percent}%`,defdown:`방어력 −${percent}%`,openingDefdown:`방어력 −${percent}%`,
     mitigation:`받는 피해 ${percent}% 감소`,dark:`명중률 −${percent}%`,
-    exposure:`노출 · 받는 공격 피해 +${percent}%`,
+    exposure:`${u.id==='vaciel'?'무방비':'노출'} · 받는 공격 피해 +${percent}%`,
     spotlight:`공격력 +${percent}% (스포트라이트)`,counter:`직접 반격 준비 (라운드당 최대 ${extra.limit||1}회)`,
     colorlessDream:'색 잃은 꿈',followup:'레드라인 추격 준비 (2라운드 동안 횟수 제한 없음)',stun:'행동 봉쇄',burn:'화상',bleed:'출혈',
     bind:'속박',puppet:'조종 실',stitch:'수선하는 손',skillseal:'스킬 봉인',healdown:`HP 회복량 ${percent}% 감소`,bodyguard:'등 맡기기',riposte:'수호 반격 준비',colorlessDream:'색 잃은 꿈',timehold:'얼어붙은 순간',songAtk:`공격력 +${percent}% (노래)`,songDef:`방어력 −${percent}% (노래)`
@@ -8145,7 +8147,7 @@ function damage(x,a,t,power,opts={}) {
   const rageAtk=a===b.boss&&b.domain==='cor'&&b.rageTriggered?bc.params.rageAtk*(b.difficulty==='practice'?.4:1):0;
   const rageDef=t===b.boss&&b.rageTriggered?(b.domain==='osteos'?bc.params.bladeDef:bc.params.rageDef):0;
   const atk=a.atk*Math.max(.1,1+buff(a,'buff',b)+buff(a,'spotlight',b)+buff(a,'songAtk',b)-buff(a,'weak',b)+rageAtk);
-  const def=t.def*Math.max(.05,1+buff(t,'defup',b)-buff(t,'defdown',b)-buff(t,'songDef',b)-rageDef);
+  const def=t.def*Math.max(.05,1+buff(t,'defup',b)-defenseDown(t,b)-buff(t,'songDef',b)-rageDef);
   const critChance=opts.critChance===undefined?Math.min(c.rules.critCap,a.crit+(opts.critBonus||0)):Math.max(0,Math.min(1,opts.critChance)),critical=!opts.noCrit&&rand(b)<critChance;
   let n=Math.max(1,atk*power-(opts.ignoreDef?0:def*c.rules.defenseFactor*(opts.defensePortion??1)))*(critical?a.critMult:1);
   if(t===b.boss&&b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&b.summons.some(u=>living(u)&&u.kind==='doll'))n*=1-(bc.params.dollShieldRatio??.65);
@@ -8154,7 +8156,7 @@ if(t===b.boss&&b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&
   if(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)&&b.team.length===0&&!b.party[a.id])n*=.72;
   // 방깎 보정과 보스의 노출은 독립 적용한다. 지속 피해에는 적용하지 않는다.
   if(t===b.boss||b.summons.includes(t)){
-    n*=1+defenseBreakBonus(buff(t,'defdown',b),buff(t,'defup',b));
+    n*=1+defenseBreakBonus(defenseDown(t,b),buff(t,'defup',b));
     n*=1+buff(t,'exposure',b);
   }
   // 수호 후 다음 주인공 공격 1회. 3연격이라면 같은 행동의 3타 모두 적용.
@@ -8598,8 +8600,8 @@ function bossAct(x) {
       break;}
     case 'ribbon':{const t=one(),linked=hard&&b.invitation?.target===t?.id&&buff(t,'weak',b)>0;if(linked)emit(x,'combo','scene','아리아에 약해진 '+t.name+'에게 무대의 조명이 모입니다. 약화와 초대가 이어져 피날레의 위력이 커집니다.');hit(t,p.power*(linked?(bc.params.finaleWeakMultiplier??1.3):1));if(b.invitation?.target===t?.id)b.invitation=null;break;}
     case 'charge':{const t=one();const defender=b.party.user;const actual=b.enemyPhase&&living(defender)&&active(defender,'bodyguard',b.round)?defender:t;if(hit(t).hit&&living(actual))status(x,actual,'bleed',actual.maxHp*(nightmare?(bc.params.hardBleedRatio??bc.params.bleedRatio):bc.params.bleedRatio*(easy?.4:1)),bc.params.bleedTurns);break;}
-    case 'smash':sweep();if(hard&&b.rageTriggered)status(x,b.boss,'defdown',bc.params.openingDef,2);break;
-    case 'duel':if(nightmare){const t=one();if(t){for(let i=0;i<bc.params.duelHits&&living(t)&&living(b.boss);i++)hit(t,p.power,{noCrit:true});emit(x,'notice','scene','연속 검격이 멎고 코르의 자세가 잠시 열립니다.');status(x,b.boss,'defdown',bc.params.openingDef,2);}}break;
+    case 'smash':sweep();if(hard&&b.rageTriggered)status(x,b.boss,'openingDefdown',bc.params.openingDef,2);break;
+    case 'duel':if(nightmare){const t=one();if(t){for(let i=0;i<bc.params.duelHits&&living(t)&&living(b.boss);i++)hit(t,p.power,{noCrit:true});emit(x,'notice','scene','연속 검격이 멎고 코르의 자세가 잠시 열립니다.');status(x,b.boss,'openingDefdown',bc.params.openingDef,2);}}break;
     case 'light':if(hard&&b.domain==='lacrien')sweep(.48);else if(b.difficulty==='easy'&&b.domain==='lacrien')sweep(.51);for(const t of all())status(x,t,'dark',p.power,2);break;
     case 'reflect':{
       // 보통·어려움: 단일 빛 공격 뒤 피해 기록만 시작, 즉시 반사하지 않음.
@@ -8661,7 +8663,7 @@ function bossAct(x) {
       if(b.domain==='vaciel'&&nightmare)emit(x,'notice','scene',p.name+' · 다음 아군 차례 동안 HP 회복량이 25% 감소합니다.');
       break;
     }
-    case 'parasol':for(const t of all())hit(t,p.power*(hard&&buff(t,'weak',b)>0?1.2:1));if(b.domain==='vaciel'&&p.closingStep==='finish'){status(x,b.boss,'exposure',bc.params.finalExposureBonus??.2,3);emit(x,'phase','scene','종언의 장막이 갈라집니다. 바시엘이 노출된 지금이 반격할 기회입니다!');}break;
+    case 'parasol':for(const t of all())hit(t,p.power*(hard&&buff(t,'weak',b)>0?1.2:1));if(b.domain==='vaciel'&&p.closingStep==='finish'){status(x,b.boss,'exposure',bc.params.finalExposureBonus??.2,3);emit(x,'phase','scene','종언의 장막이 갈라집니다. 바시엘이 무방비해진 지금이 반격할 기회입니다!');}break;
     case 'motif':{
       const limit=nightmare?5:3;
       if(b.motifCount>=limit&&!canRepeatVacielMotif(b)){hit(one());break;}
@@ -8780,7 +8782,7 @@ function bossAct(x) {
       emit(x,'story','scene','그는 쓰러지지 않았다. 다만 한동안 아무 말도 하지 못했다.');
       emit(x,'dialogue','vaciel','……이 몸이 거두려던 것은, 대체 무엇이었을까.');
       status(x,b.boss,'exposure',bc.params.finalExposureBonus??.2,3);
-      emit(x,'notice','system','바시엘이 힘을 소진했습니다. 이번 차례 행동하지 못하고, 노출되어 받는 공격 피해가 증가합니다.');
+      emit(x,'notice','system','바시엘이 힘을 소진했습니다. 이번 차례 행동하지 못하고, 무방비 상태가 되어 받는 공격 피해가 증가합니다.');
       break;
     }
     case 'empty':sweep();for(const t of all())status(x,t,'weak',easy?.1:.2,2);break;
@@ -8991,7 +8993,7 @@ function validateState(b,c) {
   if(b.lastCompanionSkill!=null){const rec=b.lastCompanionSkill;need(b.team.includes(rec.ownerId)&&!!c.heroSkills?.[rec.ownerId]?.find(s=>s.id===rec.skillId),'직전 동료 기술 기록 오류');if(rec.songIndex!==undefined)need(Number.isInteger(rec.songIndex)&&!!c.songs[rec.songIndex],'동료 지원곡 기록 오류');}
   need(Array.isArray(b.playerSkills)&&b.playerSkills.length<=4&&b.playerSkills.filter(isSpecial).length<=1&&b.playerSkills.filter(k=>!isSpecial(k)).length<=3&&b.playerSkills.every(id=>c.skills.some(s=>s.id===id)),'주인공 장착 기술 오류');if(!b.outcome)need(b.intent&&effects.includes(b.intent.effect),'예고 상태 오류');return true;
 }
-H.core={forecast,copy,canTalk,rescueTargets,combatReady,validateConfig,validateState,initial,act,endRound,retreat,commit,skills,enemies,attackable,actions,living,ready,active,snapshot,validateAction,talkTargets,pattern,actorName,bossIds,effects,skillTargets,skillLabels,specialIds,isSpecial,copiedSkill,effectiveTarget};
+H.core={forecast,copy,canTalk,rescueTargets,combatReady,validateConfig,validateState,initial,act,endRound,retreat,commit,skills,enemies,attackable,actions,living,ready,active,snapshot,validateAction,talkTargets,pattern,actorName,bossIds,effects,skillTargets,skillLabels,specialIds,isSpecial,copiedSkill,effectiveTarget,defenseDown};
 })(globalThis);
 </script><script>/* v3 저장을 유지한다. 이전 기본값과 정확히 같은 수치만 새 시험값으로 옮긴다.
    사용자가 바꾼 이름, 수치, HP 및 미완료 전투의 생성 능력치는 보존한다. */
@@ -9963,12 +9965,14 @@ function impacts(e){
  return {byTarget,small,cls};
 }
 function bossStateLabels(v){
- const labels={buff:'공격력',weak:'공격력',defup:'방어력',defdown:'방어력',dark:'명중률',mitigation:'받는 피해',exposure:'노출 · 받는 공격 피해',songAtk:'공격력',songDef:'방어력',burn:'화상',bleed:'출혈',stun:'행동 봉쇄',bind:'속박',counter:'반격',followup:'추격 준비'};
+ const labels={buff:'공격력',weak:'공격력',defup:'방어력',defdown:'방어력',dark:'명중률',mitigation:'받는 피해',exposure:v.boss.id==='vaciel'?'무방비 · 받는 공격 피해':'노출 · 받는 공격 피해',songAtk:'공격력',songDef:'방어력',burn:'화상',bleed:'출혈',stun:'행동 봉쇄',bind:'속박',counter:'반격',followup:'추격 준비'};
  const positive=new Set(['buff','defup','songAtk','exposure']);
  const ailments=new Set(['burn','bleed','stun','bind','counter','followup']);
  const out=[];
+ const defenseReduction=C.defenseDown(v.boss,v);
+ if(defenseReduction>0)out.push(`방어력 −${Math.round(defenseReduction*1000)/10}%`);
  for(const [key,effect] of Object.entries(v.boss.buffs||{})){
-  if(!C.active(v.boss,key,v.round))continue;
+  if(key==='defdown'||key==='openingDefdown'||!C.active(v.boss,key,v.round))continue;
   const detail=ailments.has(key)?(key==='followup'?` · 남은 ${effect.remaining||0}회`:key==='burn'&&effect.stacks?.length>1?` · ${effect.stacks.length}겹`:''):
     ` ${positive.has(key)?'+':'−'}${Math.round(effect.value*1000)/10}%`;
   out.push(`${labels[key]||key}${detail}`);
