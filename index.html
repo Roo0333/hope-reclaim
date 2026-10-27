@@ -2458,7 +2458,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "wingDef": 0.6,
         "attackHp": 0.7,
         "calmMaxRounds": 2,
-        "bladeHp": 0.5,
+        "bladeHp": 0.55,
         "bladeDef": 0.3,
         "bladeCrit": 0.12,
         "pillarHp": 48,
@@ -3835,7 +3835,7 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
         "hard": [
           314,
           457,
-          600
+          560
         ]
       },
       "attackByDifficulty": {
@@ -9319,7 +9319,7 @@ function bossAct(x) {
         else {
           emit(x,'story','scene','세 번째 궤적이 완성되며 백골예검이 허공을 가릅니다.');
           emit(x,'notice','scene','예검의 궤적 · 세 합 완성! 검흔이 하나로 이어지며 아군 전체를 덮칩니다.');
-          sweep(.5,{noCrit:true}); // 3회 연속 치명타 성공 보상: 공격력 50%의 비치명타 전체 공격
+          sweep(.8,{noCrit:true}); // 3회 연속 치명타 성공 보상: 공격력 80%의 비치명타 전체 공격
         }
       }
       break;
