@@ -3981,7 +3981,11 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
           },
           {
             "speaker": "scene",
-            "text": "당신이 그를 말리려 뒤따라 나서는 순간 돌바닥 틈새에서 억센 덩굴이 솟구쳐 올랐다. 가시 돋친 줄기가 당신과 동료들의 발목을 빈틈없이 휘감았다."
+            "text": "당신이 그를 말리려 뒤따라 나서는 순간 돌바닥 틈새에서 억센 덩굴이 솟구쳐 올랐다."
+          },
+          {
+            "speaker": "scene",
+            "text": "가시 돋친 줄기가 당신과 동료들의 발목을 빈틈없이 휘감았다."
           },
           {
             "speaker": "rikka",
@@ -8613,17 +8617,23 @@ function forecast(b,c) {
   if(b.domain==='bellaton'&&p.cycle===4)parts[0]='공연 '+(Math.floor((b.round-1)/4)+1)+'회 · '+parts[0];
   return parts.filter(Boolean).join('\n');
 }
+// 구 저장에서는 첫 소환이 봉쇄됐어도 1라운드를 넘겼다면 시도한 것으로 취급한다.
+function marionelOpeningAttempted(b) {
+  return b.summonCount>0||b.patternUsed.summon!=null||(b.startedAt===1&&b.round>1);
+}
 function adaptiveIntent(b,c,p) {
   const bc=c.bosses[b.domain];
   if(b.domain==='cor'&&b.difficulty!=='hard'&&p.effect==='duel')return {...p,id:p.id+'-strike',effect:'strike',name:'검격',power:1,tell:'코르가 대검을 겨눕니다.'};
   if(b.domain==='osteos'&&b.difficulty==='hard'&&b.swordTrace?.ready)return {...p,id:'sword-trace',name:'예검의 궤적',effect:'blade-trace',power:1,phase:'rage',tell:'오스테오스의 세 검흔이 정해진 순서대로 빛납니다.'};
 
-  if(b.domain==='marionel'&&p.effect==='repair')
-    return {...p,tell:b.difficulty==='hard'?'수선하는 손 · 두 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.':'수선하는 손 · 한 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.'};
   if(b.domain==='marionel'&&['normal','hard'].includes(b.difficulty)){
     const dolls=b.summons.filter(u=>living(u)&&u.kind==='doll');
-    const canNextWave=b.summonCount===0||(b.team.length>0&&b.summonCount===1&&b.boss.hp/b.boss.maxHp<=.7);
-    if(b.summonCount===1&&canNextWave&&b.summonCount<bc.params.summonLimit&&!dolls.length&&b.round>b.exposedUntil)
+    // 어려움: 첫 소환 성공 여부와 무관하게 5라운드부터 후반 기믹을 준비한다.
+    // 보통 난이도의 기존 HP·소환 횟수 조건은 유지한다.
+    const finalReady=b.difficulty==='hard'
+      ?marionelOpeningAttempted(b)&&b.round>=5&&b.patternUsed['final-summon']==null
+      :b.summonCount===1&&b.boss.hp/b.boss.maxHp<=.7;
+    if(b.team.length>0&&finalReady&&b.summonCount<bc.params.summonLimit&&!dolls.length&&b.round>b.exposedUntil)
       return {...p,id:'final-summon',name:'미완성의 역작',effect:'summon',power:.6,tell:'마리오넬의 손끝에서 끊어진 실들이 한곳으로 모입니다.'};
     if(p.effect==='thread'){
       if(Object.values(b.party).filter(living).length<2)
@@ -8633,8 +8643,11 @@ function adaptiveIntent(b,c,p) {
     if(p.effect==='strike'&&b.boss.hp/b.boss.maxHp<=.5)
       return {...p,power:Math.max(p.power,1.4),tell:'마리오넬이 수많은 실을 한곳으로 끌어당깁니다.'};
   }
-  // 첫 인형 소환 뒤의 정규 순환 자리만 교체한다. 미완성의 역작은 위에서 별도 예약한다.
-  if(b.domain==='marionel'&&p.effect==='summon'&&b.summonCount>0)
+  if(b.domain==='marionel'&&p.effect==='repair')
+    return {...p,tell:b.difficulty==='hard'?'수선하는 손 · 두 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.':'수선하는 손 · 한 사람의 손끝에 실이 감깁니다. 다음 차례에 스킬을 사용할 수 없습니다.'};
+  // 첫 소환이 봉쇄돼도 정규 소환 자리에서는 재소환하지 않는다. 후반 기믹은 위에서 따로 예약한다.
+  if(b.domain==='marionel'&&p.effect==='summon'&&
+     (b.summonCount>0||(b.difficulty==='hard'&&marionelOpeningAttempted(b))))
     return {...p,id:'scattered-threads',sourcePatternId:p.id,name:'흩어진 실',effect:'sweep',target:'all',power:.5,tell:'풀린 실들이 낮게 퍼져 일행 전체를 향합니다.'};
   // 수선하는 손은 모든 난이도에서 1회 스킬 봉인, 어려움에서는 2명에게 적용합니다.
   if(b.domain==='vaciel'&&b.difficulty==='hard'&&b.finalChain==='done')return vacielAftermath(b);
@@ -9194,6 +9207,8 @@ function blockedBossAction(x,p){
   const {b,bc}=x;
   // 후반의 약한 공격/휴식은 봉쇄되면 그 차례를 소모하고 다음 행동으로 넘어간다.
   if(b.domain==='vaciel'&&vacielAftermathIds.includes(p.id))b.patternUsed[p.id]=b.round;
+  // 첫 소환을 행동 봉쇄로 막아도 시도 기록은 남긴다. 미완성의 역작은 봉쇄 시 재시도한다.
+  if(b.domain==='marionel'&&b.difficulty==='hard'&&p.id==='summon')b.patternUsed.summon=b.round;
   if(b.domain==='vaciel'&&b.difficulty==='hard'&&['dreammark','dreamresonance'].includes(p.effect)){
     if(p.effect==='dreammark'){
       emit(x,'blocked','scene','바시엘이 눈을 감자, 양산 아래로 번지던 빛이 그 자리에서 멎습니다.');
@@ -9360,7 +9375,7 @@ function bossAct(x) {
     case 'summon':{
       const maxWaves=easy?1:bc.params.summonLimit;
       if(b.summonCount<maxWaves&&!b.summons.some(u=>living(u)&&u.kind==='doll')&&b.round>b.exposedUntil){
-        const finalDoll=hard&&b.domain==='marionel'&&b.summonCount===1;
+        const finalDoll=hard&&b.domain==='marionel'&&(b.difficulty==='hard'?p.id==='final-summon':b.summonCount===1);
         summon(x,'doll',finalDoll?1:easy?1:hard&&b.domain==='marionel'&&b.team.length<2?1:Math.min(2,bc.params.summonAliveLimit),{quiet:finalDoll&&nightmare});
         if(finalDoll){const u=b.summons.at(-1);u.name='미완성의 역작';u.maxHp=Math.round(u.maxHp*1.6);u.hp=u.maxHp;u.atk=Math.round(u.atk*1.2);if(!nightmare)emit(x,'phase','scene','마리오넬이 남은 실로 마지막 인형 하나를 꿰맵니다.');
           if(nightmare){
@@ -10835,7 +10850,7 @@ function renderResult(){
  const knocked=Object.values(battle.party).filter(u=>u.knockedOutThisBattle&&!lost.includes(u));
  const survival=lost.length?`영구 이탈 · ${lost.map(u=>esc(u.name)).join(' · ')}`:knocked.length?`전투불능 경험 · ${knocked.map(u=>esc(u.name)).join(' · ')}`:'전원 생존 · 영구 이탈 없음';
  const message=canGo?'승리 기록이 저장되었습니다. 다음 전투를 준비하세요.':startOptions.series&&!won?'이번 보스 러시가 종료되었습니다.':'전투 기록이 저장되었습니다.';
- box.innerHTML=`<div class="result-summary"><strong>${headline}</strong><span class="result-boss">${esc(subtitle)}</span>${startOptions.series?`<div class="result-survival">${survival}</div>`:''}<p>${esc(message)}</p></div><div class="hr-actions result-simple-actions">${canGo?`<button type="button" data-action="new-test" class="hr-primary">${nextLabel} →</button>`:''}<button type="button" data-action="retry" class="${canGo?'':'hr-primary'}">타이틀로 돌아가기</button></div>`;
+ box.innerHTML=`<div class="result-summary"><strong>${headline}</strong><span class="result-boss">${esc(subtitle)}</span>${startOptions.series?`<div class="result-survival">${survival}</div>`:''}<p>${esc(message)}</p></div><div class="hr-actions result-simple-actions">${canGo?`<button type="button" data-action="new-test" class="hr-primary">${nextLabel} →</button>`:''}<button type="button" data-action="retry" class="${canGo?'':'hr-primary'}">보스 러시 중단하기</button></div>`;
 }
 function field(label,path,value,type='number',asOption=false){return `<label>${esc(label)}<input type="${type}" ${asOption?'data-option':'data-config'}="${esc(path)}" ${type==='checkbox'?(value?'checked':''):`value="${esc(value)}"`} ${type==='number'?'step="any"':''}></label>`;}
 const cfg=(l,p,v,t)=>field(l,p,v,t||'number'),opt=(l,p,v,t)=>field(l,p,v,t||'number',true);
@@ -11035,7 +11050,7 @@ function offerResume(){
   const expectedHp=activeConfig?.bosses?.[battle.domain]?.hpByDifficulty?.[battle.difficulty]?.[battle.team.length];
   const oldHp=inBattle&&Number.isFinite(expectedHp)&&battle.boss.maxHp!==expectedHp;
   $('resume-desc').textContent=oldHp
-    ? '이 전투는 이전 버전의 HP('+battle.boss.maxHp+')로 저장되었습니다. 계속하기는 기존 수치로 진행합니다. 최신 HP('+expectedHp+')를 적용하려면 새로 시작을 선택하세요.'
+    ? '저장된 전투와 현재 게임 설정에 차이가 있습니다. 이어서 플레이하면 저장 당시의 전투 수치가 유지됩니다. 현재 설정으로 플레이하려면 새로 시작을 선택하세요.'
     : '이전에 진행하던 '+modeName+' 기록이 있습니다. 이어서 플레이하시겠어요?';
   $('resume-overlay').hidden=false;
   clearTimeout(playTimer);autoRound=null;
