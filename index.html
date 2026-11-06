@@ -179,7 +179,7 @@ body.hr-app.hr-page{font-family:ui-monospace,"Galmuri11","DungGeunMo","Noto Sans
 .hr-settings .start-mode.is-selected{background:#474747;border-color:#c6c6c6;box-shadow:4px 4px 0 #707070}
 .start-mode b{font-size:16px}.start-mode small{color:#d5d5d5;font-size:11px}
 .start-info{margin:16px 0 0;padding:12px 14px;background:#2d2d2d;border-left:4px solid #979797;display:grid;gap:6px}.start-info b{font-size:13px;color:#dddddd}.start-info span{font-size:12px;color:#dddddd}
-.start-supply{margin:15px 0 0;padding:12px;border:2px solid #929292}.start-supply-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:9px}.start-reset{margin:13px 0 0}
+.start-reset{margin:13px 0 0}
 .start-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.start-label{display:block;font-size:12px;color:#dadada;font-weight:750}.start-label select,.start-label input{margin:6px 0 0}
 .start-caption{color:#b4b4b4;font-size:12px;line-height:1.7;margin:10px 0 4px}
 .start-roster{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
@@ -243,7 +243,6 @@ body.hr-app.hr-page{background:#ececec!important;color:#343434!important;padding
 .start-heading h3,.start-heading small,.start-label{color:#353535!important}
 .start-info{background:#f3f3f3!important;border-color:#8d8d8d!important}
 .start-info b{color:#484848!important}.start-info span{color:#434343!important}
-.start-supply{border-color:#9e9e9e!important;background:#fbfbfb!important}
 .start-ally,.start-skill{background:#ffffff!important;border-color:#bfbfbf!important}
 .start-ally.selected,.start-skill.selected{background:#f0f0f0!important;border-color:#767676!important}
 .start-ally-pick b,.start-skill-info b{color:#2f2f2f!important}
@@ -327,7 +326,6 @@ body.hr-at-title>.hr-panel{visibility:hidden!important}
 .hr-settings .start-difficulty-block{min-width:0}
 .hr-settings .game-field-caption{display:block;color:#353535;font-size:12px;font-weight:800;margin-bottom:8px}
 .hr-settings .game-difficulty-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
-.hr-settings .game-supply-options{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:8px}
 .hr-settings button.game-choice,.hr-settings button.game-map-choice,.hr-settings button.game-special-choice{font:inherit;text-align:center;background:#ffffff!important;color:#353535!important;border:2px solid #afafaf!important;box-shadow:2px 2px 0 #d2d2d2!important;cursor:pointer;border-radius:0;min-height:44px;padding:9px 5px;transition:none}
 .hr-settings button.is-selected,.hr-settings button.game-choice.is-selected,.hr-settings button.game-map-choice.is-selected,.hr-settings button.game-special-choice.is-selected{background:#e9e9e9!important;border-color:#5a5a5a!important;box-shadow:2px 2px 0 #878787!important}
 .hr-settings button.is-selected::before{content:'▶';font-size:10px;margin-right:5px;color:#616161}
@@ -391,7 +389,7 @@ body.hr-app.hr-page{background:#e9e9e9!important;color:#313131!important}
 .hr-settings .start-mode small,.hr-settings .start-info span,.hr-settings .start-info b{color:#555555!important}
 .hr-settings .start-mode.is-selected{background:#e6e6e6!important;border-color:#494949!important;box-shadow:3px 3px 0 #999999!important}
 .hr-settings .start-info{background:#efefef!important;border-left-color:#5f5f5f!important}
-.hr-settings .start-supply,.hr-settings .start-ally,.hr-settings .start-skill,.hr-settings .start-extra{background:#fcfcfc!important;border-color:#c0c0c0!important;color:#353535!important}
+.hr-settings .start-ally,.hr-settings .start-skill,.hr-settings .start-extra{background:#fcfcfc!important;border-color:#c0c0c0!important;color:#353535!important}
 .hr-settings .start-ally.selected{background:#f0f0f0!important;border-color:#565656!important}
 .hr-settings .start-ally-pick,.hr-settings .start-event{background:#fefefe!important;color:#313131!important}
 .hr-settings button.game-choice,.hr-settings button.game-map-choice,.hr-settings button.game-special-choice{color:#323232!important;border-color:#bebebe!important;background:#fefefe!important;box-shadow:2px 2px 0 #d4d4d4!important}
@@ -402,7 +400,6 @@ body.hr-app.hr-page{background:#e9e9e9!important;color:#313131!important}
 .hr-settings .start-cost{background:#f4f4f4!important;border-color:#bbbbbb!important}
 .hr-settings .game-field-caption{color:#393939!important}
 .hr-settings .game-difficulty-options{grid-template-columns:repeat(3,minmax(0,1fr))}
-.hr-settings .game-supply-options{grid-template-columns:repeat(2,minmax(0,1fr))}
 .hr-settings .game-secret-hint{background:#f2f2f2;border-left:3px solid #696969;padding:8px 10px;margin:9px 0 0;color:#595959!important}
 .hr-app .hr-progress{background:#f1f1f1!important}
 .hr-app .hr-progress-heading b{color:#484848!important}
@@ -448,8 +445,7 @@ body.hr-app.hr-page button:not(.hr-primary):hover:not(:disabled){background:#e7e
 .hr-ending-footer span{font-size:11px;color:#696969}
 @media(max-width:580px){
  .hr-settings .game-difficulty-options{grid-template-columns:repeat(3,minmax(0,1fr))}
- .hr-settings .game-supply-options{grid-template-columns:repeat(2,minmax(0,1fr))}
- .hr-ending-scroll{padding:15px 13px!important}
+  .hr-ending-scroll{padding:15px 13px!important}
  .ending-story p,.ending-letter-text{font-size:13px;line-height:1.95}
  .ending-body.is-letter{padding:15px 13px 19px}
  .hr-ending-panel{max-height:95dvh!important}
@@ -461,7 +457,7 @@ body.hr-app.hr-page{background:#f3f3f3!important;color:#292929!important}
 .hr-settings .start-section{background:#ffffff!important;border-bottom-color:#d1d1d1!important}
 .hr-settings .start-heading>span{background:#323232!important;color:#ffffff!important;box-shadow:3px 3px 0 #bcbcbc!important}
 .hr-settings .start-info{background:#f2f2f2!important;border-left-color:#525252!important}
-.hr-settings .start-supply,.hr-settings .start-ally,.hr-settings .start-skill,.hr-settings .start-extra{background:#ffffff!important;border-color:#bdbdbd!important}
+.hr-settings .start-ally,.hr-settings .start-skill,.hr-settings .start-extra{background:#ffffff!important;border-color:#bdbdbd!important}
 .hr-settings .start-mode,.hr-settings button.game-choice,.hr-settings button.game-map-choice,.hr-settings button.game-special-choice,.hr-settings button.start-ally-pick,.hr-settings button.start-skill{background:#ffffff!important;color:#292929!important;border-color:#777777!important;box-shadow:2px 2px 0 #d5d5d5!important}
 .hr-settings .start-mode.is-selected,
 .hr-settings button.game-choice.is-selected,
@@ -733,6 +729,9 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 .hr-page .hr-confirm-actions{display:flex;gap:9px;justify-content:flex-end;margin:0;padding:12px 16px 15px}
 .hr-page .hr-confirm-actions button{min-height:44px;flex:1;box-shadow:1px 1px 0 #aaa!important}
 .hr-page .hr-confirm-actions .hr-primary{background:#4d4d4d!important;color:#fff!important}
+.hr-page .hr-preparation-status{white-space:pre-line;font-weight:700}
+.hr-page .hr-supply-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:4px 16px 16px}
+.hr-page .hr-supply-grid button{min-height:48px;white-space:normal;word-break:keep-all}
 
 /* 상단 주요 버튼은 유지하고, 음악/새 게임은 가벼운 텍스트 조작으로 표시. */
 .hr-page .hr-quick-buttons{gap:7px;flex-wrap:nowrap}
@@ -1004,18 +1003,18 @@ body.hr-app.hr-page{background:#f2f2f2!important;color:#262626!important}
 <div class="hr-confirm-actions"><button id="cancel-new-game" type="button">취소</button><button class="hr-primary" id="confirm-new-game" type="button">새 게임 시작</button></div>
 </section>
 </div>
-<div class="hr-overlay hr-confirm-overlay" hidden="" id="skill-loadout-warning">
-<section aria-describedby="skill-loadout-message" aria-labelledby="skill-loadout-title" aria-modal="true" class="hr-panel hr-confirm-dialog" role="dialog">
-<div class="hr-heading"><h2 id="skill-loadout-title">스킬을 모두 장착하지 않았어요</h2></div>
-<div class="hr-confirm-body"><p id="skill-loadout-message"></p><p>빈 스킬 칸이 있어도 전투를 시작할 수 있습니다. 이대로 출전할까요?</p></div>
-<div class="hr-confirm-actions"><button id="revise-skill-loadout" type="button">스킬 다시 선택</button><button class="hr-primary" id="confirm-skill-loadout" type="button">이대로 출전</button></div>
+<div class="hr-overlay hr-confirm-overlay" hidden="" id="preparation-warning">
+<section aria-describedby="preparation-message" aria-labelledby="preparation-title" aria-modal="true" class="hr-panel hr-confirm-dialog" role="dialog">
+<div class="hr-heading"><h2 id="preparation-title">전투 준비를 확인해 주세요</h2></div>
+<div class="hr-confirm-body"><p class="hr-preparation-status" id="preparation-message"></p><p>부족한 상태로도 전투를 시작할 수 있습니다. 이대로 출전할까요?</p></div>
+<div class="hr-confirm-actions"><button id="revise-preparation" type="button">다시 선택</button><button class="hr-primary" id="confirm-preparation" type="button">그대로 출전</button></div>
 </section>
 </div>
-<div class="hr-overlay hr-confirm-overlay" hidden="" id="vaciel-team-warning">
-<section aria-describedby="vaciel-team-message" aria-labelledby="vaciel-team-title" aria-modal="true" class="hr-panel hr-confirm-dialog" role="dialog">
-<div class="hr-heading"><h2 id="vaciel-team-title">바시엘전에 동료가 부족합니다</h2></div>
-<div class="hr-confirm-body"><p id="vaciel-team-message"></p><p>5명 모두 함께하지 않아도 도전할 수 있습니다. 이대로 출전할까요?</p></div>
-<div class="hr-confirm-actions"><button id="revise-vaciel-team" type="button">동료 다시 선택</button><button class="hr-primary" id="confirm-vaciel-team" type="button">그대로 출전</button></div>
+<div class="hr-overlay hr-confirm-overlay" hidden="" id="supply-choice-overlay">
+<section aria-describedby="supply-choice-message" aria-labelledby="supply-choice-title" aria-modal="true" class="hr-panel hr-confirm-dialog" role="dialog">
+<div class="hr-heading"><h2 id="supply-choice-title">다음 전투를 위한 보급품 선택</h2></div>
+<div class="hr-confirm-body"><p id="supply-choice-message">보스 러시 보상으로 아이템 하나를 선택해 주세요. 선택하면 보급품에 바로 추가됩니다.</p></div>
+<div class="hr-supply-grid" id="supply-choice-options"></div>
 </section>
 </div>
 <div class="hr-overlay hr-settings" hidden="" id="settings">
@@ -10069,9 +10068,9 @@ H.presentation={frame,pages,manual,single};
 })(globalThis);
 </script><script>/* 화면 자동공격과 검증이 함께 쓰는 결정 규칙. 판정 RNG를 미리 읽거나 AI에 묻지 않는다. */
 (function(g){'use strict';const H=g.HopeBattle,C=H.core;
-function choose(b,c,{style='normal',rescue=false}={}){
- const ids=C.actions(b);if(!ids.length)return null;
- if(C.rescueTargets(b).length){if(!rescue)return null;return {id:'user',action:{kind:'talk',target:C.rescueTargets(b)[0].id}};}
+function choose(b,c,{style='normal'}={}){
+ // 일그러짐 구출 대화는 수동 선택으로 남기고, 자동공격은 실제로 행동할 수 있는 아군만 고른다.
+ const ids=C.actions(b).filter(id=>C.combatReady(b.party[id],b.round));if(!ids.length)return null;
  const threatened=Object.values(b.party).find(u=>C.living(u)&&C.active(u,'puppet',b.round));
  if(threatened&&style!=='inefficient'){
    for(const actorId of ids){const u=b.party[actorId];if(actorId===threatened.id||!C.combatReady(u,b.round))continue;
@@ -10397,7 +10396,7 @@ function launch(c,o){
  cursor=0;page=0;autoRound=null;retreatOpen=false;$('retreat-confirm').hidden=true;
  actor=C.actions(battle)[0]||'user';menu='attack';if(o.series){journey.currentKnockouts=0;journey.currentStartItems=clone(next.battle.items);}checkpoint();render();updateAudio();
 }
-function start(skipVacielWarning=false,skipSkillWarning=false){
+function start(skipPreparationWarning=false){
  if(battle&&!battle.committed&&startOptions?.series&&campaign.campaign.encounter)throw Error('전투를 마쳐야 다음 구역으로 이동할 수 있습니다.');
  if(options.series&&journey.started&&options.difficulty!==campaign.battleDifficulty)throw Error('연전 도중에는 난이도를 바꿀 수 없습니다.');
  if(options.series&&journey.pendingSupply)throw Error('전리품을 먼저 선택해 주세요.');
@@ -10405,17 +10404,17 @@ function start(skipVacielWarning=false,skipSkillWarning=false){
  if(options.series&&options.team.some(id=>journey.roster[id]&&(journey.roster[id].alive===false||journey.roster[id].permanentUnavailable||journey.roster[id].severeInjury||journey.roster[id].hasHope===false)))throw Error('영구 이탈한 동료는 출전할 수 없습니다.');
  if(options.series&&options.team.some(id=>!H.adapter.available(campaign,options.bossId).includes(id)))throw Error('직전 전투에 출전한 동료는 다음 한 전투를 쉬어야 합니다.');
  if(!options.series||!journey.started){for(const h of Object.values(options.conditions))Object.assign(h,{alive:true,injured:false,severeInjury:false,permanentUnavailable:false,distorted:false,hasHope:true,hpPercent:100,spPercent:100});options.deathAllowed=false;}
- if(options.series&&options.bossId==='vaciel'&&options.team.length<5&&!skipVacielWarning){
-   $('vaciel-team-message').textContent=`현재 ${options.team.length}명 / 최대 5명 출전 선택 상태입니다. 보스 러시 최종전에서 인원이 부족하면 전투가 더 어려워질 수 있습니다.`;
-   $('vaciel-team-warning').hidden=false;$('revise-vaciel-team').focus();return;
- }
- if(!skipSkillWarning){
+ if(!skipPreparationWarning){
+   const teamLimit=options.bossId==='vaciel'?5:2;
    const equippedBasics=options.playerSkills.filter(id=>!C.isSpecial(id)).length;
    const equippedSpecials=options.playerSkills.filter(id=>C.isSpecial(id)).length;
-   if(equippedBasics<3||equippedSpecials<1){
-     $('skill-loadout-message').textContent=`현재 일반 기술 ${equippedBasics}/3개 · 특수 기술 ${equippedSpecials}/1개를 장착했습니다.`;
-     $('skill-loadout-warning').hidden=false;
-     $('revise-skill-loadout').focus();
+   const missing=[];
+   if(options.team.length<teamLimit)missing.push(`출전 동료: ${options.team.length}/${teamLimit}명`);
+   if(equippedBasics<3||equippedSpecials<1)missing.push(`일반 스킬: ${equippedBasics}/3개 · 특수 스킬: ${equippedSpecials}/1개`);
+   if(missing.length){
+     $('preparation-message').textContent=missing.join('\n');
+     $('preparation-warning').hidden=false;
+     $('revise-preparation').focus();
      return;
    }
  }
@@ -10559,11 +10558,13 @@ function renderFunStats(){
  }
  return `<section class="clear-section"><h3>✦ 별별 전투 기록</h3><div class="fun-stats">${rows.map(([title,value])=>`<div><small>${esc(title)}</small><b>${esc(value)}</b></div>`).join('')}</div></section>`;
 }
+// 자동공격 중에는 구출 대화만 가능한 상태를 남은 공격 행동으로 세지 않는다.
+function hasAutoAction(){return C.actions(battle).some(id=>C.combatReady(battle.party[id],battle.round));}
 function accept(next){
  battle=next.battle;events=next.events;tallyFunEvents(next.events);cursor=0;page=0;
  actor=C.actions(battle)[0]||'user';menu='attack';chosenTarget='';
  if(playing()&&current()?.manual)autoRound=null;
- if(!playing()&&!battle.outcome&&!C.actions(battle).length){autoRound=null;accept(C.endRound(battle,activeConfig,battle.revision));return;}
+ if(!playing()&&!battle.outcome&&(!C.actions(battle).length||(autoRound!==null&&!hasAutoAction()))){autoRound=null;accept(C.endRound(battle,activeConfig,battle.revision));return;}
  checkpoint();render();if(battle.outcome)updateAudio();focusPrimary();
 }
 function run(){if(playing()||battle.outcome||retreatOpen)return;autoRound=null;accept(C.endRound(battle,activeConfig,battle.revision));}
@@ -10572,7 +10573,7 @@ function skipAutoResults(){
  // 일반 피해/회복/버프 결과는 건너뛰고, 이야기/구출/승패 확인은 반드시 수동으로 남긴다.
  while(playing()&&!current().manual){cursor=current().end;page=0;}
  if(playing()&&current().manual)autoRound=null;
- if(!playing()&&!battle.outcome&&!C.actions(battle).length){autoRound=null;accept(C.endRound(battle,activeConfig,battle.revision));return;}
+ if(!playing()&&!battle.outcome&&(!C.actions(battle).length||(autoRound!==null&&!hasAutoAction()))){autoRound=null;accept(C.endRound(battle,activeConfig,battle.revision));return;}
  checkpoint();render();
 }
 function schedule(){clearTimeout(playTimer);if(!battle||!$('settings').hidden||!$('resume-overlay').hidden||retreatOpen||document.hidden)return;
@@ -10585,10 +10586,23 @@ function schedule(){clearTimeout(playTimer);if(!battle||!$('settings').hidden||!
   return;
  }
  if(battle.outcome)return;
- if(!C.actions(battle).length){autoRound=null;playTimer=setTimeout(()=>{if(!playing()&&!retreatOpen&&!battle.outcome)accept(C.endRound(battle,activeConfig,battle.revision));},0);return;}
- if(autoRound!==null){playTimer=setTimeout(()=>{try{const move=H.auto.choose(battle,activeConfig);if(!move){autoRound=null;if(C.rescueTargets(battle).length)tell('대화할 동료가 있습니다. 사용자 행동을 직접 골라 주세요.');render();return;}actor=move.id;accept(C.act(battle,activeConfig,move.id,move.action,battle.revision));}catch(e){autoRound=null;tell(e.message);render();}},180);}
+ if(!C.actions(battle).length||(autoRound!==null&&!hasAutoAction())){autoRound=null;playTimer=setTimeout(()=>{if(!playing()&&!retreatOpen&&!battle.outcome)accept(C.endRound(battle,activeConfig,battle.revision));},0);return;}
+ if(autoRound!==null){playTimer=setTimeout(()=>{try{const move=H.auto.choose(battle,activeConfig);if(!move){autoRound=null;render();return;}actor=move.id;accept(C.act(battle,activeConfig,move.id,move.action,battle.revision));}catch(e){autoRound=null;tell(e.message);render();}},180);}
 }
-function openSettings(which){clearTimeout(playTimer);autoRound=null;if(which)tab=which;$('settings').hidden=false;document.body.classList.toggle('hr-at-title',atTitle);$('close-settings').hidden=atTitle;renderPanel();(atTitle?$('apply-restart'):$('close-settings')).focus();}
+function openSettings(which){
+ clearTimeout(playTimer);autoRound=null;if(which)tab=which;
+ $('settings').hidden=false;document.body.classList.toggle('hr-at-title',atTitle);$('close-settings').hidden=atTitle;
+ renderPanel();
+ // 전투 사이 보급품은 준비 화면의 스크롤 위치와 관계없이 선택할 수 있습니다.
+ if(options.series&&journey.pendingSupply){
+   $('supply-choice-options').innerHTML=Object.entries(supplyNames).map(([id,name])=>`<button type="button" data-supply="${id}">${esc(name)} +1</button>`).join('');
+   $('supply-choice-overlay').hidden=false;
+   $('supply-choice-options').querySelector('button')?.focus();
+ }else{
+   $('supply-choice-overlay').hidden=true;
+   (atTitle?$('apply-restart'):$('close-settings')).focus();
+ }
+}
 function closeSettings(){if(atTitle)return;$('settings').hidden=true;$('open-settings').focus();render();}
 function liveName(value){options.playerName=value;const name=value.trim();if(!/[가-힣]/.test(name)||/[A-Za-z\u3040-\u30ff\u3400-\u9fff<>]/.test(name)||name.length>20||/[\r\n\t]/.test(name))return false;options.playerName=name;if(battle){battle.playerName=name;battle.party.user.name=name;startOptions.playerName=name;}persistConfig();checkpoint();render();return true;}
 function impacts(e){
@@ -10867,7 +10881,7 @@ function journeyPanel(){
  <div class="start-mode-grid"><button type="button" data-game-mode="free" class="start-mode ${!options.series?'is-selected':''}" aria-pressed="${!options.series}"><b>⚔ 자유 대전</b><small>원하는 보스와 바로 전투</small></button><button type="button" data-game-mode="rush" class="start-mode ${options.series?'is-selected':''}" aria-pressed="${options.series}"><b>★ 보스 러시</b><small>전투 결과와 동료 상태가 이어지는 도전</small></button></div>
 
  ${options.series?`<div class="start-info"><b>${journey.started?'도전 진행 중':'새 보스 러시'}</b><span>다음 지역: ${esc(open.map(id=>config.bosses[id].arena).join(' / ')||'모두 클리어!')}</span><span>남은 물품: ${Object.entries(supplyNames).map(([k,n])=>`${n} ${supplies[k]||0}`).join(' · ')}</span>${rest?'<span>다음 전투에서는 HP/SP가 회복되며 직전 출전 동료는 한 번 쉽니다.</span>':''}</div>
- ${journey.pendingSupply?`<div class="start-supply"><b>다음 전투를 위한 보급품 선택</b><div class="start-supply-grid">${Object.entries(supplyNames).map(([id,n])=>`<button type="button" data-supply="${id}">${n} +1</button>`).join('')}</div></div>`:''}${journey.failed?'<p class="start-error">이번 도전은 종료됐습니다. 새 게임을 시작해 주세요.</p>':''}`:''}
+ ${journey.failed?'<p class="start-error">이번 도전은 종료됐습니다. 새 게임을 시작해 주세요.</p>':''}`:''}
  </div>`;
 }
 function renderPanel(){
@@ -11088,12 +11102,16 @@ function openNewGame(){
 }
 bind('cancel-new-game',cancelNewGame);
 bind('confirm-new-game',()=>{ $('new-game-confirm').hidden=true;newGame(); });
-bind('revise-vaciel-team',()=>{ $('vaciel-team-warning').hidden=true;const first=$('[data-team-pick]');first?.focus(); });
-bind('confirm-vaciel-team',()=>{ $('vaciel-team-warning').hidden=true;start(true); });
-bind('revise-skill-loadout',()=>{ $('skill-loadout-warning').hidden=true;const first=$('[data-equip-pick]');first?.focus(); });
-bind('confirm-skill-loadout',()=>{ $('skill-loadout-warning').hidden=true;start(true,true); });
+bind('revise-preparation',()=>{
+ $('preparation-warning').hidden=true;
+ const teamLimit=options.bossId==='vaciel'?5:2;
+ const selector=options.team.length<teamLimit?'[data-team-pick]:not(:disabled):not([aria-pressed="true"])':
+   options.playerSkills.filter(id=>!C.isSpecial(id)).length<3?'[data-equip-pick][aria-pressed="false"]':'[data-special-pick]';
+ (document.querySelector(selector)||$('apply-restart')).focus();
+});
+bind('confirm-preparation',()=>{ $('preparation-warning').hidden=true;start(true); });
 bind('open-settings',()=>openSettings());bind('close-settings',closeSettings);bind('apply-restart',start);bind('restart',openNewGame);bind('prep-new-game',openNewGame);bind('next-event',step);bind('skip-narration',skipNarration);bind('execute',run);
-bind('auto-attack',()=>{if(autoRound!==null){autoRound=null;render();return;}if(playing()||battle.outcome||retreatOpen)return;if(C.rescueTargets(battle).length){tell('사용자의 대화 또는 행동을 먼저 골라 주세요.');return;}else autoRound=battle.round;render();});
+bind('auto-attack',()=>{if(autoRound!==null){autoRound=null;render();return;}if(playing()||battle.outcome||retreatOpen)return;autoRound=battle.round;render();});
 bind('retreat',()=>{if(playing()||battle.outcome)return;clearTimeout(playTimer);autoRound=null;retreatOpen=true;$('retreat-confirm').hidden=false;$('retreat-message').textContent='전투에서 후퇴할까요?'+(Object.values(battle.party).some(u=>C.living(u)&&u.distorted&&!u.permanentUnavailable)?' 미구출 동료는 영구 이탈합니다.':'')+(startOptions.series?' 보스 러시를 종료합니다.':'');render();$('cancel-retreat').focus();});
 bind('cancel-retreat',()=>{retreatOpen=false;$('retreat-confirm').hidden=true;render();$('retreat').focus();});
 bind('confirm-retreat',()=>{if(!retreatOpen)return;retreatOpen=false;$('retreat-confirm').hidden=true;accept(C.retreat(battle,activeConfig));});
@@ -11149,7 +11167,14 @@ if(el.dataset.actor&&!playing()&&!retreatOpen){actor=el.dataset.actor;menu='atta
   else throw Error('아이템 종류 오류');
   journey.inventory[key]--;checkpoint();renderPanel();tell('전투 사이 치료가 적용됐습니다.');return;
  }
- if(el.dataset.supply){if(!options.series||!journey.pendingSupply)throw Error('보급 선택 상태가 아닙니다.');const id=el.dataset.supply;if(!Object.hasOwn(supplyNames,id))throw Error('아이템 종류 오류');journey.inventory[id]=Math.min(99,(journey.inventory[id]||0)+1);journey.pendingSupply=false;checkpoint();renderPanel();tell(supplyNames[id]+' 1개를 획득했습니다.');return;}const a=el.dataset.action;
+ if(el.dataset.supply){
+   if(!options.series||!journey.pendingSupply)throw Error('보급 선택 상태가 아닙니다.');
+   const id=el.dataset.supply;if(!Object.hasOwn(supplyNames,id))throw Error('아이템 종류 오류');
+   journey.inventory[id]=Math.min(99,(journey.inventory[id]||0)+1);
+   journey.pendingSupply=false;$('supply-choice-overlay').hidden=true;
+   checkpoint();renderPanel();$('apply-restart').focus({preventScroll:true});
+   tell(supplyNames[id]+' 1개를 획득했습니다.');return;
+ }const a=el.dataset.action;
  if(a==='ending-next'){
    const pages=endingPages();journey.endingStep=(Number(journey.endingStep)||0)+1;
    if(journey.endingStep>=pages.length){journey.endingDismissed=true;$('ending-overlay').hidden=true;}
@@ -11163,10 +11188,21 @@ document.addEventListener('change',async e=>{const t=e.target;try{if(t.dataset.h
  if(t.dataset.equip){if(t.checked){if(options.playerSkills.filter(id=>!C.isSpecial(id)).length>=3){t.checked=false;throw Error('일반 기술은 최대 세 개입니다.');}options.playerSkills.push(t.dataset.equip);}else options.playerSkills=options.playerSkills.filter(id=>id!==t.dataset.equip);marked();renderPanel();}if(t.dataset.returned){const a=options.storyFlags.returnedCommanders;options.storyFlags.returnedCommanders=t.checked?[...new Set([...a,t.dataset.returned])]:a.filter(id=>id!==t.dataset.returned);marked();}if(t.id==='skill-choice'){chosenSkill=t.value;chosenTarget='';renderCommand();}if(t.id==='item-choice'){chosenItem=t.value;chosenTarget='';renderCommand();}if(t.id==='target-choice'){chosenTarget=t.value;renderCommand();}if(t.id==='media-slot'){mediaKey=t.value;renderPanel();}if(t.id==='media-upload'&&t.files[0])await storeMedia(mediaKey,t.files[0]);if(t.id==='file-input'&&t.files[0]){if(t.files[0].size>55*1024*1024)throw Error('파일이 너무 큽니다.');const parsed=JSON.parse(await t.files[0].text());await fileHandler(parsed);}}catch(err){tell(err.message);}});
 document.addEventListener('input',e=>{if(e.target.dataset.option==='playerName')liveName(e.target.value);if(e.target.dataset.json){rawDrafts[e.target.dataset.json]=e.target.value;marked();}if(e.target.id==='volume'){volume=Number(e.target.value)/100;if(audio)rampBgm(audio,volume,100);}});
 document.addEventListener('keydown',e=>{
-  const confirmDialog=!$('new-game-confirm').hidden?['new-game-confirm','cancel-new-game','confirm-new-game']:!$('vaciel-team-warning').hidden?['vaciel-team-warning','revise-vaciel-team','confirm-vaciel-team']:!$('skill-loadout-warning').hidden?['skill-loadout-warning','revise-skill-loadout','confirm-skill-loadout']:null;
-  if(confirmDialog){
-    if(e.key==='Escape'){e.preventDefault();$(confirmDialog[1]).click();return;}
-    if(e.key==='Tab'){const first=$(confirmDialog[1]),last=$(confirmDialog[2]);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}
+  const activeDialog=['new-game-confirm','preparation-warning','supply-choice-overlay'].find(id=>!$(id).hidden);
+  if(activeDialog){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      if(activeDialog==='new-game-confirm')$('cancel-new-game').click();
+      else if(activeDialog==='preparation-warning')$('revise-preparation').click();
+      // 보급품 선택은 반드시 하나를 골라야 하므로 닫지 않습니다.
+      return;
+    }
+    if(e.key==='Tab'){
+      const buttons=[...$(activeDialog).querySelectorAll('button:not(:disabled)')];
+      const first=buttons[0],last=buttons.at(-1);
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}
+    }
     return;
   }
   if(!$('resume-overlay').hidden){if(e.key==='Escape'){e.preventDefault();return;}if(e.key==='Tab'){const buttons=[$('resume-new'),$('resume-continue')];if(e.shiftKey&&document.activeElement===buttons[0]){e.preventDefault();buttons[1].focus();}else if(!e.shiftKey&&document.activeElement===buttons[1]){e.preventDefault();buttons[0].focus();}}return;}if(retreatOpen&&e.key==='Escape'){$('cancel-retreat').click();return;}if(!$('settings').hidden){if(e.key==='Escape'){e.preventDefault();if(!atTitle)closeSettings();}if(e.key==='Tab'){const nodes=[...$('settings').querySelectorAll('button,input,select,textarea')].filter(n=>!n.disabled&&n.offsetParent!==null),first=nodes[0],last=nodes.at(-1);if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}else if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}}return;}if(!['INPUT','TEXTAREA','SELECT','BUTTON'].includes(document.activeElement?.tagName)&&(e.key==='Enter'||e.key===' ')){e.preventDefault();step();}});
